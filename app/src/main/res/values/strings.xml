@@ -11,4 +11,7 @@
     <string name="your_sign">Your sign</string>
     <string name="forget_password">Forget password?</string>
     <string name="login">Login</string>
+    <string name="login_failed">login failed\n</string>
+    <string name="invalid_email">invalid email</string>
+    <string name="invalid_password">invalid password\n</string>
 </resources>

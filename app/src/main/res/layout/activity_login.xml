@@ -57,7 +57,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_input"
             android:onClick="@{() -> loginViewModel.onLoginClicked()}"
-            app:userAccount="@{loginViewModel.userAccount}"/>
+            app:loggedInUser="@{loginViewModel.loggedInUser}"/>
 
         <TextView
             android:id="@+id/forget_password_text"
