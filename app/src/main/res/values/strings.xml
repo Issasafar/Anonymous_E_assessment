@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Anonymous E-assessment</string>
+    <string name="register_as">Register as:</string>
+    <string name="teacher">Teacher</string>
+    <string name="student">Student</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="your_sign">Your sign</string>
+    <string name="forget_password">Forget password?</string>
+    <string name="login">Login</string>
+</resources>
