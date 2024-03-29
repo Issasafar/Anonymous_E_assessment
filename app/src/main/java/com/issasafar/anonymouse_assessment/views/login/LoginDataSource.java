@@ -1,118 +1,104 @@
-package com.issasafar.anonymouse_assessment.data;
+package com.issasafar.anonymouse_assessment.views.login;
 
 import android.util.Log;
 
-import com.issasafar.anonymouse_assessment.data.models.LoggedUser;
+import com.google.gson.Gson;
 import com.issasafar.anonymouse_assessment.data.models.Result;
-import com.issasafar.anonymouse_assessment.views.login.LoginResponse;
-import com.issasafar.anonymouse_assessment.views.login.LoginResponseParser;
+import com.issasafar.anonymouse_assessment.data.models.login.LoginResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.concurrent.Executor;
+
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.CallAdapter;
+import retrofit2.Response;
 
 /**
         * Class that handles authentication w/ login credentials and retrieves user information.
         */
 public class LoginDataSource {
     private final Executor executor;
-    private final String loginUrl = "http://192.168.43.151/Anonymous_e_assessment/register.php/";
-    private final LoginResponseParser loginResponseParser;
 
-    public LoginDataSource(LoginResponseParser responseParser, Executor executor) {
+
+    public LoginDataSource( Executor executor) {
         this.executor = executor;
-        this.loginResponseParser = responseParser;
+
     }
     public void login(String email, String password, RepositoryCallBack<LoginResponse> repositoryCallback) {
-        Log.d("logindatasourse", "i am called with " + email);
+       String jsonBody;
         try {
 
-            // TODO: handle loggedInUser authentication
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("name", "");
             jsonObject.put("email", email);
             jsonObject.put("password", password);
             jsonObject.put("sign", "");
-
-            Log.d("logindatasourse", "nothing was thrown");
-            makeLoginRequest(loginUrl, "POST", jsonObject.toString(),repositoryCallback);
-
-        } catch (Exception e) {
-            Log.d("logindatasourse", "Exception was thrown");
-            return;
+            jsonBody = jsonObject.toString();
+    } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
-    }
-
-    public void logout() {
-        // TODO: revoke authentication
-    }
-
-
-    public void makeLoginRequest(
-            final String loginUrl,
-            String method,
-             final String jsonBody,
-            final RepositoryCallBack<LoginResponse> callback
-    ) {
-        Log.d("makeLoginRequest", "called " + jsonBody);
         executor.execute(() -> {
             try {
-                Log.d("makeRequset", "making request with " +jsonBody);
-                Result<LoginResponse> result = makeSynchronousLoginRequest(loginUrl, method, jsonBody);
-                callback.onComplete(result);
+                Log.d("makeRequset", "making request with " + jsonBody);
+                Result<LoginResponse> result = makeSynchronousLoginRequest(jsonBody);
+                repositoryCallback.onComplete(result);
             } catch (Exception e) {
-                Log.d("RequsetError", e.getMessage()+" : "+e.getCause());
+                Log.d("LoginDatasource::", e.getMessage() + " : " + e.getCause());
                 Result<LoginResponse> errorResult = new Result.Error<>(e);
-                callback.onComplete(errorResult);
+                repositoryCallback.onComplete(errorResult);
+
             }
         });
+    }
+
+        public void logout() {
+        // TODO: revoke authentication
 
     }
 
 
-    public Result<LoginResponse> makeSynchronousLoginRequest(String loginUrl, String method, String jsonBody) throws Exception {
-        Log.d("POSTTING", jsonBody);
-        // HttpURLConnection logic
-        if (method.equals("POST")) {
-            Log.d("POSTTING", "inside Post");
-            URL url = new URL(loginUrl);
-            HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
-            httpConnection.setRequestMethod(method);
-            httpConnection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-            httpConnection.setRequestProperty("Accept", "application/json");
-            httpConnection.setDoOutput(true);
-            httpConnection.getOutputStream().write(jsonBody.getBytes(StandardCharsets.UTF_8));
-            httpConnection.getOutputStream().flush();
 
-//            int responseCode = httpConnection.getResponseCode();
-//            Log.d("LoginDataSource", "response code: " + responseCode);
-//            if (responseCode == HttpURLConnection.HTTP_OK) {
-//                BufferedReader in = new BufferedReader(new InputStreamReader(httpConnection.getInputStream()));
-//                String inputLine;
-//                StringBuffer reponseStringBuffer = new StringBuffer();
-//                while ((inputLine = in.readLine()) != null) {
-//                    reponseStringBuffer.append(inputLine);
-//                }
-//                in.close();
-//                Log.d("LoginDataSource", "response was: " + reponseStringBuffer.toString());
-//            }
-          //  Log.d("InputStream", "the inputStream is: "+httpConnection.getInputStream().read());
 
-            LoginResponse loginResponse = loginResponseParser.parse(httpConnection.getInputStream());
 
-            return new Result.Success<LoginResponse>(loginResponse);
-        } else {
-            //TODO manage other cases later
-            return null;
+
+
+    public Result<LoginResponse> makeSynchronousLoginRequest(String jsonBody) {
+        LoginApi loginApi = LoginApiClient.getClient();
+        Call<LoginResponse> call = loginApi.postData(jsonBody);
+
+        try {
+            Response<LoginResponse> response = call.execute();
+            if (response.isSuccessful()) {
+                LoginResponse responseBody = response.body();
+                if (responseBody != null ) {
+                    // Parse JSON response using Gson or JSONObject
+                    Gson gson = new Gson();
+//                    LoginResponse loginResponse = gson.fromJson(responseBody, LoginResponse.class);
+                    // Log response for debugging
+                    Log.d("Retrofit", "Login response: " + responseBody.toString());
+                    // Return success result with login response
+                    return new Result.Success<>(responseBody);
+                } else {
+                    Log.d("Retrofit", "Response body is null or empty");
+                }
+            } else {
+                Log.d("Retrofit", "Unsuccessful response: " + response.code());
+            }
+        } catch (IOException e) {
+            Log.d("loginDataSource", "IOException: " + e.getMessage());
+            // Return error result with exception
+            return new Result.Error<>(e);
         }
+        // Return generic error result if response handling fails
+        return new Result.Error<>(new Exception("Failed to handle response"));
     }
 
 }

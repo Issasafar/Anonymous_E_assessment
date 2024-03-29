@@ -1,30 +1,79 @@
 package com.issasafar.anonymouse_assessment.views.login;
 
+import android.util.Log;
+import android.view.View;
+
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
+
+import com.google.gson.Gson;
 import com.issasafar.anonymouse_assessment.BR;
 import com.issasafar.anonymouse_assessment.data.models.login.ResetPasswordCredentials;
+import com.issasafar.anonymouse_assessment.data.models.login.ResetPasswordResponse;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
 
+
+import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ResetPasswordViewModel extends BaseObservable {
+    LoginApi loginApiClient = LoginApiClient.getClient();
     private ResetPasswordCredentials resetPasswordCredentials;
     private String email;
     private String userName;
     private String newPassword = null;
 
+    private int progressVisibility = View.GONE;
+    private int newPasswordTextInputLayoutVisibility = View.GONE;
+    private ResetPasswordCredentials.ResetPasswordDataHolder.AccountType accountType;
+    private String newPasswordError = null;
+    private String userNameError = null;
+    private String emailError = null;
+
+
+    public ResetPasswordViewModel() {
+        this.email = "";
+        this.userName = "";
+    }
+
+    @Bindable
+    public int getProgressVisibility() {
+        return progressVisibility;
+    }
+
+    public void setProgressVisibility(int progressVisibility) {
+        this.progressVisibility = progressVisibility;
+        notifyPropertyChanged(BR.progressVisibility);
+    }
+
+    @Bindable
+
+    public int getNewPasswordTextInputLayoutVisibility() {
+        return newPasswordTextInputLayoutVisibility;
+    }
+
+    public void setNewPasswordTextInputLayoutVisibility(int newPasswordTextInputLayoutVisibility) {
+        this.newPasswordTextInputLayoutVisibility = newPasswordTextInputLayoutVisibility;
+        notifyPropertyChanged(BR.newPasswordTextInputLayoutVisibility);
+    }
+
+    @Bindable
     public ResetPasswordCredentials.ResetPasswordDataHolder.AccountType getAccountType() {
-        return accountType;
+        return this.accountType;
     }
 
     public void setAccountType(ResetPasswordCredentials.ResetPasswordDataHolder.AccountType accountType) {
         this.accountType = accountType;
+        notifyPropertyChanged(BR.accountType);
     }
 
-    private ResetPasswordCredentials.ResetPasswordDataHolder.AccountType accountType;
-@Bindable
+    @Bindable
     public String getNewPasswordError() {
-        return newPasswordError;
+        return this.newPasswordError;
     }
 
     public void setNewPasswordError(String newPasswordError) {
@@ -32,13 +81,9 @@ public class ResetPasswordViewModel extends BaseObservable {
         notifyPropertyChanged(BR.newPasswordError);
     }
 
-    private String newPasswordError = null;
-    private String userNameError = null;
-    private String emailError = null;
-
     @Bindable
     public ResetPasswordCredentials getResetPasswordCredentials() {
-        return resetPasswordCredentials;
+        return this.resetPasswordCredentials;
     }
 
     public void setResetPasswordCredentials(ResetPasswordCredentials resetPasswordCredentials) {
@@ -48,7 +93,7 @@ public class ResetPasswordViewModel extends BaseObservable {
 
     @Bindable
     public String getNewPassword() {
-        return newPassword;
+        return this.newPassword;
     }
 
     public void setNewPassword(String newPassword) {
@@ -58,7 +103,7 @@ public class ResetPasswordViewModel extends BaseObservable {
 
     @Bindable
     public String getUserNameError() {
-        return userNameError;
+        return this.userNameError;
     }
 
     public void setUserNameError(String userNameError) {
@@ -68,7 +113,7 @@ public class ResetPasswordViewModel extends BaseObservable {
 
     @Bindable
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -88,7 +133,7 @@ public class ResetPasswordViewModel extends BaseObservable {
 
     @Bindable
     public String getEmailError() {
-        return emailError;
+        return this.emailError;
     }
 
     public void setEmailError(String emailError) {
@@ -97,21 +142,83 @@ public class ResetPasswordViewModel extends BaseObservable {
     }
 
     public void onSubmitClicked() {
+
+
         if (isInputValid() && newPassword == null) {
+
             setResetPasswordCredentials(new ResetPasswordCredentials.EmailNamePair(getEmail(), getUserName()));
+            Log.d("resetPassword",resetPasswordCredentials.toString());
+            // Attempt to post these credentials to the api
+            Gson gson = new Gson();
+          String body =  gson.toJson(resetPasswordCredentials);
+            Call<ResetPasswordResponse> resetPasswordResponseCall = loginApiClient.resetPassword(body);
+            Log.d("resetPassword", getResetPasswordCredentials().toString());
+
+            setProgressVisibility(View.VISIBLE);
+            resetPasswordResponseCall.enqueue(new Callback<ResetPasswordResponse>() {
+                @Override
+                public void onResponse(Call<ResetPasswordResponse> call, Response<ResetPasswordResponse> response) {
+                    if (response.isSuccessful()) {
+                        setProgressVisibility(View.GONE);
+                        ResetPasswordResponse resetPasswordResponse = response.body();
+                        if (resetPasswordResponse.getSuccess()) {
+                            // Account approved show the new password input layout
+                            setNewPasswordTextInputLayoutVisibility(View.VISIBLE);
+                            if (Objects.equals(resetPasswordResponse.getMessage(), ResetPasswordCredentials.ResetPasswordDataHolder.AccountType.STUDENT.getValue())) {
+                                setAccountType(ResetPasswordCredentials.ResetPasswordDataHolder.AccountType.STUDENT);
+                            } else {
+                                setAccountType(ResetPasswordCredentials.ResetPasswordDataHolder.AccountType.TEACHER);
+                            }
+                        } else {
+                            setEmailError(resetPasswordResponse.getMessage());
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResetPasswordResponse> call, Throwable t) {
+                    Log.d("resetResponse", t.getMessage());
+                    setProgressVisibility(View.GONE);
+                }
+            });
 
         } else if (isInputValid() && newPassword != null && InputValidator.validatePassword(getNewPassword()) == null) {
-            setResetPasswordCredentials(new ResetPasswordCredentials.ResetPasswordDataHolder(getEmail(),getNewPassword(),));
+            setProgressVisibility(View.VISIBLE);
+            setResetPasswordCredentials(new ResetPasswordCredentials.ResetPasswordDataHolder(getEmail(), getNewPassword(), getAccountType()));
+            // Attempt to send these credentials to the api
+            Gson gson = new Gson();
+            String body = gson.toJson(resetPasswordCredentials);
+            Call<ResetPasswordResponse> resetPasswordResponseCall = loginApiClient.resetPassword(body);
+            resetPasswordResponseCall.enqueue(new Callback<ResetPasswordResponse>() {
+                @Override
+                public void onResponse(Call<ResetPasswordResponse> call, Response<ResetPasswordResponse> response) {
+                    if (response.isSuccessful()) {
+                        setProgressVisibility(View.GONE);
+                        // TODO () show dialog after password reset
+                        ResetPasswordResponse resetPasswordResponse = response.body();
+                        Log.d("resetPassword response", resetPasswordResponse.getMessage());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResetPasswordResponse> call, Throwable t) {
+                    Log.d("resetResponse", t.getMessage());
+                    setProgressVisibility(View.GONE);
+                }
+            });
         } else {
-            setEmailError(InputValidator.validateEmail(getEmail()));
+            Log.d("resetvm", getEmail() + ":" + getUserName());
+            setEmailError(InputValidator.validateEmail(this.getEmail()));
             if (newPassword != null) {
-                setNewPasswordError(InputValidator.validatePassword(getNewPassword()));
+                setNewPasswordError(InputValidator.validatePassword(this.getNewPassword()));
             }
-            setUserNameError(InputValidator.validateName(getUserName()));
+            setUserNameError(InputValidator.validateName(this.getUserName()));
         }
     }
 
     public boolean isInputValid() {
+
         return !getEmail().trim().isEmpty()
                 && !getUserName().trim().isEmpty()
                 && InputValidator.validateEmail(getEmail()) == null

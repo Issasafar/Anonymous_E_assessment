@@ -9,9 +9,13 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="register">Register</string>
     <string name="your_sign">Your sign</string>
-    <string name="forget_password">Forget password?</string>
+    <string name="forgot_password">Forgot password?</string>
     <string name="login">Login</string>
     <string name="login_failed">login failed\n</string>
     <string name="invalid_email">invalid email</string>
     <string name="invalid_password">invalid password\n</string>
+    <string name="enter_your_username">Enter your username</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="submit">Submit</string>
+    <string name="enter_your_new_password">Enter your new password</string>
 </resources>

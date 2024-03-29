@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.issasafar.anonymouse_assessment.databinding.ActivityMainBinding;
-import com.issasafar.anonymouse_assessment.views.LoginActivity;
-import com.issasafar.anonymouse_assessment.views.student.StudentRegisterActivity;
-import com.issasafar.anonymouse_assessment.views.teacher.TeacherRegisterActivity;
+import com.issasafar.anonymouse_assessment.views.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 private ActivityMainBinding mActivityMainBinding;

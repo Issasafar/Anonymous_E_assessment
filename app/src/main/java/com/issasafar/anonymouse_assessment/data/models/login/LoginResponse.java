@@ -1,20 +1,35 @@
-package com.issasafar.anonymouse_assessment.views.login;
+package com.issasafar.anonymouse_assessment.data.models.login;
+
+import com.google.gson.annotations.SerializedName;
 
 public  class LoginResponse {
     //private String authToken;
-    private String userId;
-    private String userName;
-    private String email;
-    private String password;
-    private String sign;
 
-    public LoginResponse(String userId, String userName, String email, String password, String sign) {
+    @SerializedName("userId")
+    private String userId;
+    @SerializedName("userName")
+    private String userName;
+    @SerializedName("email")
+    private String email;
+    @SerializedName("password")
+    private String password;
+    @SerializedName("sign")
+    private String sign;
+    @SerializedName("success")
+    private boolean success;
+    @SerializedName("message")
+    private String message;
+
+    public LoginResponse(String message, boolean success, String userId, String userName, String email, String password, String sign) {
         this.userId = userId;
         this.userName = userName;
         this.email = email;
         this.password = password;
         this.sign = sign;
+        this.success = success;
+        this.message = message;
     }
+
 
     public String getUserId() {
         return userId;
@@ -54,6 +69,36 @@ public  class LoginResponse {
 
     public void setSign(String sign) {
         this.sign = sign;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+
+    @Override
+    public String toString() {
+        return "LoginResponse{" +
+                "userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", sign='" + sign + '\'' +
+                ", success=" + success +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
 

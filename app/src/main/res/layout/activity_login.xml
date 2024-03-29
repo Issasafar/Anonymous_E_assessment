@@ -6,13 +6,13 @@
     <data>
 <variable
     name="loginViewModel"
-    type="com.issasafar.anonymouse_assessment.viewmodels.LoginViewModel" />
+    type="com.issasafar.anonymouse_assessment.views.login.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.LoginActivity">
+        tools:context=".views.login.LoginActivity">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_input"
@@ -43,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
                 android:text="@={loginViewModel.password}"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:id="@+id/password_field"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -52,20 +53,35 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="271dp"
             android:text="@string/login"
-            app:layout_constraintBottom_toTopOf="@+id/forget_password_text"
+            app:layout_constraintBottom_toTopOf="@+id/forgot_password_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_input"
-            android:onClick="@{() -> loginViewModel.onLoginClicked()}"
-            app:loggedInUser="@{loginViewModel.loggedInUser}"/>
+        />
 
-        <TextView
-            android:id="@+id/forget_password_text"
+        <Button
+            style="@style/Widget.Material3.Button.TextButton.Dialog"
+            android:id="@+id/forgot_password_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/forget_password"
+            android:text="@string/forgot_password"
+            android:textColor="@drawable/forgot_password_text_selector"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_button" />
+            app:layout_constraintTop_toBottomOf="@+id/login_button"
+          />
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/password_input"
+            app:layout_constraintEnd_toEndOf="@id/password_input"
+            app:layout_constraintVertical_bias="0.3"
+            android:visibility="gone"
+
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -18,6 +18,9 @@ import com.issasafar.anonymouse_assessment.data.models.login.LoginResponse;
 import com.issasafar.anonymouse_assessment.data.models.login.UserAccount;
 import com.issasafar.anonymouse_assessment.data.models.Result;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
+import com.issasafar.anonymouse_assessment.views.login.LoginDataSource;
+import com.issasafar.anonymouse_assessment.views.login.LoginRepository;
+import com.issasafar.anonymouse_assessment.views.login.LoginResult;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -30,7 +33,7 @@ public class LoginViewModel extends BaseObservable {
     private ProgressBar loadingProgressBar;
     private LoginRepository loginRepository;
     private Context appContext;
-   private  static final String SHARED_PREF_CREDENTIAL_FILE = "/Anonymous_e_assessment/user_credentials";
+   private  static final String SHARED_PREF_CREDENTIAL_FILE = "tuser_credentials";
 
     public MutableLiveData<LoginResult> getLoginResult() {
         return this.loginResult;

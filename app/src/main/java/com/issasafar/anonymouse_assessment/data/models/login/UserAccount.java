@@ -1,4 +1,4 @@
-package com.issasafar.anonymouse_assessment.data.models;
+package com.issasafar.anonymouse_assessment.data.models.login;
 
 public class UserAccount {
     private String email;

@@ -13,7 +13,7 @@ import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
 import java.util.Objects;
 
 public class StudentRegisterViewModel extends BaseObservable {
-    private String successMessage = "registration was successful";
+    private String successMessage = "Registration was successful";
     private String errorMessage = "Registration failed";
     @Bindable
     private String toastMessage = null;

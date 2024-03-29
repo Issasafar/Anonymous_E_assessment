@@ -2,30 +2,32 @@ package com.issasafar.anonymouse_assessment.views.login;
 
 import androidx.annotation.Nullable;
 
+import com.issasafar.anonymouse_assessment.data.models.login.LoggedInUser;
+
 /**
  * Authentication result : success (user details) or error message.
  */
-class LoginResult {
+public class LoginResult {
     @Nullable
-    private LoggedInUserView success;
+    private LoggedInUser success;
     @Nullable
-    private Integer error;
+    private String error;
 
-    LoginResult(@Nullable Integer error) {
+    LoginResult(@Nullable String error) {
         this.error = error;
     }
 
-    LoginResult(@Nullable LoggedInUserView success) {
+    LoginResult(@Nullable LoggedInUser success) {
         this.success = success;
     }
 
     @Nullable
-    LoggedInUserView getSuccess() {
+    public LoggedInUser getSuccess() {
         return success;
     }
 
     @Nullable
-    Integer getError() {
+    public String getError() {
         return error;
     }
 }

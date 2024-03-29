@@ -1,13 +1,18 @@
 package com.issasafar.anonymouse_assessment.data.models.login;
 
-public  class LoggedUser {
+public  class LoggedInUser {
     String userId;
     String userName;
     String email;
+
+    public String getPassword() {
+        return password;
+    }
+
     String password;
     String sign;
 
-    public LoggedUser(String userId, String userName, String email,String password, String sign) {
+    public LoggedInUser(String userId, String userName, String email, String password, String sign) {
         this.userId = userId;
         this.userName = userName;
         this.email = email;
