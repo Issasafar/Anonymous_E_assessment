@@ -16,91 +16,92 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="409dp"
+            android:id="@+id/name_input"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:inputError="@{TeacherRegister.nameError}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/name_input"
-            app:inputError="@{TeacherRegister.nameError}"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/name"
-                android:text="@={TeacherRegister.teacherName}"
-                android:maxLines="1"
                 android:inputType="text"
-                />
+                android:maxLines="1"
+                android:text="@={TeacherRegister.teacherName}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_input"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name_input"
+            android:layout_marginTop="8dp"
             app:inputError="@{TeacherRegister.emailError}"
-           >
+            app:layout_constraintEnd_toEndOf="@+id/name_input"
+            app:layout_constraintStart_toStartOf="@+id/name_input"
+            app:layout_constraintTop_toBottomOf="@+id/name_input">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
-                android:text="@={TeacherRegister.teacherEmail}"
                 android:inputType="textEmailAddress"
-                />
+                android:text="@={TeacherRegister.teacherEmail}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password_input"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_input"
-            app:inputError="@{TeacherRegister.passwordError}">
+            android:layout_marginTop="8dp"
+            app:inputError="@{TeacherRegister.passwordError}"
+            app:layout_constraintEnd_toEndOf="@+id/email_input"
+            app:layout_constraintStart_toStartOf="@+id/email_input"
+            app:layout_constraintTop_toBottomOf="@+id/email_input">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:text="@={TeacherRegister.teacherPassword}"/>
+                android:text="@={TeacherRegister.teacherPassword}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/confirm_password_input"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password_input"
-            app:inputError="@{TeacherRegister.repeatedPasswordError}">
+            android:layout_marginTop="8dp"
+            app:inputError="@{TeacherRegister.repeatedPasswordError}"
+            app:layout_constraintEnd_toEndOf="@+id/password_input"
+            app:layout_constraintStart_toStartOf="@+id/password_input"
+            app:layout_constraintTop_toBottomOf="@+id/password_input">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/confirm_password"
                 android:inputType="textPassword"
-                android:text="@={TeacherRegister.confirmPassword}"/>
+                android:text="@={TeacherRegister.confirmPassword}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/register"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/confirm_password_input"
+            android:layout_marginTop="16dp"
             android:onClick="@{() -> TeacherRegister.onRegisterClicked()}"
-            app:toastMessage="@{TeacherRegister.toastMessage}"
-            />
+            android:text="@string/register"
+            app:layout_constraintEnd_toEndOf="@+id/confirm_password_input"
+            app:layout_constraintStart_toStartOf="@+id/confirm_password_input"
+            app:layout_constraintTop_toBottomOf="@+id/confirm_password_input"
+            app:toastMessage="@{TeacherRegister.toastMessage}" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

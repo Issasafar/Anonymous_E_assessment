@@ -1,6 +1,6 @@
 package com.issasafar.anonymouse_assessment.data.models;
 
-public class Teacher {
+public class Teacher extends user {
     private int t_id;
     private String name;
     private String email;

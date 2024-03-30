@@ -2,7 +2,7 @@ package com.issasafar.anonymouse_assessment.data.models.login;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ResetPasswordResponse {
+public class SuccessMessagePair {
     public String getMessage() {
         return this.message;
     }

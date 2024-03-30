@@ -1,6 +1,5 @@
 package com.issasafar.anonymouse_assessment.views.login;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.BaseObservable;
@@ -10,7 +9,7 @@ import androidx.databinding.Bindable;
 import com.google.gson.Gson;
 import com.issasafar.anonymouse_assessment.BR;
 import com.issasafar.anonymouse_assessment.data.models.login.ResetPasswordCredentials;
-import com.issasafar.anonymouse_assessment.data.models.login.ResetPasswordResponse;
+import com.issasafar.anonymouse_assessment.data.models.login.SuccessMessagePair;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
 
 
@@ -150,33 +149,33 @@ public class ResetPasswordViewModel extends BaseObservable {
             // Attempt to post these credentials to the api
             Gson gson = new Gson();
           String body =  gson.toJson(resetPasswordCredentials);
-            Call<ResetPasswordResponse> resetPasswordResponseCall = loginApiClient.resetPassword(body);
+            Call<SuccessMessagePair> resetPasswordResponseCall = loginApiClient.resetPassword(body);
 
 
             setProgressVisibility(View.VISIBLE);
-            resetPasswordResponseCall.enqueue(new Callback<ResetPasswordResponse>() {
+            resetPasswordResponseCall.enqueue(new Callback<SuccessMessagePair>() {
                 @Override
-                public void onResponse(Call<ResetPasswordResponse> call, Response<ResetPasswordResponse> response) {
+                public void onResponse(Call<SuccessMessagePair> call, Response<SuccessMessagePair> response) {
                     if (response.isSuccessful()) {
                         setProgressVisibility(View.GONE);
-                        ResetPasswordResponse resetPasswordResponse = response.body();
-                        if (resetPasswordResponse.getSuccess()) {
+                        SuccessMessagePair successMessagePair = response.body();
+                        if (successMessagePair.getSuccess()) {
                             // Account approved show the new password input layout
                             setNewPasswordTextInputLayoutVisibility(View.VISIBLE);
-                            if (Objects.equals(resetPasswordResponse.getMessage(), ResetPasswordCredentials.ResetPasswordDataHolder.AccountType.STUDENT.getValue())) {
+                            if (Objects.equals(successMessagePair.getMessage(), ResetPasswordCredentials.ResetPasswordDataHolder.AccountType.STUDENT.getValue())) {
                                 setAccountType(ResetPasswordCredentials.ResetPasswordDataHolder.AccountType.STUDENT);
                             } else {
                                 setAccountType(ResetPasswordCredentials.ResetPasswordDataHolder.AccountType.TEACHER);
                             }
                         } else {
-                            setEmailError(resetPasswordResponse.getMessage());
+                            setEmailError(successMessagePair.getMessage());
                         }
 
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ResetPasswordResponse> call, Throwable t) {
+                public void onFailure(Call<SuccessMessagePair> call, Throwable t) {
                     setProgressVisibility(View.GONE);
                 }
             });
@@ -187,19 +186,19 @@ public class ResetPasswordViewModel extends BaseObservable {
             // Attempt to send these credentials to the api
             Gson gson = new Gson();
             String body = gson.toJson(resetPasswordCredentials);
-            Call<ResetPasswordResponse> resetPasswordResponseCall = loginApiClient.resetPassword(body);
-            resetPasswordResponseCall.enqueue(new Callback<ResetPasswordResponse>() {
+            Call<SuccessMessagePair> resetPasswordResponseCall = loginApiClient.resetPassword(body);
+            resetPasswordResponseCall.enqueue(new Callback<SuccessMessagePair>() {
                 @Override
-                public void onResponse(Call<ResetPasswordResponse> call, Response<ResetPasswordResponse> response) {
+                public void onResponse(Call<SuccessMessagePair> call, Response<SuccessMessagePair> response) {
                     if (response.isSuccessful()) {
                         setProgressVisibility(View.GONE);
                         // TODO () show dialog after password reset
-                        ResetPasswordResponse resetPasswordResponse = response.body();
+                        SuccessMessagePair successMessagePair = response.body();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ResetPasswordResponse> call, Throwable t) {
+                public void onFailure(Call<SuccessMessagePair> call, Throwable t) {
                     setProgressVisibility(View.GONE);
                 }
             });
