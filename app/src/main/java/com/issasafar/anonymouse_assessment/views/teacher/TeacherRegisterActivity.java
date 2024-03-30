@@ -26,7 +26,7 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityTeacherRegisterBinding activityTeacherRegisterBinding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_register);
-        mTeacherRegisterViewModel = new TeacherRegisterViewModel();
+        mTeacherRegisterViewModel = new TeacherRegisterViewModel(getApplicationContext());
         activityTeacherRegisterBinding.setTeacherRegister(mTeacherRegisterViewModel);
         activityTeacherRegisterBinding.executePendingBindings();
         activityTeacherRegisterBinding.emailInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -105,17 +105,6 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
        textInputLayout.getEditText().setError(error);
     }
 
-    @BindingAdapter({"teacher"})
-    public static void runMe(View view, Teacher teacher) {
-        // TODO() handle registration
-        if (!Objects.equals(teacher.getEmail().trim(), "")) {
-            Toast.makeText(view.getContext(), "invoked register " + teacher.getEmail(), Toast.LENGTH_LONG).show();
-        }
-    }
-    @BindingAdapter({"toastMessage"})
-    public static void runMe(View view, String message) {
-//       if(message != null)
-//           Toast.makeText(view.getContext(), message, Toast.LENGTH_LONG).show();
 
-    }
+
 }

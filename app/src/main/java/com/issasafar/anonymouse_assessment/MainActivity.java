@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.issasafar.anonymouse_assessment.databinding.ActivityMainBinding;
 import com.issasafar.anonymouse_assessment.views.login.LoginActivity;
+import com.issasafar.anonymouse_assessment.views.teacher.TeacherRegisterActivity;
 
 public class MainActivity extends AppCompatActivity {
 private ActivityMainBinding mActivityMainBinding;
@@ -17,7 +18,7 @@ private ActivityMainBinding mActivityMainBinding;
         mActivityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         View uiRoot = mActivityMainBinding.getRoot();
         setContentView(uiRoot);
-        Intent i = new Intent(this, LoginActivity.class);
+        Intent i = new Intent(this, TeacherRegisterActivity.class);
         startActivity(i);
 
     }

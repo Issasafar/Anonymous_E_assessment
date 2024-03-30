@@ -147,12 +147,11 @@ public class ResetPasswordViewModel extends BaseObservable {
         if (isInputValid() && newPassword == null) {
 
             setResetPasswordCredentials(new ResetPasswordCredentials.EmailNamePair(getEmail(), getUserName()));
-            Log.d("resetPassword",resetPasswordCredentials.toString());
             // Attempt to post these credentials to the api
             Gson gson = new Gson();
           String body =  gson.toJson(resetPasswordCredentials);
             Call<ResetPasswordResponse> resetPasswordResponseCall = loginApiClient.resetPassword(body);
-            Log.d("resetPassword", getResetPasswordCredentials().toString());
+
 
             setProgressVisibility(View.VISIBLE);
             resetPasswordResponseCall.enqueue(new Callback<ResetPasswordResponse>() {
@@ -178,7 +177,6 @@ public class ResetPasswordViewModel extends BaseObservable {
 
                 @Override
                 public void onFailure(Call<ResetPasswordResponse> call, Throwable t) {
-                    Log.d("resetResponse", t.getMessage());
                     setProgressVisibility(View.GONE);
                 }
             });
@@ -197,18 +195,15 @@ public class ResetPasswordViewModel extends BaseObservable {
                         setProgressVisibility(View.GONE);
                         // TODO () show dialog after password reset
                         ResetPasswordResponse resetPasswordResponse = response.body();
-                        Log.d("resetPassword response", resetPasswordResponse.getMessage());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResetPasswordResponse> call, Throwable t) {
-                    Log.d("resetResponse", t.getMessage());
                     setProgressVisibility(View.GONE);
                 }
             });
         } else {
-            Log.d("resetvm", getEmail() + ":" + getUserName());
             setEmailError(InputValidator.validateEmail(this.getEmail()));
             if (newPassword != null) {
                 setNewPasswordError(InputValidator.validatePassword(this.getNewPassword()));

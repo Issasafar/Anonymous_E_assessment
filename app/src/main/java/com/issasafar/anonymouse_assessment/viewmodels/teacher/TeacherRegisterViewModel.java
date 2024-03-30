@@ -1,7 +1,9 @@
 package com.issasafar.anonymouse_assessment.viewmodels.teacher;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Patterns;
+import android.widget.Toast;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -29,10 +31,11 @@ public class TeacherRegisterViewModel extends BaseObservable {
     @Bindable
     private Teacher mTeacher;
     private String confirmPassword;
+    private Context appContext;
 
-    public TeacherRegisterViewModel() {
+    public TeacherRegisterViewModel(Context appContext) {
        this.mTeacher = new Teacher("", "", "");
-
+this.appContext = appContext;
         this.confirmPassword = "";
     }
 
@@ -105,6 +108,10 @@ public class TeacherRegisterViewModel extends BaseObservable {
         if (isInputValid()) {
             setToastMessage(successMessage + ": " + getTeacherName());
             setTeacher(new Teacher(mTeacher.getName(), mTeacher.getEmail(), mTeacher.getPassword()));
+            //handle the registration here
+            if (!Objects.equals(mTeacher.getEmail().trim(), "")) {
+                Toast.makeText(getAppContext(), "invoked register " + mTeacher.getEmail(), Toast.LENGTH_LONG).show();
+            }
         } else {
             setNameError(InputValidator.validateName(mTeacher.getName()));
             setPasswordError(InputValidator.validatePassword(mTeacher.getPassword()));
@@ -160,5 +167,9 @@ public class TeacherRegisterViewModel extends BaseObservable {
     public void setRepeatedPasswordError(String repeatedPasswordError) {
         this.repeatedPasswordError = repeatedPasswordError;
         notifyPropertyChanged(BR.repeatedPasswordError);
+    }
+
+    public Context getAppContext() {
+        return appContext;
     }
 }
