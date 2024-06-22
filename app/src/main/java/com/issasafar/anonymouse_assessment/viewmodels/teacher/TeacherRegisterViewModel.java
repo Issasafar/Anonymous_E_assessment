@@ -108,7 +108,6 @@ this.appContext = appContext;
         if (isInputValid()) {
             setToastMessage(successMessage + ": " + getTeacherName());
             setTeacher(new Teacher(mTeacher.getName(), mTeacher.getEmail(), mTeacher.getPassword()));
-            //handle the registration here
             if (!Objects.equals(mTeacher.getEmail().trim(), "")) {
                 Toast.makeText(getAppContext(), "invoked register " + mTeacher.getEmail(), Toast.LENGTH_LONG).show();
             }

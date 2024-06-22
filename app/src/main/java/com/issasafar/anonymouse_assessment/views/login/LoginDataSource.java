@@ -4,7 +4,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.issasafar.anonymouse_assessment.data.models.Result;
+import com.issasafar.anonymouse_assessment.data.models.User;
 import com.issasafar.anonymouse_assessment.data.models.login.LoginResponse;
+import com.issasafar.anonymouse_assessment.data.models.login.SuccessMessagePair;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +21,7 @@ import java.util.concurrent.Executor;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.CallAdapter;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -35,7 +38,6 @@ public class LoginDataSource {
     public void login(String email, String password, RepositoryCallBack<LoginResponse> repositoryCallback) {
        String jsonBody;
         try {
-
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("name", "");
             jsonObject.put("email", email);
@@ -56,6 +58,31 @@ public class LoginDataSource {
                 repositoryCallback.onComplete(errorResult);
 
             }
+        });
+    }
+    public void register(User user, RepositoryCallBack<LoginResponse> repositoryCallBack) {
+        Gson gson = new Gson();
+        String body = gson.toJson(user);
+        LoginApi loginApiClient = LoginApiClient.getClient();
+        Call<SuccessMessagePair> registerationCall = loginApiClient.registerNewUser(body);
+        executor.execute(()->{
+            registerationCall.enqueue(new Callback<SuccessMessagePair>() {
+                @Override
+                public void onResponse(Call<SuccessMessagePair> call, Response<SuccessMessagePair> response) {
+                    if(response.isSuccessful()){
+                        SuccessMessagePair successMessagePair = response.body();
+                        assert successMessagePair != null;
+                        if(successMessagePair.getSuccess()){
+                           login(user.getEmail(), user.getPassword(), repositoryCallBack);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SuccessMessagePair> call, Throwable t) {
+
+                }
+            });
         });
     }
 

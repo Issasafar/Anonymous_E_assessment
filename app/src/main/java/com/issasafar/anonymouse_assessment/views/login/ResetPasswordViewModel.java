@@ -20,7 +20,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ResetPasswordViewModel extends BaseObservable {
-    LoginApi loginApiClient = LoginApiClient.getClient();
+
     private ResetPasswordCredentials resetPasswordCredentials;
     private String email;
     private String userName;
@@ -159,6 +159,7 @@ public class ResetPasswordViewModel extends BaseObservable {
                     if (response.isSuccessful()) {
                         setProgressVisibility(View.GONE);
                         SuccessMessagePair successMessagePair = response.body();
+                        assert successMessagePair != null;
                         if (successMessagePair.getSuccess()) {
                             // Account approved show the new password input layout
                             setNewPasswordTextInputLayoutVisibility(View.VISIBLE);

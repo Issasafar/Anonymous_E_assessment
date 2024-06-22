@@ -104,6 +104,10 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
     public static void setInputError(TextInputLayout textInputLayout, String error) {
        textInputLayout.getEditText().setError(error);
     }
+    @BindingAdapter({"teacher"})
+    public static void runMe(View view, Teacher teacher){
+        //TODO() handle the registration for teacher
+    }
 
 
 

@@ -33,7 +33,7 @@ public class LoginViewModel extends BaseObservable {
     private ProgressBar loadingProgressBar;
     private LoginRepository loginRepository;
     private Context appContext;
-   private  static final String SHARED_PREF_CREDENTIAL_FILE = "tuser_credentials";
+   private  static final String SHARED_PREF_CREDENTIAL_FILE = "user_credentials";
 
     public MutableLiveData<LoginResult> getLoginResult() {
         return this.loginResult;

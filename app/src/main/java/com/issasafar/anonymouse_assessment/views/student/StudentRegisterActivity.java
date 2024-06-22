@@ -25,8 +25,6 @@ public class StudentRegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        mBinding = ActivityStudentRegisterBinding.inflate(getLayoutInflater());
-//        setContentView(mBinding.getRoot());
         ActivityStudentRegisterBinding activityStudentRegisterBinding = DataBindingUtil.setContentView(this, R.layout.activity_student_register);
         mStudentRegisterViewModel = new StudentRegisterViewModel();
         activityStudentRegisterBinding.setStudentRegister(mStudentRegisterViewModel);
@@ -116,17 +114,6 @@ public class StudentRegisterActivity extends AppCompatActivity {
                 activityStudentRegisterBinding.YourSignInput.getEditText().setError(mStudentRegisterViewModel.getSignError());
             }
         });
-//        activityStudentRegisterBinding.registerButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                activityStudentRegisterBinding.nameInput.getEditText().setError(mStudentRegisterViewModel.getNameError());
-//                activityStudentRegisterBinding.emailInput.getEditText().setError(mStudentRegisterViewModel.getEmailError());
-//                activityStudentRegisterBinding.passwordInput.getEditText().setError(mStudentRegisterViewModel.getPasswordError());
-//                activityStudentRegisterBinding.confirmPasswordInput.getEditText().setError(mStudentRegisterViewModel.getRepeatedPasswordError());
-//                activityStudentRegisterBinding.YourSignInput.getEditText().setError(mStudentRegisterViewModel.getSignError());
-//
-//            }
-//        });
     }
 
     @BindingAdapter({"student"})
