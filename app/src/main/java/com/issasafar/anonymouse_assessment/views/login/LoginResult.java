@@ -13,11 +13,11 @@ public class LoginResult {
     @Nullable
     private String error;
 
-    LoginResult(@Nullable String error) {
+    public LoginResult(@Nullable String error) {
         this.error = error;
     }
 
-    LoginResult(@Nullable LoggedInUser success) {
+    public LoginResult(@Nullable LoggedInUser success) {
         this.success = success;
     }
 

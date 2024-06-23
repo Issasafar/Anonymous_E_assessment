@@ -2,22 +2,38 @@ package com.issasafar.anonymouse_assessment.viewmodels.teacher;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.lifecycle.MutableLiveData;
 
 import com.issasafar.anonymouse_assessment.BR;
+import com.issasafar.anonymouse_assessment.data.models.Result;
 import com.issasafar.anonymouse_assessment.data.models.Teacher;
+import com.issasafar.anonymouse_assessment.data.models.login.LoggedInUser;
+import com.issasafar.anonymouse_assessment.data.models.login.LoginResponse;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
+import com.issasafar.anonymouse_assessment.views.login.LoggedInUserView;
+import com.issasafar.anonymouse_assessment.views.login.LoginDataSource;
+import com.issasafar.anonymouse_assessment.views.login.LoginRepository;
+import com.issasafar.anonymouse_assessment.views.login.LoginResult;
+import com.issasafar.anonymouse_assessment.views.login.LoginViewModel;
 
 import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class TeacherRegisterViewModel extends BaseObservable {
 
+    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private final String successMessage = "Registration was successful";
     private final String errorMessage = "Registration Failed";
+    private int progressVisibility = View.GONE;
+    private LoginRepository loginRepository;
     @Bindable
     private String toastMessage = null;
     @Bindable
@@ -37,6 +53,12 @@ public class TeacherRegisterViewModel extends BaseObservable {
        this.mTeacher = new Teacher("", "", "");
 this.appContext = appContext;
         this.confirmPassword = "";
+        Executor executor = Executors.newCachedThreadPool();
+        this.loginRepository = LoginRepository.getInstance(new LoginDataSource( executor));
+    }
+
+    public MutableLiveData<LoginResult> getLoginResult() {
+        return this.loginResult;
     }
 
     public TeacherRegisterViewModel(Teacher teacher, String confirmPassword) {
@@ -106,11 +128,26 @@ this.appContext = appContext;
 
     public void onRegisterClicked() {
         if (isInputValid()) {
+            setProgressVisibility(View.VISIBLE);
             setToastMessage(successMessage + ": " + getTeacherName());
             setTeacher(new Teacher(mTeacher.getName(), mTeacher.getEmail(), mTeacher.getPassword()));
             if (!Objects.equals(mTeacher.getEmail().trim(), "")) {
                 Toast.makeText(getAppContext(), "invoked register " + mTeacher.getEmail(), Toast.LENGTH_LONG).show();
             }
+            loginRepository.register(getTeacher(),result ->{
+                setProgressVisibility(View.GONE);
+                if(result instanceof Result.Success){
+                    LoggedInUser loggedInUser;
+                    LoginResponse response =  ((Result.Success<LoginResponse>) result).getData();
+                    loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(),response.getPassword(), response.getSign());
+                    LoginViewModel loginViewModel = new LoginViewModel(getAppContext());
+                    loginViewModel.saveUserCredentials(new LoginResult(loggedInUser));
+                    loginResult.postValue(new LoginResult(loggedInUser));
+                }else{
+                    // failed
+                    loginResult.postValue(new LoginResult("Failed to register\n"));
+                }
+            });
         } else {
             setNameError(InputValidator.validateName(mTeacher.getName()));
             setPasswordError(InputValidator.validatePassword(mTeacher.getPassword()));
@@ -170,5 +207,14 @@ this.appContext = appContext;
 
     public Context getAppContext() {
         return appContext;
+    }
+    @Bindable
+    public int getProgressVisibility() {
+        return progressVisibility;
+    }
+
+    public void setProgressVisibility(int progressVisibility) {
+        this.progressVisibility = progressVisibility;
+        notifyPropertyChanged(BR.progressVisibility);
     }
 }

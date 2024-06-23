@@ -140,6 +140,8 @@ public class LoginViewModel extends BaseObservable {
         spEditor.putString("password", loggedInUser.getPassword());
         if (loggedInUser.getSign() != null) {
             spEditor.putString("sign", loggedInUser.getSign());
+        }else{
+            spEditor.putString("sign","");
         }
         spEditor.apply();
         return true;
@@ -153,7 +155,6 @@ public class LoginViewModel extends BaseObservable {
               LoginResponse response = ((Result.Success<LoginResponse>) result).getData();
 
               loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(), response.getPassword(), response.getSign());
-              //TODO() do something with user credentials
               Log.d("loginRepository.login", response.getUserName());
               loginResult.postValue(new LoginResult(loggedInUser));
           } else {

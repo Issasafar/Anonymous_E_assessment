@@ -26,7 +26,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityStudentRegisterBinding activityStudentRegisterBinding = DataBindingUtil.setContentView(this, R.layout.activity_student_register);
-        mStudentRegisterViewModel = new StudentRegisterViewModel();
+        mStudentRegisterViewModel = new StudentRegisterViewModel(getApplicationContext());
         activityStudentRegisterBinding.setStudentRegister(mStudentRegisterViewModel);
         activityStudentRegisterBinding.executePendingBindings();
         activityStudentRegisterBinding.nameInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -114,14 +114,15 @@ public class StudentRegisterActivity extends AppCompatActivity {
                 activityStudentRegisterBinding.YourSignInput.getEditText().setError(mStudentRegisterViewModel.getSignError());
             }
         });
+        mStudentRegisterViewModel.getLoginResult().observe(this,loginResult -> {
+            //TODO() start activities
+        });
     }
 
     @BindingAdapter({"student"})
     public static void runMe(View view, Student student) {
-        //TODO() handle registration
         if (!Objects.equals(student.getEmail().trim(), "")) {
             Toast.makeText(view.getContext(), "invoked register " + student.getEmail(), Toast.LENGTH_LONG).show();
-
         }
 
     }

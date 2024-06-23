@@ -1,5 +1,8 @@
 package com.issasafar.anonymouse_assessment.views.login;
 
+import android.util.Log;
+
+import com.issasafar.anonymouse_assessment.data.models.User;
 import com.issasafar.anonymouse_assessment.data.models.login.LoggedInUser;
 import com.issasafar.anonymouse_assessment.data.models.login.LoginResponse;
 
@@ -16,7 +19,6 @@ public class LoginRepository {
         private LoginDataSource dataSource;
 
 
-        private LoggedInUser user = null;
 
         private LoginRepository(LoginDataSource dataSource) {
             this.dataSource = dataSource;
@@ -29,14 +31,6 @@ public class LoginRepository {
             return instance;
         }
 
-        public boolean isLoggedIn() {
-            return user != null;
-        }
-
-        public void logout() {
-            user = null;
-            dataSource.logout();
-        }
 
 
 
@@ -45,6 +39,9 @@ public class LoginRepository {
            dataSource.login(username, password, repositoryCallback);
 
         }
+        public void register(User user, RepositoryCallBack<LoginResponse> repositoryCallBack){
 
+            dataSource.register(user,repositoryCallBack);
+        }
 
 }

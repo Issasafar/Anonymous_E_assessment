@@ -5,6 +5,10 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.AnonymousEassessment" parent="Base.Theme.AnonymousEassessment" />
-<style name="Theme.AnonymousEassessment.ActionBar" parent="Theme.Material3.DayNight"/>
+    <style name="Theme.AnonymousEassessment" parent="Base.Theme.AnonymousEassessment">
+    <item name="fontFamily">@font/roboto_fonts_family</item>
+        </style>
+<style name="Theme.AnonymousEassessment.ActionBar" parent="Theme.Material3.DayNight">
+    <item name="fontFamily">@font/roboto_fonts_family</item>
+    </style>
 </resources>

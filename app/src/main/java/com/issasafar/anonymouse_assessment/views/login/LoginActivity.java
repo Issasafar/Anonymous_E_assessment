@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 loginViewModel.login(userAccount.getEmail(), userAccount.getPassword());
                 loginViewModel.getLoginResult().observe(this, loginResult -> {
                     if (loginResult.getSuccess() != null) {
+                        loadingProgressBar.setVisibility(View.GONE);
                         loginViewModel.saveUserCredentials(loginResult);
                         //TODO() something to do with after saving the credentials :)
                     } else {

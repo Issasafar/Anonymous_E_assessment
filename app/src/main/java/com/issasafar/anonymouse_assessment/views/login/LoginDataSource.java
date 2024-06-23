@@ -56,7 +56,6 @@ public class LoginDataSource {
                 Log.d("LoginDatasource::", e.getMessage() + " : " + e.getCause());
                 Result<LoginResponse> errorResult = new Result.Error<>(e);
                 repositoryCallback.onComplete(errorResult);
-
             }
         });
     }
@@ -74,13 +73,17 @@ public class LoginDataSource {
                         assert successMessagePair != null;
                         if(successMessagePair.getSuccess()){
                            login(user.getEmail(), user.getPassword(), repositoryCallBack);
+                        }else{
+                            repositoryCallBack.onComplete(new Result.Error<>(new Exception("something went wrong")));
                         }
+                    }else{
+                        repositoryCallBack.onComplete(new Result.Error<>(new Exception("something went wrong")));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<SuccessMessagePair> call, Throwable t) {
-
+                    repositoryCallBack.onComplete(new Result.Error<>(new Exception(t)));
                 }
             });
         });
@@ -88,7 +91,6 @@ public class LoginDataSource {
 
         public void logout() {
         // TODO: revoke authentication
-
     }
 
 

@@ -9,6 +9,8 @@ import android.widget.Button;
 
 import com.issasafar.anonymouse_assessment.databinding.ActivityMainBinding;
 import com.issasafar.anonymouse_assessment.views.login.LoginActivity;
+import com.issasafar.anonymouse_assessment.views.login.ResetPasswordActivity;
+import com.issasafar.anonymouse_assessment.views.login.ResetPasswordViewModel;
 import com.issasafar.anonymouse_assessment.views.student.StudentRegisterActivity;
 import com.issasafar.anonymouse_assessment.views.teacher.TeacherRegisterActivity;
 

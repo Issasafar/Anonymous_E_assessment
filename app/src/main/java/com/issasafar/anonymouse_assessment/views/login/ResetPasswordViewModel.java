@@ -143,13 +143,14 @@ public class ResetPasswordViewModel extends BaseObservable {
     public void onSubmitClicked() {
 
 
+        LoginApi loginApi = LoginApiClient.getClient();
         if (isInputValid() && newPassword == null) {
 
             setResetPasswordCredentials(new ResetPasswordCredentials.EmailNamePair(getEmail(), getUserName()));
             // Attempt to post these credentials to the api
             Gson gson = new Gson();
           String body =  gson.toJson(resetPasswordCredentials);
-            Call<SuccessMessagePair> resetPasswordResponseCall = loginApiClient.resetPassword(body);
+            Call<SuccessMessagePair> resetPasswordResponseCall = loginApi.resetPassword(body);
 
 
             setProgressVisibility(View.VISIBLE);
@@ -187,7 +188,7 @@ public class ResetPasswordViewModel extends BaseObservable {
             // Attempt to send these credentials to the api
             Gson gson = new Gson();
             String body = gson.toJson(resetPasswordCredentials);
-            Call<SuccessMessagePair> resetPasswordResponseCall = loginApiClient.resetPassword(body);
+            Call<SuccessMessagePair> resetPasswordResponseCall = loginApi.resetPassword(body);
             resetPasswordResponseCall.enqueue(new Callback<SuccessMessagePair>() {
                 @Override
                 public void onResponse(Call<SuccessMessagePair> call, Response<SuccessMessagePair> response) {
@@ -195,6 +196,7 @@ public class ResetPasswordViewModel extends BaseObservable {
                         setProgressVisibility(View.GONE);
                         // TODO () show dialog after password reset
                         SuccessMessagePair successMessagePair = response.body();
+
                     }
                 }
 

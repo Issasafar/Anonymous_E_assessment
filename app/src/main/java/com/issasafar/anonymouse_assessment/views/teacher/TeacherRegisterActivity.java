@@ -3,6 +3,7 @@ package com.issasafar.anonymouse_assessment.views.teacher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.MutableLiveData;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,11 +17,14 @@ import com.issasafar.anonymouse_assessment.databinding.ActivityTeacherRegisterBi
 import com.issasafar.anonymouse_assessment.data.models.Teacher;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
 import com.issasafar.anonymouse_assessment.viewmodels.teacher.TeacherRegisterViewModel;
+import com.issasafar.anonymouse_assessment.views.login.LoginRepository;
+import com.issasafar.anonymouse_assessment.views.login.LoginResult;
 
 import java.util.Objects;
 
 public class TeacherRegisterActivity extends AppCompatActivity {
 private ActivityTeacherRegisterBinding mBinding;
+private LoginRepository loginRepository;
 private TeacherRegisterViewModel mTeacherRegisterViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,17 +102,13 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
             activityTeacherRegisterBinding.confirmPasswordInput.getEditText().setError(mTeacherRegisterViewModel.getRepeatedPasswordError());
             }
         });
+       mTeacherRegisterViewModel.getLoginResult().observe(this, loginResult -> {
+           //Todo() start corresponding acts
+       });
     }
 
     @BindingAdapter({"inputError"})
     public static void setInputError(TextInputLayout textInputLayout, String error) {
        textInputLayout.getEditText().setError(error);
     }
-    @BindingAdapter({"teacher"})
-    public static void runMe(View view, Teacher teacher){
-        //TODO() handle the registration for teacher
-    }
-
-
-
 }
