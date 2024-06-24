@@ -14,29 +14,60 @@
         android:layout_height="match_parent"
         tools:context=".views.student.StudentRegisterActivity">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/main_color"
+            android:paddingTop="@dimen/margin_16dp_size"
+            android:paddingBottom="@dimen/margin_16dp_size"
+            android:id="@+id/header">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/main_logo"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/register_layout"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        android:paddingTop="@dimen/margin_16dp_size"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:paddingStart="@dimen/margin_16dp_size"
+            android:paddingEnd="@dimen/margin_16dp_size"
             android:id="@+id/name_input"
-            app:inputError="@{StudentRegister.nameError}">
+            app:inputError="@{StudentRegister.nameError}"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/name"
+                android:drawableStart="@drawable/baseline_person_24"
+                android:drawablePadding="@dimen/margin_8dp_size"
                 android:text="@={StudentRegister.studentName}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_input"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/name_input"
+            app:layout_constraintStart_toStartOf="@id/name_input"
+            android:paddingStart="@dimen/margin_16dp_size"
+            android:paddingEnd="@dimen/margin_16dp_size"
+            android:paddingTop="@dimen/margin_8dp_size"
             app:layout_constraintTop_toBottomOf="@+id/name_input"
             app:inputError="@{StudentRegister.emailError}">
 
@@ -44,15 +75,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
-                android:text="@={StudentRegister.studentEmail}"/>
+                android:text="@={StudentRegister.studentEmail}"
+                android:drawableStart="@drawable/baseline_email_24"
+                android:drawablePadding="@dimen/margin_8dp_size"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password_input"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
+            app:layout_constraintEnd_toEndOf="@id/name_input"
+            app:layout_constraintStart_toStartOf="@id/name_input"
+            android:paddingStart="@dimen/margin_16dp_size"
+            android:paddingEnd="@dimen/margin_16dp_size"
+            android:paddingTop="@dimen/margin_8dp_size"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_input"
             app:inputError="@{StudentRegister.passwordError}">
 
@@ -60,30 +96,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
+                android:inputType="textPassword"
+                android:drawableStart="@drawable/baseline_lock_24"
+                android:drawablePadding="@dimen/margin_8dp_size"
                 android:text="@={StudentRegister.studentPassword}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/confirm_password_input"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
+            app:layout_constraintEnd_toEndOf="@id/name_input"
+            app:layout_constraintStart_toStartOf="@id/name_input"
+            android:paddingStart="@dimen/margin_16dp_size"
+            android:paddingEnd="@dimen/margin_16dp_size"
+            android:paddingTop="@dimen/margin_8dp_size"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_input"
             app:inputError="@{StudentRegister.repeatedPasswordError}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableStart="@drawable/baseline_lock_24"
+                android:drawablePadding="@dimen/margin_8dp_size"
+                android:inputType="textPassword"
                 android:hint="@string/confirm_password"
                 android:text="@={StudentRegister.confirmPassword}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="409dp"
+            android:layout_width="0dp"
+            app:layout_constraintEnd_toEndOf="@id/name_input"
+            app:layout_constraintStart_toStartOf="@id/name_input"
+            android:paddingStart="@dimen/margin_16dp_size"
+            android:paddingEnd="@dimen/margin_16dp_size"
+            android:paddingTop="@dimen/margin_8dp_size"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/Your_sign_input"
             app:layout_constraintTop_toBottomOf="@+id/confirm_password_input"
             app:inputError="@{StudentRegister.signError}">
@@ -91,6 +139,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/margin_8dp_size"
+                android:drawableStart="@drawable/main_logo_small"
                 android:hint="@string/your_sign"
                 android:text="@={StudentRegister.studentSign}"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -120,6 +170,6 @@
             app:layout_constraintTop_toTopOf="parent"
             android:visibility="@{StudentRegister.progressVisibility}"
             app:layout_constraintVertical_bias="0.3"/>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

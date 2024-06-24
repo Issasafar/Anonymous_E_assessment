@@ -14,74 +14,132 @@
         android:layout_height="match_parent"
         tools:context=".views.login.LoginActivity">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/email_input"
-            android:layout_width="409dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topHeader"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:inputError="@{loginViewModel.emailError}">
+            android:paddingTop="@dimen/margin_32dp_size"
+            android:paddingBottom="@dimen/margin_32dp_size"
+            android:background="@color/main_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/anony_text"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/email"
-                android:text="@={loginViewModel.email}"
-                android:inputType="textEmailAddress"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginStart="8dp"
+                android:text="@string/anonymous"
+                android:textColor="@color/white"
+                android:textSize="@dimen/headline3"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/assess_text"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password_input"
-            android:layout_width="409dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_input"
-            app:inputError="@{loginViewModel.passwordError}">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/assess_text"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/password"
-                android:text="@={loginViewModel.password}"
-                android:inputType="textPassword"
-                android:id="@+id/password_field"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="@string/e_assessment"
+                android:textColor="@color/white"
+                android:textSize="@dimen/headline3"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/anony_text" />
 
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="271dp"
-            android:text="@string/login"
-            app:layout_constraintBottom_toTopOf="@+id/forgot_password_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password_input"
-        />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:src="@drawable/main_logo"
+                app:layout_constraintBottom_toBottomOf="@id/anony_text"
+                app:layout_constraintLeft_toRightOf="@id/anony_text"
+                app:layout_constraintRight_toRightOf="@id/assess_text" />
 
-        <Button
-            style="@style/Widget.Material3.Button.TextButton.Dialog"
-            android:id="@+id/forgot_password_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/forgot_password"
-            android:textColor="@drawable/forgot_password_text_selector"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_button"
-          />
-        <ProgressBar
-            android:id="@+id/loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/footer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@id/password_input"
-            app:layout_constraintEnd_toEndOf="@id/password_input"
-            app:layout_constraintVertical_bias="0.3"
-            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topHeader">
 
-            />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:inputError="@{loginViewModel.emailError}"
+                android:paddingStart="@dimen/margin_16dp_size"
+                android:paddingEnd="@dimen/margin_16dp_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:text="@={loginViewModel.email}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:inputError="@{loginViewModel.passwordError}"
+                android:paddingStart="@dimen/margin_16dp_size"
+                android:paddingEnd="@dimen/margin_16dp_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/email_input">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:text="@={loginViewModel.password}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                app:layout_constraintBottom_toTopOf="@+id/forgot_password_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password_input" />
+
+            <Button
+                android:id="@+id/forgot_password_button"
+                style="@style/Widget.Material3.Button.TextButton.Dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/forgot_password"
+                android:textColor="@drawable/forgot_password_text_selector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/login_button" />
+
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/password_input"
+                app:layout_constraintStart_toStartOf="@id/password_input"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

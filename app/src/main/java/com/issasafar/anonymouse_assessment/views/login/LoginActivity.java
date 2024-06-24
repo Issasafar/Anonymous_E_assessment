@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                         loadingProgressBar.setVisibility(View.GONE);
                         loginViewModel.saveUserCredentials(loginResult);
                         //TODO() something to do with after saving the credentials :)
+
                     } else {
                         Toast.makeText(getApplicationContext(), loginResult.getError(), Toast.LENGTH_SHORT).show();
                     }
