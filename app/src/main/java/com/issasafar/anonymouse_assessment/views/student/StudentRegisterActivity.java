@@ -26,7 +26,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityStudentRegisterBinding activityStudentRegisterBinding = DataBindingUtil.setContentView(this, R.layout.activity_student_register);
-        mStudentRegisterViewModel = new StudentRegisterViewModel(getApplicationContext());
+        mStudentRegisterViewModel = new StudentRegisterViewModel(getApplicationContext(), activityStudentRegisterBinding);
         activityStudentRegisterBinding.setStudentRegister(mStudentRegisterViewModel);
         activityStudentRegisterBinding.executePendingBindings();
         activityStudentRegisterBinding.nameInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -121,9 +121,9 @@ public class StudentRegisterActivity extends AppCompatActivity {
 
     @BindingAdapter({"student"})
     public static void runMe(View view, Student student) {
-        if (!Objects.equals(student.getEmail().trim(), "")) {
-            Toast.makeText(view.getContext(), "invoked register " + student.getEmail(), Toast.LENGTH_LONG).show();
-        }
+//        if (!Objects.equals(student.getEmail().trim(), "")) {
+//            Toast.makeText(view.getContext(), "invoked register " + student.getEmail(), Toast.LENGTH_LONG).show();
+//        }
 
     }
 
@@ -131,10 +131,10 @@ public class StudentRegisterActivity extends AppCompatActivity {
     public static void setInputError(TextInputLayout textInputLayout, String error) {
         textInputLayout.getEditText().setError(error);
     }
+    //TODO() do something with this toast message
     @BindingAdapter({"toastMessage"})
     public static void runMe(View view, String message) {
-
-        if (message != null)
-            Toast.makeText(view.getContext(), message, Toast.LENGTH_LONG).show();
+//        if (message != null)
+//            Toast.makeText(view.getContext(), message, Toast.LENGTH_LONG).show();
     }
 }

@@ -11,11 +11,13 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.issasafar.anonymouse_assessment.BR;
 import com.issasafar.anonymouse_assessment.data.models.Result;
 import com.issasafar.anonymouse_assessment.data.models.Teacher;
 import com.issasafar.anonymouse_assessment.data.models.login.LoggedInUser;
 import com.issasafar.anonymouse_assessment.data.models.login.LoginResponse;
+import com.issasafar.anonymouse_assessment.databinding.ActivityTeacherRegisterBinding;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
 import com.issasafar.anonymouse_assessment.views.login.LoggedInUserView;
 import com.issasafar.anonymouse_assessment.views.login.LoginDataSource;
@@ -48,13 +50,15 @@ public class TeacherRegisterViewModel extends BaseObservable {
     private Teacher mTeacher;
     private String confirmPassword;
     private Context appContext;
+    private ActivityTeacherRegisterBinding teacherRegisterBinding;
 
-    public TeacherRegisterViewModel(Context appContext) {
-       this.mTeacher = new Teacher("", "", "");
-this.appContext = appContext;
+    public TeacherRegisterViewModel(Context appContext, ActivityTeacherRegisterBinding teacherRegisterBinding) {
+        this.mTeacher = new Teacher("", "", "");
         this.confirmPassword = "";
+        this.appContext = appContext;
+        this.teacherRegisterBinding = teacherRegisterBinding;
         Executor executor = Executors.newCachedThreadPool();
-        this.loginRepository = LoginRepository.getInstance(new LoginDataSource( executor));
+        this.loginRepository = LoginRepository.getInstance(new LoginDataSource(executor));
     }
 
     public MutableLiveData<LoginResult> getLoginResult() {
@@ -131,28 +135,32 @@ this.appContext = appContext;
             setProgressVisibility(View.VISIBLE);
             setToastMessage(successMessage + ": " + getTeacherName());
             setTeacher(new Teacher(mTeacher.getName(), mTeacher.getEmail(), mTeacher.getPassword()));
-            if (!Objects.equals(mTeacher.getEmail().trim(), "")) {
+         /*   if (!Objects.equals(mTeacher.getEmail().trim(), "")) {
                 Toast.makeText(getAppContext(), "invoked register " + mTeacher.getEmail(), Toast.LENGTH_LONG).show();
-            }
-            loginRepository.register(getTeacher(),result ->{
+            }*/
+            loginRepository.register(getTeacher(), result -> {
                 setProgressVisibility(View.GONE);
-                if(result instanceof Result.Success){
+                if (result instanceof Result.Success) {
                     LoggedInUser loggedInUser;
-                    LoginResponse response =  ((Result.Success<LoginResponse>) result).getData();
-                    loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(),response.getPassword(), response.getSign());
+                    LoginResponse response = ((Result.Success<LoginResponse>) result).getData();
+                    loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(), response.getPassword(), response.getSign());
                     LoginViewModel loginViewModel = new LoginViewModel(getAppContext());
                     loginViewModel.saveUserCredentials(new LoginResult(loggedInUser));
                     loginResult.postValue(new LoginResult(loggedInUser));
-                }else{
+                } else if (result instanceof Result.Error) {
                     // failed
-                    loginResult.postValue(new LoginResult("Failed to register\n"));
+                    String errorMessage = ((Result.Error<LoginResponse>) result).getException().getMessage();
+                    assert errorMessage != null;
+                    Snackbar snackbar = Snackbar.make(teacherRegisterBinding.getRoot(), errorMessage, Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    loginResult.postValue(new LoginResult(errorMessage));
                 }
             });
         } else {
             setNameError(InputValidator.validateName(mTeacher.getName()));
             setPasswordError(InputValidator.validatePassword(mTeacher.getPassword()));
             setEmailError(InputValidator.validateEmail(mTeacher.getEmail()));
-            setRepeatedPasswordError(InputValidator.validateRepeatedPassword(mTeacher.getPassword(),getConfirmPassword()));
+            setRepeatedPasswordError(InputValidator.validateRepeatedPassword(mTeacher.getPassword(), getConfirmPassword()));
             setToastMessage(errorMessage);
             //setTeacher(new Teacher(mTeacher.getName(), mTeacher.getEmail(), mTeacher.getPassword()));
         }
@@ -208,6 +216,7 @@ this.appContext = appContext;
     public Context getAppContext() {
         return appContext;
     }
+
     @Bindable
     public int getProgressVisibility() {
         return progressVisibility;

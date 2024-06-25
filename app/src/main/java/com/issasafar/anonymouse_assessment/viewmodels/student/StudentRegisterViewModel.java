@@ -9,11 +9,13 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.issasafar.anonymouse_assessment.BR;
 import com.issasafar.anonymouse_assessment.data.models.Result;
 import com.issasafar.anonymouse_assessment.data.models.Student;
 import com.issasafar.anonymouse_assessment.data.models.login.LoggedInUser;
 import com.issasafar.anonymouse_assessment.data.models.login.LoginResponse;
+import com.issasafar.anonymouse_assessment.databinding.ActivityStudentRegisterBinding;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
 import com.issasafar.anonymouse_assessment.views.login.LoginDataSource;
 import com.issasafar.anonymouse_assessment.views.login.LoginRepository;
@@ -47,10 +49,12 @@ private String repeatedPasswordError = null;
 @Bindable
 private String signError = null;
     private Context appContext;
-    public StudentRegisterViewModel(Context appContext) {
+    private ActivityStudentRegisterBinding studentRegisterBinding;
+    public StudentRegisterViewModel(Context appContext, ActivityStudentRegisterBinding studentRegisterBinding) {
         this.mStudent = new Student("","","","");
         this.confirmPassword = "";
         this.appContext = appContext;
+        this.studentRegisterBinding = studentRegisterBinding;
         Executor executor = Executors.newCachedThreadPool();
         this.loginRepository = LoginRepository.getInstance(new LoginDataSource( executor));
     }
@@ -126,7 +130,6 @@ private String signError = null;
     public void onRegisterClicked() {
         if (isInputValid()) {
             setProgressVisibility(View.VISIBLE);
-            setToastMessage(successMessage + ": "+getStudentName());
             setStudent(new Student(mStudent.getName(), mStudent.getEmail(), mStudent.getPassword(), mStudent.getSign()));
             loginRepository.register(getStudent(),result ->{
                 setProgressVisibility(View.GONE);
@@ -136,10 +139,15 @@ private String signError = null;
                     loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(),response.getPassword(), response.getSign());
                     LoginViewModel loginViewModel = new LoginViewModel(getAppContext());
                     loginViewModel.saveUserCredentials(new LoginResult(loggedInUser));
+                    setToastMessage(successMessage + ": "+getStudentName());
                     loginResult.postValue(new LoginResult(loggedInUser));
-                }else{
+                } else if (result instanceof Result.Error) {
                     // failed
-                    loginResult.postValue(new LoginResult("Failed to register\n"));
+                    String errorMessage = ((Result.Error<LoginResponse>) result).getException().getMessage();
+                    assert errorMessage != null;
+                    Snackbar snackbar = Snackbar.make(studentRegisterBinding.getRoot(), errorMessage, Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    loginResult.postValue(new LoginResult(errorMessage));
                 }
             });
         }else {

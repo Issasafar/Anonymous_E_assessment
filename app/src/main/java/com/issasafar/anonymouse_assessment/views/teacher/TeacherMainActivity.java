@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.issasafar.anonymouse_assessment.R;
 import com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.TeacherMainFragment;
 
 public class TeacherMainActivity extends AppCompatActivity {

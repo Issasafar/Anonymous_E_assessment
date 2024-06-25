@@ -5,6 +5,7 @@ import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.MutableLiveData;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,7 +31,7 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityTeacherRegisterBinding activityTeacherRegisterBinding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_register);
-        mTeacherRegisterViewModel = new TeacherRegisterViewModel(getApplicationContext());
+        mTeacherRegisterViewModel = new TeacherRegisterViewModel(getApplicationContext(), activityTeacherRegisterBinding);
         activityTeacherRegisterBinding.setTeacherRegister(mTeacherRegisterViewModel);
         activityTeacherRegisterBinding.executePendingBindings();
         activityTeacherRegisterBinding.emailInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -104,6 +105,8 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
         });
        mTeacherRegisterViewModel.getLoginResult().observe(this, loginResult -> {
            //Todo() start corresponding acts
+           setResult(RESULT_OK, new Intent(this, TeacherMainActivity.class));
+           finish();
        });
     }
 

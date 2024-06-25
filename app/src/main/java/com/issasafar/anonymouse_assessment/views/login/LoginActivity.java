@@ -3,6 +3,7 @@ package com.issasafar.anonymouse_assessment.views.login;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -13,11 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.issasafar.anonymouse_assessment.R;
 import com.issasafar.anonymouse_assessment.data.models.login.UserAccount;
 import com.issasafar.anonymouse_assessment.databinding.ActivityLoginBinding;
+import com.issasafar.anonymouse_assessment.views.teacher.TeacherMainActivity;
 
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel mLoginViewModel;
@@ -62,17 +65,24 @@ public class LoginActivity extends AppCompatActivity {
             if (mLoginViewModel.isInputValid()) {
                 userAccount = mLoginViewModel.getUserAccount();
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                Toast.makeText(getApplicationContext(), userAccount.getEmail() + ":" + userAccount.getPassword(), Toast.LENGTH_SHORT).show();
                 LoginViewModel loginViewModel = activityLoginBinding.getLoginViewModel();
                 loginViewModel.login(userAccount.getEmail(), userAccount.getPassword());
                 loginViewModel.getLoginResult().observe(this, loginResult -> {
+                    loadingProgressBar.setVisibility(View.GONE);
                     if (loginResult.getSuccess() != null) {
-                        loadingProgressBar.setVisibility(View.GONE);
                         loginViewModel.saveUserCredentials(loginResult);
                         //TODO() something to do with after saving the credentials :)
-
+                        String EMPTY = "";
+                        if(loginResult.getSuccess().getSign() == null || EMPTY.equals(loginResult.getSuccess().getSign())){
+                            Log.d("mainLogin","empy sign");
+                            // no sign so it's a teacher
+                            setResult(RESULT_OK, new Intent(this, TeacherMainActivity.class));
+                            finish();
+                        }
                     } else {
-                        Toast.makeText(getApplicationContext(), loginResult.getError(), Toast.LENGTH_SHORT).show();
+                        assert loginResult.getError() != null;
+                        Snackbar snackbar = Snackbar.make(activityLoginBinding.getRoot(), loginResult.getError(), Snackbar.LENGTH_LONG);
+                        snackbar.show();
                     }
                 });
             }

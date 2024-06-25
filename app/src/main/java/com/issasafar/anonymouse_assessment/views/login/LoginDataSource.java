@@ -25,18 +25,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
-        * Class that handles authentication w/ login credentials and retrieves user information.
-        */
+ * Class that handles authentication w/ login credentials and retrieves user information.
+ */
 public class LoginDataSource {
     private final Executor executor;
 
 
-    public LoginDataSource( Executor executor) {
+    public LoginDataSource(Executor executor) {
         this.executor = executor;
 
     }
+
     public void login(String email, String password, RepositoryCallBack<LoginResponse> repositoryCallback) {
-       String jsonBody;
+        String jsonBody;
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("name", "");
@@ -44,59 +45,55 @@ public class LoginDataSource {
             jsonObject.put("password", password);
             jsonObject.put("sign", "");
             jsonBody = jsonObject.toString();
-    } catch (JSONException e) {
+        } catch (JSONException e) {
             throw new RuntimeException(e);
         }
         executor.execute(() -> {
             try {
-                Log.d("makeRequset", "making request with " + jsonBody);
                 Result<LoginResponse> result = makeSynchronousLoginRequest(jsonBody);
                 repositoryCallback.onComplete(result);
             } catch (Exception e) {
-                Log.d("LoginDatasource::", e.getMessage() + " : " + e.getCause());
                 Result<LoginResponse> errorResult = new Result.Error<>(e);
                 repositoryCallback.onComplete(errorResult);
             }
         });
     }
+
     public void register(User user, RepositoryCallBack<LoginResponse> repositoryCallBack) {
         Gson gson = new Gson();
         String body = gson.toJson(user);
         LoginApi loginApiClient = LoginApiClient.getClient();
         Call<SuccessMessagePair> registerationCall = loginApiClient.registerNewUser(body);
-        executor.execute(()->{
+        executor.execute(() -> {
             registerationCall.enqueue(new Callback<SuccessMessagePair>() {
                 @Override
                 public void onResponse(Call<SuccessMessagePair> call, Response<SuccessMessagePair> response) {
-                    if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         SuccessMessagePair successMessagePair = response.body();
                         assert successMessagePair != null;
-                        if(successMessagePair.getSuccess()){
-                           login(user.getEmail(), user.getPassword(), repositoryCallBack);
-                        }else{
-                            repositoryCallBack.onComplete(new Result.Error<>(new Exception("something went wrong")));
+                        if (successMessagePair.getSuccess()) {
+                            login(user.getEmail(), user.getPassword(), repositoryCallBack);
+                        } else if (!successMessagePair.getSuccess()) {
+                            repositoryCallBack.onComplete(new Result.Error<>(new Exception(successMessagePair.getMessage())));
+                        } else {
+                            repositoryCallBack.onComplete(new Result.Error<>(new Exception("Unknown error")));
                         }
-                    }else{
-                        repositoryCallBack.onComplete(new Result.Error<>(new Exception("something went wrong")));
+                    } else {
+                        repositoryCallBack.onComplete(new Result.Error<>(new Exception(String.valueOf(response.errorBody()))));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<SuccessMessagePair> call, Throwable t) {
-                    repositoryCallBack.onComplete(new Result.Error<>(new Exception(t)));
+                    repositoryCallBack.onComplete(new Result.Error<>(new Exception(t.getMessage())));
                 }
             });
         });
     }
 
-        public void logout() {
+    public void logout() {
         // TODO: revoke authentication
     }
-
-
-
-
-
 
 
     public Result<LoginResponse> makeSynchronousLoginRequest(String jsonBody) {
@@ -107,7 +104,7 @@ public class LoginDataSource {
             Response<LoginResponse> response = call.execute();
             if (response.isSuccessful()) {
                 LoginResponse responseBody = response.body();
-                if (responseBody != null ) {
+                if (responseBody != null) {
                     // Parse JSON response using Gson or JSONObject
                     Gson gson = new Gson();
 //                    LoginResponse loginResponse = gson.fromJson(responseBody, LoginResponse.class);
@@ -120,14 +117,14 @@ public class LoginDataSource {
                 }
             } else {
                 Log.d("Retrofit", "Unsuccessful response: " + response.code());
+                return new Result.Error<>(new Exception("Login error"));
             }
         } catch (IOException e) {
-            Log.d("loginDataSource", "IOException: " + e.getMessage());
             // Return error result with exception
             return new Result.Error<>(e);
         }
         // Return generic error result if response handling fails
-        return new Result.Error<>(new Exception("Failed to handle response"));
+        return new Result.Error<>(new Exception("Unable to retrieve data from the server"));
     }
 
 }
