@@ -71,10 +71,9 @@ public class LoginActivity extends AppCompatActivity {
                     loadingProgressBar.setVisibility(View.GONE);
                     if (loginResult.getSuccess() != null) {
                         loginViewModel.saveUserCredentials(loginResult);
-                        //TODO() something to do with after saving the credentials :)
+                        //TODO() do something after saving the credentials :)
                         String EMPTY = "";
                         if(loginResult.getSuccess().getSign() == null || EMPTY.equals(loginResult.getSuccess().getSign())){
-                            Log.d("mainLogin","empy sign");
                             // no sign so it's a teacher
                             setResult(RESULT_OK, new Intent(this, TeacherMainActivity.class));
                             finish();
