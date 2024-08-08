@@ -72,8 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (loginResult.getSuccess() != null) {
                         loginViewModel.saveUserCredentials(loginResult);
                         //TODO() do something after saving the credentials :)
-                        String EMPTY = "";
-                        if(loginResult.getSuccess().getSign() == null || EMPTY.equals(loginResult.getSuccess().getSign())){
+                        if(loginResult.getSuccess().getSign() == null || "".equals(loginResult.getSuccess().getSign())){
                             // no sign so it's a teacher
                             setResult(RESULT_OK, new Intent(this, TeacherMainActivity.class));
                             finish();

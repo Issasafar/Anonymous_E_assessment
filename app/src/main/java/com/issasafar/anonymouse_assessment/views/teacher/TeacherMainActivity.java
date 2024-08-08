@@ -23,7 +23,7 @@ public class TeacherMainActivity extends AppCompatActivity {
         setContentView(activityTeacherMainBinding.getRoot());
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, TeacherMainFragment.newInstance())
+                    .replace(R.id.teacher_fragment_container, TeacherMainFragment.newInstance())
                     .commitNow();
         }
         Toolbar toolbar = activityTeacherMainBinding.toolbar.getRoot();
