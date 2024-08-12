@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 
 import com.issasafar.anonymouse_assessment.R;
 import com.issasafar.anonymouse_assessment.databinding.ActivityTeacherMainBinding;
+import com.issasafar.anonymouse_assessment.databinding.TeacherFragmentMainBinding;
 import com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.TeacherMainFragment;
 
 public class TeacherMainActivity extends AppCompatActivity {
