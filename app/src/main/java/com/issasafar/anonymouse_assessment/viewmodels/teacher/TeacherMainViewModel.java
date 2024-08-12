@@ -20,7 +20,14 @@ public class TeacherMainViewModel extends BaseObservable {
  @Bindable
  private String courseNameError;
 
-public void setFragmentMainBinding(TeacherFragmentMainBinding teacherFragmentMainBinding){
+    public TeacherMainViewModel(TeacherFragmentMainBinding teacherFragmentMainBinding) {
+        this.fragmentMainBinding = teacherFragmentMainBinding;
+        fragmentMainBinding.addButton.setOnClickListener((view)->{
+            dropDownClicked();
+        });
+    }
+
+    public void setFragmentMainBinding(TeacherFragmentMainBinding teacherFragmentMainBinding){
     this.fragmentMainBinding = teacherFragmentMainBinding;
 }
     public String getCourseNameError() {
@@ -32,11 +39,12 @@ public void setFragmentMainBinding(TeacherFragmentMainBinding teacherFragmentMai
         notifyPropertyChanged(BR.courseNameError);
     }
     public void dropDownClicked(){
-        Log.d("mainteacher act","drop down clicked");
         ImageView imageView = fragmentMainBinding.dropdownIcon;
-        ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(imageView,"rotation",190f);
+        ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(imageView,"rotation",imageView.getRotation() + 180f);
         rotateAnimator.setDuration(10);
         rotateAnimator.start();
-        fragmentMainBinding.courseNameInputLayout.getEditText().setText("hhhh");
+        if(!rotateAnimator.isRunning()){
+            imageView.setImageDrawable();
+        }
     }
 }

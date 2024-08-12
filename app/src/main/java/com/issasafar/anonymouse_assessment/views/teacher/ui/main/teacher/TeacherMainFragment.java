@@ -3,15 +3,18 @@ package com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.issasafar.anonymouse_assessment.R;
 import com.issasafar.anonymouse_assessment.databinding.TeacherFragmentMainBinding;
@@ -32,9 +35,9 @@ public class TeacherMainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         teacherFragmentMainBinding = TeacherFragmentMainBinding.inflate(getLayoutInflater());
-        mViewModel = new TeacherMainViewModel();
-        mViewModel.setFragmentMainBinding(teacherFragmentMainBinding);
         teacherFragmentMainBinding.executePendingBindings();
+        mViewModel = new TeacherMainViewModel(teacherFragmentMainBinding);
+        teacherFragmentMainBinding.setTeacherMainFragment(mViewModel);
         // TODO: Use the ViewModel
     }
 
@@ -42,6 +45,6 @@ public class TeacherMainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return teacherFragmentMainBinding.getRoot();
+        return this.teacherFragmentMainBinding.getRoot();
     }
 }
