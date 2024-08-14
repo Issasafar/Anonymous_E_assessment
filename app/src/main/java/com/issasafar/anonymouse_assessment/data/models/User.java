@@ -1,6 +1,6 @@
 package com.issasafar.anonymouse_assessment.data.models;
 
-public class User {
+public  abstract class User {
     protected String  name;
     protected String email;
     protected String password;
