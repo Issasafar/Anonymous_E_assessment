@@ -11,9 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.issasafar.anonymouse_assessment.R;
@@ -38,6 +41,9 @@ public class TeacherMainFragment extends Fragment {
         teacherFragmentMainBinding.executePendingBindings();
         mViewModel = new TeacherMainViewModel(teacherFragmentMainBinding);
         teacherFragmentMainBinding.setTeacherMainFragment(mViewModel);
+        String[] items = new String[]{"1", "2", "three"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1,items);
+        teacherFragmentMainBinding.courseNameSpinner.setAdapter(adapter);
         // TODO: Use the ViewModel
     }
 

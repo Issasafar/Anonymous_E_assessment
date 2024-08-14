@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="TeacherMainFragment"
             type="com.issasafar.anonymouse_assessment.viewmodels.teacher.TeacherMainViewModel" />
@@ -50,17 +51,27 @@
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toTopOf="@+id/textView">
 
+            <Spinner
+                android:id="@+id/courseNameSpinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/dropdown_icon"
+                app:layout_constraintTop_toTopOf="@id/dropdown_icon"
+                app:layout_constraintEnd_toEndOf="@id/dropdown_icon"
+                app:layout_constraintBottom_toBottomOf="@id/dropdown_icon"
+                android:text="" />
+
             <ImageButton
                 android:id="@+id/dropdown_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/margin_8dp_size"
+                android:visibility="invisible"
                 android:src="@drawable/baseline_arrow_drop_down_24"
-                android:onClick="@{()->TeacherMainFragment.dropDownClicked()}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -68,15 +79,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_8dp_size"
-                app:layout_constraintStart_toEndOf="@id/dropdown_icon"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:inputError="@{TeacherMainFragment.courseNameError}"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/dropdown_icon"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:text="@={TeacherMainFragment.courseName}"
                     android:hint="@string/course_name" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,6 +103,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textConstraintLayout"
+            android:onClick="@{()->TeacherMainFragment.addQuestionClicked()}"
             app:layout_constraintVertical_chainStyle="spread" />
 
         <Button
