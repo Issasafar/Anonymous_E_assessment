@@ -9,7 +9,7 @@ public class SuccessMessagePair {
 
     @SerializedName("message")
     private String message;
- @SerializedName("success")
+    @SerializedName("success")
     private Boolean success;
 
     public Boolean getSuccess() {
