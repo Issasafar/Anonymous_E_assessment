@@ -2,7 +2,8 @@ package com.issasafar.anonymouse_assessment.views.common;
 
 
 import com.issasafar.anonymouse_assessment.data.models.Result;
-import com.issasafar.anonymouse_assessment.data.models.common.Test;
+import com.issasafar.anonymouse_assessment.data.models.common.Course;
+import com.issasafar.anonymouse_assessment.data.models.common.CourseRequest;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -13,8 +14,8 @@ public class CoursesRepository {
     public CoursesRepository(){
         this.coursesDataSource = new CoursesDataSource();
     }
-    public void createTest(Test test, final ResultCallback<Result> callback){
-        coursesDataSource.createTest(test).enqueue(new Callback<Result>() {
+    public void createTest(CourseRequest<Course> course, final ResultCallback<Result> callback){
+        coursesDataSource.createTest(course).enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if(response.isSuccessful()){
