@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/margin_16dp_size"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/score_text"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/start_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test "/>
+        <TextView
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/start_text"
+            app:layout_constraintEnd_toStartOf="@id/action_text"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/score_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="score"/>
+        <TextView
+            android:textStyle="bold"
+            android:textColor="@color/text_color_selector"
+            app:layout_constraintStart_toEndOf="@id/score_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/action_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_result"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

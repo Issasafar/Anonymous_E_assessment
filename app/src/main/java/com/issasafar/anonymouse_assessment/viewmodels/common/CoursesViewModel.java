@@ -4,9 +4,9 @@ import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
-import com.issasafar.anonymouse_assessment.data.models.Result;
 import com.issasafar.anonymouse_assessment.data.models.common.Course;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseRequest;
+import com.issasafar.anonymouse_assessment.data.models.common.CourseResponse;
 import com.issasafar.anonymouse_assessment.views.common.CoursesRepository;
 import com.issasafar.anonymouse_assessment.views.common.ResultCallback;
 
@@ -15,10 +15,10 @@ public class CoursesViewModel extends ViewModel {
     public CoursesViewModel(){
         coursesRepository = new CoursesRepository();
     }
-    public void createTest(CourseRequest<Course> course){
-        coursesRepository.createTest(course, new ResultCallback<Result>() {
+    public void postData(CourseRequest<Course> course){
+        coursesRepository.postData(course, new ResultCallback<CourseResponse>() {
             @Override
-            public void onSuccess(Result data) {
+            public void onSuccess(CourseResponse  data) {
                 Log.d("CoursesViewModel", "onSuccess: " + data.toString());
             }
 

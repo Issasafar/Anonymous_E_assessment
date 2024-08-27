@@ -29,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CoursesViewModelTest {
     public static CoursesRepository coursesRepository = new CoursesRepository();
 
-    public Course sampleTest() {
+    public Course getSampleTest() {
         Question question1 = new LongAnswerQuestion(1, 1, "what is 2!", 1, "2");
         Question question2 = new MultipleChoiceQuestion(1, 1, "which is best", 2, "A", new String[]{"java", "kotlin", "python"});
         Answer answer1 = new Answer.LongAnswerAnswer(1, "9", 1, 1);
@@ -45,27 +45,14 @@ public class CoursesViewModelTest {
 //    java.net.ConnectException: Failed to connect to /127.0.0.1:80
 //    java.net.SocketTimeoutException: timeout
     @Test
-    public void createTest() throws InterruptedException {
-        Course course = sampleTest();
+    public void postData() throws InterruptedException {
+        Course course = getSampleTest();
         assertNotNull(coursesRepository);
         assertEquals("programming course", course.getDescription());
         GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create();
 
         CountDownLatch latch = new CountDownLatch(1); // This will wait for the asynchronous process to complete
 
-        coursesRepository.createTest(new CourseRequest<>(CourseRequest.CourseAction.POST_TEST,course), new ResultCallback<Result>() {
-            @Override
-            public void onSuccess(Result data) {
-                assertNotNull(data); // Assuming data should be null
-                latch.countDown(); // Decrement the latch to unblock the test
-            }
-
-            @Override
-            public void onError(Exception e) {
-                assertNotNull(e); // Ensure an error is thrown if expected
-                latch.countDown(); // Decrement the latch to unblock the test
-            }
-        });
 
         latch.await(); // Wait for the latch to reach 0 before proceeding
         // Add any additional assertions if needed

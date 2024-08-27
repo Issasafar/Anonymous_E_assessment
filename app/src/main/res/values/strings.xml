@@ -32,4 +32,13 @@
     <string name="add_questions">Add Questions</string>
     <string name="generate_test">Generate Test</string>
     <string name="get_previous_tests_results">Get Previous tests\' Results</string>
+    <string name="click_to_add_new_question">Click to add new question</string>
+    <string name="save">Save</string>
+    <string name="add_question">add question</string>
+    <string name="test_generated">Test Generated</string>
+    <string name="view">View</string>
+    <string name="exit">Exit</string>
+    <string name="test_s_results">Test\'s Results</string>
+    <string name="view_result"><u>View Result</u></string>
+    <string name="view_answers"><u>View Answers</u></string>
 </resources>

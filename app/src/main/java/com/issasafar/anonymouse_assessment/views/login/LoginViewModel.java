@@ -112,10 +112,7 @@ public class LoginViewModel extends BaseObservable {
     public void onLoginClicked() {
         if (isInputValid()) {
             setUserAccount(new UserAccount(mUserAccount.getEmail(), mUserAccount.getPassword()));
-            Log.d("loginViewModel", "login is valid");
-            Log.d("loginViewModel", getUserAccount().getEmail() + ":" + getUserAccount().getPassword());
         } else {
-            Log.d("loginViewModel", "login is NOT valid");
             setEmailError(InputValidator.validateEmail(mUserAccount.getEmail()));
             setPasswordError(InputValidator.validatePassword(mUserAccount.getPassword()));
         }
@@ -148,14 +145,12 @@ public class LoginViewModel extends BaseObservable {
     }
 
     public void login(String email, String password) {
-        Log.d("loginRepository.login", "loggin in with " + email);
       loginRepository.login(email, password, result -> {
           if (result instanceof Result.Success) {
               LoggedInUser loggedInUser;
               LoginResponse response = ((Result.Success<LoginResponse>) result).getData();
 
               loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(), response.getPassword(), response.getSign());
-              Log.d("loginRepository.login", response.getUserName());
               loginResult.postValue(new LoginResult(loggedInUser));
           } else {
               loginResult.postValue(new LoginResult("login failed\n"));

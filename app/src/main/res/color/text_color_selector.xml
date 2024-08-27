@@ -1,0 +1,9 @@
+<!-- res/color/text_color_selector.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- State when the text is pressed (clicked) -->
+    <item android:color="@color/main_dark_color" android:state_pressed="true"/>
+    <!-- State when the text is not pressed -->
+    <item android:color="@color/main_dark_color" android:state_focused="true"/>
+    <!-- Default state -->
+    <item android:color="@color/main_color"/>
+</selector>
