@@ -1,6 +1,7 @@
 package com.issasafar.anonymouse_assessment.viewmodels.teacher;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -60,6 +61,7 @@ public class TeacherRegisterViewModel extends BaseObservable {
         Executor executor = Executors.newCachedThreadPool();
         this.loginRepository = LoginRepository.getInstance(new LoginDataSource(executor));
     }
+
 
     public MutableLiveData<LoginResult> getLoginResult() {
         return this.loginResult;

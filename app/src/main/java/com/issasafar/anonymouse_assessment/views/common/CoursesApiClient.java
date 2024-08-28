@@ -20,7 +20,7 @@ public class CoursesApiClient {
         Executor executor = Executors.newCachedThreadPool();
         if(retrofit == null){
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://127.0.0.1")
+                    .baseUrl("http://10.0.2.2")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .callbackExecutor(executor)

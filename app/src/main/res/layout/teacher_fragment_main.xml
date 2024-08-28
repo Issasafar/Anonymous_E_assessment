@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_8dp_size"
+        android:padding="@dimen/margin_16dp_size"
         tools:context=".views.teacher.TeacherMainActivity">
 
         <TextView
@@ -30,7 +31,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/choose_course"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_fonts_family"
@@ -46,15 +47,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_8dp_size"
-            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintBottom_toBottomOf="@+id/choose_course"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="@+id/textView">
+            app:layout_constraintStart_toEndOf="@+id/choose_course"
+            app:layout_constraintTop_toTopOf="@+id/choose_course">
 
             <Spinner
                 android:id="@+id/courseNameSpinner"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 app:layout_constraintStart_toStartOf="@id/dropdown_icon"
                 app:layout_constraintTop_toTopOf="@id/dropdown_icon"
                 app:layout_constraintEnd_toEndOf="@id/dropdown_icon"

@@ -41,4 +41,5 @@
     <string name="test_s_results">Test\'s Results</string>
     <string name="view_result"><u>View Result</u></string>
     <string name="view_answers"><u>View Answers</u></string>
+    <string name="question_type">Question type</string>
 </resources>

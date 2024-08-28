@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class CourseResponse<T> {
     private String message;
-    private int success;
+    private boolean success;
     private T data;
 
-    public CourseResponse(String message, int success, @Nullable T data) {
+    public CourseResponse(String message, boolean success, @Nullable T data) {
         this.message = message;
         this.success = success;
         this.data = data;
@@ -23,11 +23,11 @@ public class CourseResponse<T> {
         this.message = message;
     }
 
-    public int getSuccess() {
+    public boolean getSuccess() {
         return success;
     }
 
-    public void setSuccess(int success) {
+    public void setSuccess(boolean success) {
         this.success = success;
     }
 

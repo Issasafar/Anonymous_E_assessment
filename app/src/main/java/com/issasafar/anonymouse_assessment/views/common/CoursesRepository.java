@@ -42,7 +42,7 @@ public class CoursesRepository {
                 if (response.isSuccessful()) {
                     callback.onSuccess(response.body());
                 } else {
-                    callback.onError(new Exception("Request failed"));
+                    callback.onError(new Exception(response.errorBody().toString()));
                 }
             }
 

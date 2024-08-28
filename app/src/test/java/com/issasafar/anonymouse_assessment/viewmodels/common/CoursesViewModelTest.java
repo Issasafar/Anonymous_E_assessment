@@ -4,15 +4,12 @@ package com.issasafar.anonymouse_assessment.viewmodels.common;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.issasafar.anonymouse_assessment.data.models.Result;
 import com.issasafar.anonymouse_assessment.data.models.common.Answer;
 import com.issasafar.anonymouse_assessment.data.models.common.Course;
-import com.issasafar.anonymouse_assessment.data.models.common.CourseRequest;
 import com.issasafar.anonymouse_assessment.data.models.common.LongAnswerQuestion;
 import com.issasafar.anonymouse_assessment.data.models.common.MultipleChoiceQuestion;
 import com.issasafar.anonymouse_assessment.data.models.common.Question;
 import com.issasafar.anonymouse_assessment.views.common.CoursesRepository;
-import com.issasafar.anonymouse_assessment.views.common.ResultCallback;
 
 
 import org.junit.jupiter.api.Test;
@@ -40,7 +37,7 @@ public class CoursesViewModelTest {
         ArrayList<Answer> answers = new ArrayList<>();
         answers.add(answer1);
         answers.add(answer2);
-        return new Course.TestCourse(1, 1,"programming course", questions, answers);
+        return new Course.TestCourse(1, 1,"programming course", questions);
     }
 //    java.net.ConnectException: Failed to connect to /127.0.0.1:80
 //    java.net.SocketTimeoutException: timeout

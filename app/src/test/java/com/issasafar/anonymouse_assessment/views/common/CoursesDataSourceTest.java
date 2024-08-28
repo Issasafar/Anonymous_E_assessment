@@ -10,6 +10,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.issasafar.anonymouse_assessment.data.models.common.Answer;
 import com.issasafar.anonymouse_assessment.data.models.common.Course;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseRequest;
@@ -26,6 +28,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -61,7 +65,7 @@ class CoursesDataSourceTest {
         ArrayList<Answer> answers = new ArrayList<>();
         answers.add(answer1);
         answers.add(answer2);
-        Course course = new Course.TestCourse(1, 1, "programming course", questions, answers);
+        Course course = new Course.TestCourse(1, 1, "programming course", questions);
         return new CourseRequest<Course>(CourseRequest.CourseAction.POST_TEST, course);
     }
 
@@ -75,5 +79,13 @@ class CoursesDataSourceTest {
         verifyNoMoreInteractions(mockApiService);
     }
 
+    @Test
+    public void mapToJsonValid(){
+        Map<String, Integer> somedata = new HashMap<>();
+        somedata.put("owner_id",1);
+        CourseRequest<Map<String,Integer>> request = new CourseRequest<>(CourseRequest.CourseAction.GET_COURSES,somedata);
+        String thing = new Gson().toJson(request);
+        assertEquals(thing, "{\"action\":\"GET_COURSES\",\"data\":{\"owner_id\":1}}");
+    }
 
 }

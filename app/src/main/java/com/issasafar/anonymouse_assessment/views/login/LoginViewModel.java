@@ -2,10 +2,8 @@ package com.issasafar.anonymouse_assessment.views.login;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import androidx.databinding.BaseObservable;
@@ -18,9 +16,6 @@ import com.issasafar.anonymouse_assessment.data.models.login.LoginResponse;
 import com.issasafar.anonymouse_assessment.data.models.login.UserAccount;
 import com.issasafar.anonymouse_assessment.data.models.Result;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
-import com.issasafar.anonymouse_assessment.views.login.LoginDataSource;
-import com.issasafar.anonymouse_assessment.views.login.LoginRepository;
-import com.issasafar.anonymouse_assessment.views.login.LoginResult;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -33,7 +28,7 @@ public class LoginViewModel extends BaseObservable {
     private ProgressBar loadingProgressBar;
     private LoginRepository loginRepository;
     private Context appContext;
-   private  static final String SHARED_PREF_CREDENTIAL_FILE = "user_credentials";
+    private static final String SHARED_PREF_CREDENTIAL_FILE = "user_credentials";
 
     public MutableLiveData<LoginResult> getLoginResult() {
         return this.loginResult;
@@ -55,7 +50,7 @@ public class LoginViewModel extends BaseObservable {
         this.appContext = appContext;
         this.mUserAccount = new UserAccount("", "");
         Executor executor = Executors.newCachedThreadPool();
-        this.loginRepository = LoginRepository.getInstance(new LoginDataSource( executor));
+        this.loginRepository = LoginRepository.getInstance(new LoginDataSource(executor));
     }
 
     @Bindable
@@ -119,14 +114,14 @@ public class LoginViewModel extends BaseObservable {
     }
 
 
-
     public boolean isInputValid() {
         return !getEmail().trim().isEmpty()
                 && !getPassword().trim().isEmpty()
                 && InputValidator.validateEmail(mUserAccount.getEmail()) == null
                 && InputValidator.validatePassword(mUserAccount.getPassword()) == null;
     }
-    public Boolean saveUserCredentials(LoginResult loginResult) {
+
+    public void saveUserCredentials(LoginResult loginResult) {
         SharedPreferences sharedPreferences;
         sharedPreferences = appContext.getSharedPreferences(SHARED_PREF_CREDENTIAL_FILE, MODE_PRIVATE);
         LoggedInUser loggedInUser = loginResult.getSuccess();
@@ -137,25 +132,29 @@ public class LoginViewModel extends BaseObservable {
         spEditor.putString("password", loggedInUser.getPassword());
         if (loggedInUser.getSign() != null) {
             spEditor.putString("sign", loggedInUser.getSign());
-        }else{
-            spEditor.putString("sign","");
+        } else {
+            spEditor.putString("sign", "");
         }
         spEditor.apply();
-        return true;
+    }
+
+    public static String getUserId(Context appContext) {
+        SharedPreferences sharedPreferences = appContext.getSharedPreferences(SHARED_PREF_CREDENTIAL_FILE, MODE_PRIVATE);
+        return sharedPreferences.getString("userId", "-1");
     }
 
     public void login(String email, String password) {
-      loginRepository.login(email, password, result -> {
-          if (result instanceof Result.Success) {
-              LoggedInUser loggedInUser;
-              LoginResponse response = ((Result.Success<LoginResponse>) result).getData();
+        loginRepository.login(email, password, result -> {
+            if (result instanceof Result.Success) {
+                LoggedInUser loggedInUser;
+                LoginResponse response = ((Result.Success<LoginResponse>) result).getData();
 
-              loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(), response.getPassword(), response.getSign());
-              loginResult.postValue(new LoginResult(loggedInUser));
-          } else {
-              loginResult.postValue(new LoginResult("login failed\n"));
-          }
-      });
+                loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(), response.getPassword(), response.getSign());
+                loginResult.postValue(new LoginResult(loggedInUser));
+            } else {
+                loginResult.postValue(new LoginResult("login failed\n"));
+            }
+        });
 
 
     }
