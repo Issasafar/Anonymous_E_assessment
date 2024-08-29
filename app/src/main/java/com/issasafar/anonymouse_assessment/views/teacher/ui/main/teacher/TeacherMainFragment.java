@@ -1,10 +1,12 @@
 package com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher;
 
 
+import static com.issasafar.anonymouse_assessment.viewmodels.teacher.AddQuestionsViewModel.QUESTIONS_KEY;
 import static com.issasafar.anonymouse_assessment.views.teacher.TeacherMainActivity.COURSES_KEY;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.ObjectAnimator;
@@ -30,6 +32,7 @@ import com.google.gson.reflect.TypeToken;
 import com.issasafar.anonymouse_assessment.R;
 import com.issasafar.anonymouse_assessment.data.models.common.Course;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseResponse;
+import com.issasafar.anonymouse_assessment.data.models.common.Question;
 import com.issasafar.anonymouse_assessment.databinding.TeacherFragmentMainBinding;
 import com.issasafar.anonymouse_assessment.viewmodels.teacher.TeacherMainViewModel;
 
@@ -44,10 +47,11 @@ import java.util.stream.Collectors;
 
 public class TeacherMainFragment extends Fragment {
 
-    private TeacherMainViewModel mViewModel;
+    private TeacherMainViewModel teacherMainViewModel;
     private ArrayList<Course> courses;
     public static final String TARGET_COURSE_KEY = "targetCourse";
     private TeacherFragmentMainBinding teacherFragmentMainBinding;
+    private Course targetCourse;
 
     public static TeacherMainFragment newInstance() {
         return new TeacherMainFragment();
@@ -59,8 +63,19 @@ public class TeacherMainFragment extends Fragment {
         teacherFragmentMainBinding = TeacherFragmentMainBinding.inflate(getLayoutInflater());
         teacherFragmentMainBinding.executePendingBindings();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        mViewModel = new TeacherMainViewModel(teacherFragmentMainBinding, fragmentManager);
-        teacherFragmentMainBinding.setTeacherMainFragment(mViewModel);
+        teacherMainViewModel = new TeacherMainViewModel(teacherFragmentMainBinding, fragmentManager,getActivity().getApplicationContext());
+        teacherFragmentMainBinding.setTeacherMainFragment(teacherMainViewModel);
+        fragmentManager.setFragmentResultListener(QUESTIONS_KEY, this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                Type questionsArrayType = new TypeToken<ArrayList<Question>>() {
+                }.getType();
+                String json = result.getString(TARGET_COURSE_KEY);
+                ArrayList<Question> questions = new Gson().fromJson(json, questionsArrayType);
+                teacherFragmentMainBinding.getTeacherMainFragment().setQuestions(questions);
+
+            }
+        });
         if (getArguments() != null) {
             teacherFragmentMainBinding.courseNameSpinner.setEnabled(true);
             Bundle coursesBundle = getArguments();
@@ -79,14 +94,15 @@ public class TeacherMainFragment extends Fragment {
                     Objects.requireNonNull(teacherFragmentMainBinding.courseNameInputLayout.getEditText()).setText(courseName);
                     Optional<Course> courseSearch = courses
                             .stream()
-                            .filter(item->item.getDescription().equals(courseName))
+                            .filter(item -> item.getDescription().equals(courseName))
                             .findFirst();
-                    if(courseSearch.isPresent()){
-                        Course  targetCourse = courseSearch.get();
+                    if (courseSearch.isPresent()) {
+                        targetCourse = courseSearch.get();
+                        teacherMainViewModel.setTargetCourse(targetCourse);
                         String courseJson = new Gson().toJson(targetCourse);
                         Bundle courseBundle = new Bundle();
-                        courseBundle.putString(TARGET_COURSE_KEY,courseJson);
-                        getParentFragmentManager().setFragmentResult(TARGET_COURSE_KEY,courseBundle);
+                        courseBundle.putString(TARGET_COURSE_KEY, courseJson);
+                        getParentFragmentManager().setFragmentResult(TARGET_COURSE_KEY, courseBundle);
                     }
                 }
 
@@ -98,6 +114,7 @@ public class TeacherMainFragment extends Fragment {
         } else {
             teacherFragmentMainBinding.courseNameSpinner.setEnabled(false);
         }
+
         // TODO: Use the ViewModel
     }
 

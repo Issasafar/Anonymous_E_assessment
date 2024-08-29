@@ -47,7 +47,7 @@ public class TeacherMainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .add(R.id.teacher_fragment_container, TeacherMainFragment.class,bundle)
-                    .commitNow();
+                    .commit();
         }
         Toolbar toolbar = activityTeacherMainBinding.toolbar.getRoot();
         setSupportActionBar(toolbar);

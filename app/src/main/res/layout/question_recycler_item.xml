@@ -1,213 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/margin_16dp_size"
->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="QuestionViewModel"
+            type="com.issasafar.anonymouse_assessment.viewmodels.teacher.QuestionViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/question_type_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_8dp_size"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/question_number_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Question "
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/type_text"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/type_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Type: "
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/course_type_spinner"
-            app:layout_constraintStart_toEndOf="@id/question_number_text"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Spinner
-            android:id="@+id/course_type_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:prompt="@string/question_type"
-            android:textAlignment="viewStart"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/type_text"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/question_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_8dp_size"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/question_type_layout">
-
-        <TextView
-            android:id="@+id/question_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_8dp_size"
-            android:layout_marginTop="@dimen/margin_8dp_size"
-            android:layout_marginEnd="@dimen/margin_8dp_size"
-            android:text="Question Text"
-            app:layout_constraintEnd_toStartOf="@id/question_text_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/question_text_layout" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/question_text_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/question_text"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/question_text_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+        android:padding="@dimen/margin_16dp_size">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/choices_layout"
+            android:id="@+id/question_type_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toTopOf="@id/answer_text_layout"
+            android:layout_margin="@dimen/margin_8dp_size"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/question_text_layout">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/choice1_text"
+                android:id="@+id/question_number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Question "
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/type_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/type_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type: "
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/course_type_spinner"
+                app:layout_constraintStart_toEndOf="@id/question_number_text"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/course_type_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:prompt="@string/question_type"
+                android:textAlignment="viewStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/type_text"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/question_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8dp_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/question_type_layout">
+
+            <TextView
+                android:id="@+id/question_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_8dp_size"
                 android:layout_marginTop="@dimen/margin_8dp_size"
                 android:layout_marginEnd="@dimen/margin_8dp_size"
-                android:text="Choice 1"
-                app:layout_constraintEnd_toStartOf="@id/choice1_text_layout"
+                android:text="Question Text"
+                app:layout_constraintEnd_toStartOf="@id/question_text_layout"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/choice1_text_layout" />
+                app:layout_constraintTop_toTopOf="@id/question_text_layout" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/choice1_text_layout"
+                android:id="@+id/question_text_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:inputError="@{QuestionViewModel.questionTextError}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/choice1_text"
-                app:layout_constraintStart_toStartOf="@id/choices_guideline"
+                app:layout_constraintStart_toEndOf="@id/question_text"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/choice1_text_input"
+                    android:id="@+id/question_text_input"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@={QuestionViewModel.questionText}" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/choice2_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_8dp_size"
-                android:layout_marginTop="@dimen/margin_8dp_size"
-                android:layout_marginEnd="@dimen/margin_8dp_size"
-                android:text="Choice 2"
-                app:layout_constraintEnd_toStartOf="@id/choice2_text_layout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/choice2_text_layout" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/choice2_text_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/choice2_text"
-                app:layout_constraintStart_toStartOf="@id/choices_guideline"
-                app:layout_constraintTop_toBottomOf="@id/choice1_text_layout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/choice2_text_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/choice3_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_8dp_size"
-                android:layout_marginTop="@dimen/margin_8dp_size"
-                android:layout_marginEnd="@dimen/margin_8dp_size"
-                android:text="Choice 3"
-                app:layout_constraintEnd_toStartOf="@id/choice3_text_layout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/choice3_text_layout" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/choice3_text_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/choice3_text"
-                app:layout_constraintStart_toStartOf="@id/choices_guideline"
-                app:layout_constraintTop_toBottomOf="@id/choice2_text_layout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/choice3_text_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/choices_guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="102dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/answer_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_8dp_size"
-            android:layout_marginTop="@dimen/margin_8dp_size"
-            android:layout_marginEnd="@dimen/margin_8dp_size"
-            android:text="Answer"
-            app:layout_constraintEnd_toStartOf="@id/answer_text_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/answer_text_layout" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/answer_text_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/answer_text"
-            app:layout_constraintStart_toStartOf="@id/question_text_layout"
-            app:layout_constraintTop_toBottomOf="@id/choices_layout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/answer_text_input"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/choices_layout"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toTopOf="@id/answer_text_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/question_text_layout">
 
+                <TextView
+                    android:id="@+id/choice1_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_8dp_size"
+                    android:layout_marginTop="@dimen/margin_8dp_size"
+                    android:layout_marginEnd="@dimen/margin_8dp_size"
+                    android:text="Choice 1"
+                    app:layout_constraintEnd_toStartOf="@id/choice1_text_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/choice1_text_layout" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/choice1_text_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:inputError="@{QuestionViewModel.choice1TextError}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/choice1_text"
+                    app:layout_constraintStart_toStartOf="@id/choices_guideline"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/choice1_text_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={QuestionViewModel.choice1Text}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/choice2_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_8dp_size"
+                    android:layout_marginTop="@dimen/margin_8dp_size"
+                    android:layout_marginEnd="@dimen/margin_8dp_size"
+                    android:text="Choice 2"
+                    app:layout_constraintEnd_toStartOf="@id/choice2_text_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/choice2_text_layout" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/choice2_text_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:inputError="@{QuestionViewModel.choice2TextError}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/choice2_text"
+                    app:layout_constraintStart_toStartOf="@id/choices_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/choice1_text_layout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/choice2_text_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={QuestionViewModel.choice2Text}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/choice3_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_8dp_size"
+                    android:layout_marginTop="@dimen/margin_8dp_size"
+                    android:layout_marginEnd="@dimen/margin_8dp_size"
+                    android:text="Choice 3"
+                    app:layout_constraintEnd_toStartOf="@id/choice3_text_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/choice3_text_layout" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/choice3_text_layout"
+                    android:layout_width="0dp"
+                    app:inputError="@{QuestionViewModel.choice3TextError}"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/choice3_text"
+                    app:layout_constraintStart_toStartOf="@id/choices_guideline"
+                    app:layout_constraintTop_toBottomOf="@id/choice2_text_layout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:text="@={QuestionViewModel.choice3Text}"
+                        android:id="@+id/choice3_text_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/choices_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="102dp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/answer_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8dp_size"
+                android:layout_marginTop="@dimen/margin_8dp_size"
+                android:layout_marginEnd="@dimen/margin_8dp_size"
+                android:text="Answer"
+                app:layout_constraintEnd_toStartOf="@id/answer_text_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/answer_text_layout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/answer_text_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:inputError="@{QuestionViewModel.answerTextError}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/answer_text"
+                app:layout_constraintStart_toStartOf="@id/question_text_layout"
+                app:layout_constraintTop_toBottomOf="@id/choices_layout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/answer_text_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={QuestionViewModel.answerText}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

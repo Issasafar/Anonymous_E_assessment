@@ -42,4 +42,6 @@
     <string name="view_result"><u>View Result</u></string>
     <string name="view_answers"><u>View Answers</u></string>
     <string name="question_type">Question type</string>
+    <string name="long_answer">Long Answer</string>
+    <string name="multiple_choice">Multiple Choice</string>
 </resources>

@@ -12,6 +12,10 @@ public abstract class Question {
         this.description = description;
         this.q_order = q_order;
     }
+    public Question(String description, int q_order){
+        this.description = description;
+        this.q_order = q_order;
+    }
 
 
     public int getQ_id() {

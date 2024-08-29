@@ -3,7 +3,6 @@ package com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher;
 import static com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.TeacherMainFragment.TARGET_COURSE_KEY;
 
 import androidx.fragment.app.FragmentResultListener;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
@@ -17,32 +16,37 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
-import com.issasafar.anonymouse_assessment.R;
+import com.google.gson.reflect.TypeToken;
 import com.issasafar.anonymouse_assessment.data.models.common.Course;
-import com.issasafar.anonymouse_assessment.data.models.common.LongAnswerQuestion;
-import com.issasafar.anonymouse_assessment.data.models.common.Question;
 import com.issasafar.anonymouse_assessment.databinding.FragmentAddQuestionsBinding;
 import com.issasafar.anonymouse_assessment.viewmodels.teacher.AddQuestionsViewModel;
 import com.issasafar.anonymouse_assessment.views.teacher.QuestionRecyclerViewAdapter;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 
 public class AddQuestionsFragment extends Fragment {
 
-    private AddQuestionsViewModel mViewModel;
+    private AddQuestionsViewModel addQuestionsViewModel;
     private FragmentAddQuestionsBinding addQuestionsBinding;
 
     public static AddQuestionsFragment newInstance() {
         return new AddQuestionsFragment();
     }
+
     private Course currentCourse;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addQuestionsBinding = FragmentAddQuestionsBinding.inflate(getLayoutInflater());
+            addQuestionsBinding = FragmentAddQuestionsBinding.inflate(getLayoutInflater());
+            QuestionRecyclerViewAdapter questionsAdapter = new QuestionRecyclerViewAdapter();
+            questionsAdapter.setContext(getActivity().getApplicationContext());
+            addQuestionsBinding.questionsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+            addQuestionsBinding.questionsRecycler.setAdapter(questionsAdapter);
+            addQuestionsViewModel = new AddQuestionsViewModel(addQuestionsBinding, questionsAdapter, getParentFragmentManager());
+            addQuestionsBinding.setAddQuestionViewModel(addQuestionsViewModel);
         addQuestionsBinding.executePendingBindings();
-        // todo() data binding for addQues...
         getParentFragmentManager().setFragmentResultListener(TARGET_COURSE_KEY, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
@@ -50,14 +54,9 @@ public class AddQuestionsFragment extends Fragment {
                 currentCourse = new Gson().fromJson(courseJson, Course.class);
             }
         });
-        QuestionRecyclerViewAdapter adapter = new QuestionRecyclerViewAdapter();
-        addQuestionsBinding.questionsRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        addQuestionsBinding.questionsRecycler.setAdapter(adapter);
-        adapter.addQuestion();
-        AddQuestionsViewModel addQuestionsViewModel = new AddQuestionsViewModel(addQuestionsBinding,adapter);
-        addQuestionsBinding.setAddQuestionViewModel(addQuestionsViewModel);
 
-       // add more logic
+
+        // add more logic
     }
 
     @Nullable

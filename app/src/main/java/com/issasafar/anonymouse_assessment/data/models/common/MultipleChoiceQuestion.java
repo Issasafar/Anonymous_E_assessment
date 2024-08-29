@@ -9,4 +9,10 @@ public class MultipleChoiceQuestion extends Question{
         this.solution = solution;
         this.choices = choices;
     }
+
+    public MultipleChoiceQuestion(String description, int q_order, String solution, String[] choices) {
+        super(description,q_order);
+        this.choices = choices;
+        this.solution = solution;
+    }
 }

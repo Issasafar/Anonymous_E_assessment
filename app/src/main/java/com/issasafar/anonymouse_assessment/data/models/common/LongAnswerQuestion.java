@@ -7,4 +7,8 @@ public class LongAnswerQuestion  extends Question{
         super(q_id, t_id, description, q_order);
         this.solution = solution;
     }
+    public LongAnswerQuestion(String description, int q_order, String solution){
+        super(description,q_order);
+        this.solution = solution;
+    }
 }
