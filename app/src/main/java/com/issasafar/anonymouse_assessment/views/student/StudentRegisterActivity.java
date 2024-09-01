@@ -25,8 +25,9 @@ public class StudentRegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ActivityStudentRegisterBinding activityStudentRegisterBinding = DataBindingUtil.setContentView(this, R.layout.activity_student_register);
-        mStudentRegisterViewModel = new StudentRegisterViewModel(getApplicationContext(), activityStudentRegisterBinding);
+        mStudentRegisterViewModel = new StudentRegisterViewModel(getApplicationContext(), activityStudentRegisterBinding,getWindow());
         activityStudentRegisterBinding.setStudentRegister(mStudentRegisterViewModel);
         activityStudentRegisterBinding.executePendingBindings();
         activityStudentRegisterBinding.nameInput.getEditText().addTextChangedListener(new TextWatcher() {

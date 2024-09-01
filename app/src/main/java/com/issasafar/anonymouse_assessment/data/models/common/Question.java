@@ -1,6 +1,6 @@
 package com.issasafar.anonymouse_assessment.data.models.common;
 
-public abstract class Question {
+public  class Question {
     protected int q_id;
     protected int t_id;
     protected String description;

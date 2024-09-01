@@ -18,6 +18,7 @@ public class CourseRequest<T> {
         POST_ANSWERS,
         GET_ANSWERS,
         GET_MESSAGES,
-        POST_MESSAGE
+        POST_MESSAGE,
+        GET_PREV_TESTS
     }
 }

@@ -89,6 +89,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/question_text_input"
+                    android:maxLines="3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@={QuestionViewModel.questionText}" />
@@ -104,6 +105,36 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/question_text_layout">
 
+                <TextView
+                    android:visibility="invisible"
+                    android:clickable="false"
+                    android:id="@+id/dummy_question"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_8dp_size"
+                    android:layout_marginTop="@dimen/margin_8dp_size"
+                    android:layout_marginEnd="@dimen/margin_8dp_size"
+                    android:text="Question Text"
+                    app:layout_constraintEnd_toStartOf="@id/dummy_question_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/dummy_question_layout" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="invisible"
+                    android:clickable="false"
+                    android:id="@+id/dummy_question_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/dummy_question"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dummy_question_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                         />
+                </com.google.android.material.textfield.TextInputLayout>
                 <TextView
                     android:id="@+id/choice1_text"
                     android:layout_width="wrap_content"
@@ -123,11 +154,12 @@
                     app:inputError="@{QuestionViewModel.choice1TextError}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/choice1_text"
-                    app:layout_constraintStart_toStartOf="@id/choices_guideline"
+                    app:layout_constraintStart_toStartOf="@id/dummy_question_layout"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/choice1_text_input"
+                        android:maxLines="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={QuestionViewModel.choice1Text}" />
@@ -152,12 +184,13 @@
                     app:inputError="@{QuestionViewModel.choice2TextError}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/choice2_text"
-                    app:layout_constraintStart_toStartOf="@id/choices_guideline"
+                    app:layout_constraintStart_toStartOf="@id/dummy_question_layout"
                     app:layout_constraintTop_toBottomOf="@id/choice1_text_layout">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/choice2_text_input"
                         android:layout_width="match_parent"
+                        android:maxLines="1"
                         android:layout_height="wrap_content"
                         android:text="@={QuestionViewModel.choice2Text}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -181,12 +214,13 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/choice3_text"
-                    app:layout_constraintStart_toStartOf="@id/choices_guideline"
+                    app:layout_constraintStart_toStartOf="@id/dummy_question_layout"
                     app:layout_constraintTop_toBottomOf="@id/choice2_text_layout">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:text="@={QuestionViewModel.choice3Text}"
                         android:id="@+id/choice3_text_input"
+                        android:maxLines="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -196,7 +230,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_begin="102dp" />
+                    app:layout_constraintGuide_end="277dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -223,6 +257,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/answer_text_input"
+                    android:maxLines="3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@={QuestionViewModel.answerText}" />

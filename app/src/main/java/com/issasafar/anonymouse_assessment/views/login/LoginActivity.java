@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -58,17 +59,21 @@ public class LoginActivity extends AppCompatActivity {
         forgotPasswordButton.setOnClickListener(view -> {
             Intent forgotPasswordIntent = new Intent(this, ResetPasswordActivity.class);
             startActivity(forgotPasswordIntent);
-            finish();
+            //todo() finish this activity if the action is not success
         });
         loginButton.setOnClickListener(view -> {
             mLoginViewModel.onLoginClicked();
             if (mLoginViewModel.isInputValid()) {
                 userAccount = mLoginViewModel.getUserAccount();
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 loadingProgressBar.setVisibility(View.VISIBLE);
+
                 LoginViewModel loginViewModel = activityLoginBinding.getLoginViewModel();
                 loginViewModel.login(userAccount.getEmail(), userAccount.getPassword());
                 loginViewModel.getLoginResult().observe(this, loginResult -> {
                     loadingProgressBar.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     if (loginResult.getSuccess() != null) {
                         loginViewModel.saveUserCredentials(loginResult);
                         //TODO() do something after saving the credentials :)

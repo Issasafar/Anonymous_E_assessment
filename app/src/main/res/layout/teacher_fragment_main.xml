@@ -87,6 +87,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:maxLines="3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@={TeacherMainFragment.courseName}"
@@ -109,6 +110,7 @@
 
         <Button
             android:id="@+id/generate_button"
+            android:onClick="@{()->TeacherMainFragment.generateTestClicked()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/generate_test"
@@ -122,6 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/get_previous_tests_results"
+            android:onClick="@{()->TeacherMainFragment.getPrevResultsClicked()}"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="@+id/generate_button"
             app:layout_constraintStart_toStartOf="@+id/generate_button"
@@ -134,6 +137,15 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="586dp" />
 
-
+<ProgressBar
+    android:id="@+id/progress_bar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintVertical_bias="0.4"
+    app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

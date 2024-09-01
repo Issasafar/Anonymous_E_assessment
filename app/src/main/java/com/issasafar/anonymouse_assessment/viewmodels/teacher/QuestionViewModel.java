@@ -76,7 +76,7 @@ public class QuestionViewModel extends BaseObservable {
     }
 
     public void setQuestionText(String questionText) {
-        if (!"".equals(questionText)) {
+        if (!questionText.trim().isEmpty()) {
             this.questionText.setValue(questionText);
             notifyPropertyChanged(BR.questionText);
             setQuestionTextError(null);
@@ -91,7 +91,7 @@ public class QuestionViewModel extends BaseObservable {
     }
 
     public void setAnswerText(String answerText) {
-        if (!"".equals(answerText)) {
+        if (!answerText.trim().isEmpty()) {
             this.answerText.setValue(answerText);
             notifyPropertyChanged(BR.answerText);
             setAnswerTextError(null);
@@ -106,7 +106,7 @@ public class QuestionViewModel extends BaseObservable {
     }
 
     public void setChoice1Text(String choice1Text) {
-        if (!"".equals(choice1Text)) {
+        if (!choice1Text.trim().isEmpty()) {
             this.choice1Text.setValue(choice1Text);
             notifyPropertyChanged(BR.choice1TextError);
             setChoice1TextError(null);
@@ -121,7 +121,7 @@ public class QuestionViewModel extends BaseObservable {
     }
 
     public void setChoice2Text(String choice2Text) {
-        if (!"".equals(choice2Text)) {
+        if (!choice2Text.trim().isEmpty()) {
             this.choice2Text.setValue(choice2Text);
             notifyPropertyChanged(BR.choice2TextError);
             setChoice2TextError(null);
@@ -136,7 +136,7 @@ public class QuestionViewModel extends BaseObservable {
     }
 
     public void setChoice3Text(String choice3Text) {
-        if (!"".equals(choice3Text)) {
+        if (!choice3Text.trim().isEmpty()) {
             this.choice3Text.setValue(choice3Text);
             notifyPropertyChanged(BR.choice3TextError);
             setChoice3TextError(null);

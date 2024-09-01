@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -11,7 +12,9 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.issasafar.anonymouse_assessment.data.models.common.Answer;
 import com.issasafar.anonymouse_assessment.data.models.common.Course;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseRequest;
@@ -19,6 +22,8 @@ import com.issasafar.anonymouse_assessment.data.models.common.CourseResponse;
 import com.issasafar.anonymouse_assessment.data.models.common.LongAnswerQuestion;
 import com.issasafar.anonymouse_assessment.data.models.common.MultipleChoiceQuestion;
 import com.issasafar.anonymouse_assessment.data.models.common.Question;
+import com.issasafar.anonymouse_assessment.data.models.common.QuestionDeserializer;
+import com.issasafar.anonymouse_assessment.data.models.login.SuccessMessagePair;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,10 +32,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kotlin.Pair;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 
@@ -86,6 +93,47 @@ class CoursesDataSourceTest {
         CourseRequest<Map<String,Integer>> request = new CourseRequest<>(CourseRequest.CourseAction.GET_COURSES,somedata);
         String thing = new Gson().toJson(request);
         assertEquals(thing, "{\"action\":\"GET_COURSES\",\"data\":{\"owner_id\":1}}");
+    }
+
+    @Test
+    public void questionsJsonSerialized() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Question.class, new QuestionDeserializer())
+                .create();
+
+        String jsonString = "[\n" +
+                "    {\n" +
+                "        \"description\": \"Describe the water cycle.\",\n" +
+                "        \"solution\": \"The water cycle is the continuous movement of water on, above, and below the surface of the Earth.\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"description\": \"Which of the following is a mammal?\",\n" +
+                "        \"solution\": \"Dolphin\",\n" +
+                "        \"choices\": [\"Shark\", \"Dolphin\", \"Crocodile\"]\n" +
+                "    }\n" +
+                "]\n";
+
+        Type questionListType = new TypeToken<ArrayList<Question>>() {}.getType();
+        ArrayList<Question> questions = gson.fromJson(jsonString, questionListType);
+
+        assertNotNull(questions);
+
+    }
+
+    @Test
+    public void pairGotMappedSuccessfully() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("t_id",1);
+        jsonObject.addProperty("owner_id",1);
+        String expected = "{" +
+                "\"t_id\":1," +
+                "\"owner_id\":1" +
+                "}";
+
+        String json = new Gson().toJson(jsonObject);
+        String jsonStr = jsonObject.toString();
+        assertEquals(jsonStr,expected);
+        assertEquals(json,expected);
     }
 
 }

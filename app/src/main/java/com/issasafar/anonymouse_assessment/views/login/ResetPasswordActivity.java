@@ -27,9 +27,10 @@ public class ResetPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityForgotPasswordBinding activityForgotPasswordBinding = DataBindingUtil.setContentView(this, R.layout.activity_forgot_password);
         setContentView(activityForgotPasswordBinding.getRoot());
-        resetPasswordViewModel = new ResetPasswordViewModel();
+        resetPasswordViewModel = new ResetPasswordViewModel(getApplicationContext(),activityForgotPasswordBinding,getWindow());
         activityForgotPasswordBinding.setResetPasswordViewModel(resetPasswordViewModel);
         activityForgotPasswordBinding.executePendingBindings();
+        submitButton = activityForgotPasswordBinding.submitButton;
         newPasswordTextInput = activityForgotPasswordBinding.newPasswordField;
         newPasswordTextInput.setOnEditorActionListener((textView, i, keyEvent) ->{
         if (i == EditorInfo.IME_ACTION_DONE) {

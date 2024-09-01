@@ -25,6 +25,11 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
     private Context context;
     private String[] questionTypes = new String[2];
     private static final ArrayList<ViewHolder> viewHolders = new ArrayList<>();
+
+    public int getQuestionsCount() {
+        return questionsCount;
+    }
+
     private int questionsCount = 0;
     public boolean isValidQuestions() {
         return validQuestions;
@@ -68,6 +73,7 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
 
     public void addQuestion() {
         this.questionsCount++;
+        this.notifyItemInserted(getQuestionsCount());
     }
 
     public void addQuestion(Question question) {
@@ -127,6 +133,6 @@ public class QuestionRecyclerViewAdapter extends RecyclerView.Adapter<QuestionRe
 
     @Override
     public int getItemCount() {
-        return questionsCount;
+        return getQuestionsCount();
     }
 }

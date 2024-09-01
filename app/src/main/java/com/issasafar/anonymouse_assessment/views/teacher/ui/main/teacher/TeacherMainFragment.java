@@ -4,44 +4,34 @@ package com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher;
 import static com.issasafar.anonymouse_assessment.viewmodels.teacher.AddQuestionsViewModel.QUESTIONS_KEY;
 import static com.issasafar.anonymouse_assessment.views.teacher.TeacherMainActivity.COURSES_KEY;
 
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.SpinnerAdapter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.issasafar.anonymouse_assessment.R;
 import com.issasafar.anonymouse_assessment.data.models.common.Course;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseResponse;
-import com.issasafar.anonymouse_assessment.data.models.common.Question;
 import com.issasafar.anonymouse_assessment.databinding.TeacherFragmentMainBinding;
 import com.issasafar.anonymouse_assessment.viewmodels.teacher.TeacherMainViewModel;
+import com.issasafar.anonymouse_assessment.data.models.common.QuestionDeserializer;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -63,26 +53,22 @@ public class TeacherMainFragment extends Fragment {
         teacherFragmentMainBinding = TeacherFragmentMainBinding.inflate(getLayoutInflater());
         teacherFragmentMainBinding.executePendingBindings();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        teacherMainViewModel = new TeacherMainViewModel(teacherFragmentMainBinding, fragmentManager,getActivity().getApplicationContext());
+        teacherMainViewModel = new TeacherMainViewModel(teacherFragmentMainBinding, fragmentManager,getActivity());
         teacherFragmentMainBinding.setTeacherMainFragment(teacherMainViewModel);
         fragmentManager.setFragmentResultListener(QUESTIONS_KEY, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                Type questionsArrayType = new TypeToken<ArrayList<Question>>() {
-                }.getType();
-                String json = result.getString(TARGET_COURSE_KEY);
-                ArrayList<Question> questions = new Gson().fromJson(json, questionsArrayType);
-                teacherFragmentMainBinding.getTeacherMainFragment().setQuestions(questions);
-
+                teacherFragmentMainBinding.getTeacherMainFragment().setQuestions(QuestionDeserializer.parseQuestionsJson(result.getString(QUESTIONS_KEY)));
             }
         });
-        if (getArguments() != null) {
+        if (getArguments() != null && !getArguments().getString(COURSES_KEY).equals("empty")) {
             teacherFragmentMainBinding.courseNameSpinner.setEnabled(true);
             Bundle coursesBundle = getArguments();
             Type courseResponseType = new TypeToken<CourseResponse<ArrayList<Course>>>() {
             }.getType();
             CourseResponse<ArrayList<Course>> courseResponse = new Gson().fromJson(coursesBundle.getString(COURSES_KEY), courseResponseType);
             courses = courseResponse.getData();
+            teacherMainViewModel.setAvailableCourses(courses);
             List<String> availableCourses = courses.stream().map(Course::getDescription).collect(Collectors.toList());
             Collections.reverse(availableCourses);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, availableCourses);
@@ -92,18 +78,6 @@ public class TeacherMainFragment extends Fragment {
                 public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                     String courseName = adapterView.getItemAtPosition(position).toString();
                     Objects.requireNonNull(teacherFragmentMainBinding.courseNameInputLayout.getEditText()).setText(courseName);
-                    Optional<Course> courseSearch = courses
-                            .stream()
-                            .filter(item -> item.getDescription().equals(courseName))
-                            .findFirst();
-                    if (courseSearch.isPresent()) {
-                        targetCourse = courseSearch.get();
-                        teacherMainViewModel.setTargetCourse(targetCourse);
-                        String courseJson = new Gson().toJson(targetCourse);
-                        Bundle courseBundle = new Bundle();
-                        courseBundle.putString(TARGET_COURSE_KEY, courseJson);
-                        getParentFragmentManager().setFragmentResult(TARGET_COURSE_KEY, courseBundle);
-                    }
                 }
 
                 @Override
@@ -115,7 +89,6 @@ public class TeacherMainFragment extends Fragment {
             teacherFragmentMainBinding.courseNameSpinner.setEnabled(false);
         }
 
-        // TODO: Use the ViewModel
     }
 
     @Nullable

@@ -33,14 +33,11 @@ public class AddQuestionsViewModel extends ViewModel {
             bundle.putString(QUESTIONS_KEY,new Gson().toJson(questionRecyclerViewAdapter.getQuestions()));
             fragmentManager.setFragmentResult(QUESTIONS_KEY, bundle);
             fragmentManager.popBackStack();
-        }else{
-            //todo() show an error
         }
     }
 
     public void addQuestionClicked() {
         questionRecyclerViewAdapter.addQuestion();
-        questionRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 }

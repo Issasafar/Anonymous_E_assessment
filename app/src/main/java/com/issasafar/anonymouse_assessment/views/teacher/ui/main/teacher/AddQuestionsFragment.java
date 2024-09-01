@@ -29,9 +29,6 @@ public class AddQuestionsFragment extends Fragment {
     private AddQuestionsViewModel addQuestionsViewModel;
     private FragmentAddQuestionsBinding addQuestionsBinding;
 
-    public static AddQuestionsFragment newInstance() {
-        return new AddQuestionsFragment();
-    }
 
     private Course currentCourse;
 

@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.databinding.BaseObservable;
@@ -51,13 +53,15 @@ public class TeacherRegisterViewModel extends BaseObservable {
     private Teacher mTeacher;
     private String confirmPassword;
     private Context appContext;
+    private Window window;
     private ActivityTeacherRegisterBinding teacherRegisterBinding;
 
-    public TeacherRegisterViewModel(Context appContext, ActivityTeacherRegisterBinding teacherRegisterBinding) {
+    public TeacherRegisterViewModel(Context appContext, ActivityTeacherRegisterBinding teacherRegisterBinding, Window window) {
         this.mTeacher = new Teacher("", "", "");
         this.confirmPassword = "";
         this.appContext = appContext;
         this.teacherRegisterBinding = teacherRegisterBinding;
+        this.window = window;
         Executor executor = Executors.newCachedThreadPool();
         this.loginRepository = LoginRepository.getInstance(new LoginDataSource(executor));
     }
@@ -135,12 +139,15 @@ public class TeacherRegisterViewModel extends BaseObservable {
     public void onRegisterClicked() {
         if (isInputValid()) {
             setProgressVisibility(View.VISIBLE);
+            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             setToastMessage(successMessage + ": " + getTeacherName());
             setTeacher(new Teacher(mTeacher.getName(), mTeacher.getEmail(), mTeacher.getPassword()));
          /*   if (!Objects.equals(mTeacher.getEmail().trim(), "")) {
                 Toast.makeText(getAppContext(), "invoked register " + mTeacher.getEmail(), Toast.LENGTH_LONG).show();
             }*/
             loginRepository.register(getTeacher(), result -> {
+                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 setProgressVisibility(View.GONE);
                 if (result instanceof Result.Success) {
                     LoggedInUser loggedInUser;

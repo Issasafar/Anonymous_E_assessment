@@ -10,8 +10,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
         tools:context=".views.teacher.TeacherRegisterActivity">
 <androidx.constraintlayout.widget.ConstraintLayout
     app:layout_constraintTop_toTopOf="parent"
@@ -86,6 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:inputError="@{TeacherRegister.passwordError}"
+            app:endIconMode="password_toggle"
             app:layout_constraintEnd_toEndOf="@+id/email_input"
             app:layout_constraintStart_toStartOf="@+id/email_input"
             app:layout_constraintTop_toBottomOf="@+id/email_input">
@@ -107,6 +110,7 @@
             android:layout_marginTop="8dp"
             app:inputError="@{TeacherRegister.repeatedPasswordError}"
             app:layout_constraintEnd_toEndOf="@+id/password_input"
+            app:endIconMode="password_toggle"
             app:layout_constraintStart_toStartOf="@+id/password_input"
             app:layout_constraintTop_toBottomOf="@+id/password_input">
 
@@ -132,6 +136,10 @@
             app:layout_constraintTop_toBottomOf="@+id/confirm_password_input"
             app:toastMessage="@{TeacherRegister.toastMessage}" />
 
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
@@ -142,11 +150,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3"
             android:visibility="@{TeacherRegister.progressVisibility}"/>
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

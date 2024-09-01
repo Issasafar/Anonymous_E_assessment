@@ -1,15 +1,24 @@
 package com.issasafar.anonymouse_assessment.views.login;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.issasafar.anonymouse_assessment.BR;
 import com.issasafar.anonymouse_assessment.data.models.login.ResetPasswordCredentials;
 import com.issasafar.anonymouse_assessment.data.models.login.SuccessMessagePair;
+import com.issasafar.anonymouse_assessment.databinding.ActivityForgotPasswordBinding;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
 
 
@@ -25,19 +34,24 @@ public class ResetPasswordViewModel extends BaseObservable {
     private String email;
     private String userName;
     private String newPassword = null;
-
+    private Context context;
+    private ActivityForgotPasswordBinding activityForgotPasswordBinding;
     private int progressVisibility = View.GONE;
     private int newPasswordTextInputLayoutVisibility = View.GONE;
     private ResetPasswordCredentials.ResetPasswordDataHolder.AccountType accountType;
     private String newPasswordError = null;
     private String userNameError = null;
     private String emailError = null;
+    private Window window;
 
 
-    public ResetPasswordViewModel() {
+    public ResetPasswordViewModel(Context context, ActivityForgotPasswordBinding activityForgotPasswordBinding, Window window) {
         this.email = "";
         this.userName = "";
-    }
+        this.context = context;
+        this.activityForgotPasswordBinding = activityForgotPasswordBinding;
+        this.window = window;
+   }
 
     @Bindable
     public int getProgressVisibility() {
@@ -46,6 +60,11 @@ public class ResetPasswordViewModel extends BaseObservable {
 
     public void setProgressVisibility(int progressVisibility) {
         this.progressVisibility = progressVisibility;
+        if (progressVisibility == View.VISIBLE) {
+            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        } else {
+           window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
         notifyPropertyChanged(BR.progressVisibility);
     }
 
@@ -179,6 +198,7 @@ public class ResetPasswordViewModel extends BaseObservable {
                 @Override
                 public void onFailure(Call<SuccessMessagePair> call, Throwable t) {
                     setProgressVisibility(View.GONE);
+                    Snackbar.make(activityForgotPasswordBinding.getRoot(),"Connection error",Snackbar.LENGTH_SHORT).show();
                 }
             });
 
@@ -194,8 +214,15 @@ public class ResetPasswordViewModel extends BaseObservable {
                 public void onResponse(Call<SuccessMessagePair> call, Response<SuccessMessagePair> response) {
                     if (response.isSuccessful()) {
                         setProgressVisibility(View.GONE);
-                        // TODO () show dialog after password reset
                         SuccessMessagePair successMessagePair = response.body();
+                        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(context);
+                        alertDialogBuilder.setTitle("Success");
+                        alertDialogBuilder.setMessage(successMessagePair.getMessage());
+                        AlertDialog dialog = alertDialogBuilder.create();
+                        alertDialogBuilder.setCancelable(false);
+                        alertDialogBuilder.setPositiveButton("Ok", (dialogInterface, i) -> {
+                           dialog.cancel();
+                        });
 
                     }
                 }
@@ -203,6 +230,7 @@ public class ResetPasswordViewModel extends BaseObservable {
                 @Override
                 public void onFailure(Call<SuccessMessagePair> call, Throwable t) {
                     setProgressVisibility(View.GONE);
+                    Snackbar.make(activityForgotPasswordBinding.getRoot(),"Connection error",Snackbar.LENGTH_SHORT).show();
                 }
             });
         } else {

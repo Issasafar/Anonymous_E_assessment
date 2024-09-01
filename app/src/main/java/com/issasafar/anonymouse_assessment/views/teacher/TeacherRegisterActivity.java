@@ -31,7 +31,7 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityTeacherRegisterBinding activityTeacherRegisterBinding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_register);
-        mTeacherRegisterViewModel = new TeacherRegisterViewModel(getApplicationContext(), activityTeacherRegisterBinding);
+        mTeacherRegisterViewModel = new TeacherRegisterViewModel(getApplicationContext(), activityTeacherRegisterBinding, getWindow());
         activityTeacherRegisterBinding.setTeacherRegister(mTeacherRegisterViewModel);
         activityTeacherRegisterBinding.executePendingBindings();
         activityTeacherRegisterBinding.emailInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -110,8 +110,4 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
        });
     }
 
-    @BindingAdapter({"inputError"})
-    public static void setInputError(TextInputLayout textInputLayout, String error) {
-       textInputLayout.getEditText().setError(error);
-    }
 }

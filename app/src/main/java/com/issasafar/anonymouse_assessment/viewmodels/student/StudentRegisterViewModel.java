@@ -4,6 +4,8 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -48,15 +50,17 @@ private String passwordError = null;
 private String repeatedPasswordError = null;
 @Bindable
 private String signError = null;
+private Window window;
     private Context appContext;
     private ActivityStudentRegisterBinding studentRegisterBinding;
-    public StudentRegisterViewModel(Context appContext, ActivityStudentRegisterBinding studentRegisterBinding) {
+    public StudentRegisterViewModel(Context appContext, ActivityStudentRegisterBinding studentRegisterBinding, Window window) {
         this.mStudent = new Student("","","","");
         this.confirmPassword = "";
         this.appContext = appContext;
         this.studentRegisterBinding = studentRegisterBinding;
         Executor executor = Executors.newCachedThreadPool();
         this.loginRepository = LoginRepository.getInstance(new LoginDataSource( executor));
+        this.window = window;
     }
     public StudentRegisterViewModel(Student student, String confirmPassword) {
         mStudent = student;
@@ -129,9 +133,12 @@ private String signError = null;
     }
     public void onRegisterClicked() {
         if (isInputValid()) {
+            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             setProgressVisibility(View.VISIBLE);
             setStudent(new Student(mStudent.getName(), mStudent.getEmail(), mStudent.getPassword(), mStudent.getSign()));
             loginRepository.register(getStudent(),result ->{
+                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 setProgressVisibility(View.GONE);
                 if(result instanceof Result.Success){
                     LoggedInUser loggedInUser;
