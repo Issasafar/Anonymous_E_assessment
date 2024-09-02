@@ -52,27 +52,6 @@
             app:layout_constraintStart_toEndOf="@+id/choose_course"
             app:layout_constraintTop_toTopOf="@+id/choose_course">
 
-            <Spinner
-                android:id="@+id/courseNameSpinner"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintStart_toStartOf="@id/dropdown_icon"
-                app:layout_constraintTop_toTopOf="@id/dropdown_icon"
-                app:layout_constraintEnd_toEndOf="@id/dropdown_icon"
-                app:layout_constraintBottom_toBottomOf="@id/dropdown_icon"
-                android:text="" />
-
-            <ImageButton
-                android:id="@+id/dropdown_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:padding="@dimen/margin_8dp_size"
-                android:visibility="invisible"
-                android:src="@drawable/baseline_arrow_drop_down_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -80,13 +59,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_8dp_size"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 app:inputError="@{TeacherMainFragment.courseNameError}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/dropdown_icon"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:maxLines="3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

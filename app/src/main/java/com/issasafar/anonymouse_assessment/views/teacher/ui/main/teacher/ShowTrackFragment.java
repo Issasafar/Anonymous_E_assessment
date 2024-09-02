@@ -41,7 +41,6 @@ public class ShowTrackFragment extends Fragment {
         showTrackViewModel = new ShowTrackViewModel(fragmentShowTrackBinding);
         fragmentShowTrackBinding.setShowTrackViewModel(showTrackViewModel);
         ShowTrackRecyclerAdapter showTrackRecyclerAdapter;
-        //todo() set adapter for the recycler view according to the situation
         if (getArguments() != null) {
             if (getArguments().getString(ADAPTER_KEY) != null) {
                 ShowTrackRecyclerAdapter.AdapterType adapterType = new Gson().fromJson(getArguments().getString(ADAPTER_KEY), new TypeToken<ShowTrackRecyclerAdapter.AdapterType>() {
@@ -59,6 +58,7 @@ public class ShowTrackFragment extends Fragment {
                     fragmentShowTrackBinding.testResultRecycler.setAdapter(showTrackRecyclerAdapter);
                     showTrackRecyclerAdapter.setContext(getActivity());
                 } else if (adapterType == ShowTrackRecyclerAdapter.AdapterType.GENERAL_STUDENT) {
+                    //todo() handle the student request
                     ArrayList<Course> courses = new Gson().fromJson(getArguments().getString(COURSES_KEY), new TypeToken<ArrayList<Course>>() {
                     }.getType());
                     ArrayList<TestResult> testResults = new Gson().fromJson(getArguments().getString(TESTS_RESULTS_KEY), new TypeToken<ArrayList<TestResult>>() {

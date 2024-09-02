@@ -9,4 +9,13 @@
 <include
     android:id="@+id/toolbar"
     layout="@layout/main_tool_bar_teacher"/>
+
+    <TextView
+        android:backgroundTint="@color/text_color_selector"
+        android:padding="@dimen/margin_16dp_size"
+        android:background="@drawable/message_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/notification_layout"
+        android:text="message text hello word" />
 </LinearLayout>

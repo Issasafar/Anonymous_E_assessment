@@ -1,52 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.appbar.MaterialToolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_tool_bar"
-    android:layout_width="match_parent"
-    android:layout_height="128dp"
-    android:background="?attr/colorPrimary"
-    android:backgroundTint="@color/main_color"
-    app:titleTextColor="@android:color/white">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="16dp"
-    android:layout_marginTop="@dimen/margin_16dp_size"
-    android:layout_marginBottom="@dimen/margin_8dp_size"
->
-        <!-- Menu icon -->
-        <ImageButton
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:id="@+id/menu_icon"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:contentDescription="@string/menu_icon_desc"
-            android:focusable="true"
-            app:tint="@color/main_dark_color"
-            android:src="@drawable/baseline_more_vert_24" />
-        <!-- App icon -->
-        <ImageView
-            android:id="@+id/app_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:contentDescription="@string/app_icon_desc"
-            android:src="@drawable/main_logo" />
+    <data>
+        <variable
+            name="ActivityTeacherMainViewModel"
+            type="com.issasafar.anonymouse_assessment.viewmodels.teacher.TeacherMainActivityViewModel" />
 
-        <!-- Navigation icon -->
-        <ImageButton
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:id="@+id/nav_icon"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:contentDescription="@string/nav_icon_desc"
-            android:src="@drawable/double_arrow_right_24"
-            app:tint="@color/main_dark_color" />
+    </data>
 
-    </RelativeLayout>
-</com.google.android.material.appbar.MaterialToolbar>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/main_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:background="?attr/colorPrimary"
+        android:backgroundTint="@color/main_color"
+        app:titleTextColor="@android:color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="@dimen/margin_16dp_size"
+            android:layout_marginBottom="@dimen/margin_8dp_size">
+            <!-- Menu icon -->
+            <ImageButton
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/menu_icon"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:contentDescription="@string/menu_icon_desc"
+                android:focusable="true"
+                app:tint="@color/main_dark_color"
+                android:src="@drawable/baseline_more_vert_24" />
+            <!-- App icon -->
+            <ImageView
+                android:id="@+id/app_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/app_icon_desc"
+                android:src="@drawable/main_logo" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="@{ActivityTeacherMainViewModel.notificationVisibility}"
+                android:id="@+id/notification_layout"
+                android:layout_toStartOf="@+id/nav_icon"
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/notification_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/baseline_notifications_24" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/notification_icon">
+
+                    <ImageView
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/notification_circle" />
+
+                    <TextView
+                        android:id="@+id/notification_text"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:textStyle="bold"
+                        android:textColor="#b9292b"
+                        android:text="@{ActivityTeacherMainViewModel.notificationCount}"
+                        android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:padding="@dimen/margin_16dp_size"
+                android:background="@drawable/message_background"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/notification_layout"
+                android:text="message text hello word" />
+            <!-- Navigation icon -->
+            <ImageButton
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:id="@+id/nav_icon"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:contentDescription="@string/nav_icon_desc"
+                android:src="@drawable/double_arrow_right_24"
+                app:tint="@color/main_dark_color" />
+
+
+        </RelativeLayout>
+    </com.google.android.material.appbar.MaterialToolbar>
+
+</layout>

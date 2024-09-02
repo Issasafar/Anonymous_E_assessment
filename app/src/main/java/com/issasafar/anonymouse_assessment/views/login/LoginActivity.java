@@ -34,6 +34,11 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindingAdapter({"inputError"})
     public static void setInputError(TextInputLayout textInputLayout, String error) {
+        if (error != null && !"".equals(error)) {
+            textInputLayout.setEndIconVisible(false);
+        } else {
+            textInputLayout.setEndIconVisible(true);
+        }
         textInputLayout.getEditText().setError(error);
     }
 

@@ -4,7 +4,6 @@ import static com.issasafar.anonymouse_assessment.viewmodels.teacher.AddQuestion
 import static com.issasafar.anonymouse_assessment.views.teacher.TeacherMainActivity.COURSES_KEY;
 import static com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.TeacherMainFragment.TARGET_COURSE_KEY;
 
-import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -13,7 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
-import android.widget.ImageView;
+import android.view.View;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -53,22 +52,19 @@ public class TeacherMainViewModel extends BaseObservable {
     private ArrayList<Question> questions = new ArrayList<>();
     private String questionsJson;
     private CoursesRepository coursesRepository = new CoursesRepository();
-
-    public ArrayList<Course> getAvailableCourses() {
-        return availableCourses;
-    }
-
     private ArrayList<Course> availableCourses = new ArrayList<>();
     private Course targetCourse;
-
     private Bundle courseBundle = new Bundle();
     @Bindable
     private String courseNameError;
-
     public TeacherMainViewModel(TeacherFragmentMainBinding teacherFragmentMainBinding, FragmentManager fragmentManager, Context appContext) {
         this.teacherFragmentMainBinding = teacherFragmentMainBinding;
         this.fragmentManager = fragmentManager;
         this.appContext = appContext;
+    }
+
+    public ArrayList<Course> getAvailableCourses() {
+        return availableCourses;
     }
 
     public void setAvailableCourses(ArrayList<Course> courses) {
@@ -121,8 +117,8 @@ public class TeacherMainViewModel extends BaseObservable {
     public void setCourseName(String name) {
         this.courseName.setValue(name);
         checkEmptyCourseName();
-        if(!findCourse()){
-            Course targetCourse = new Course(-1,Integer.parseInt(LoginViewModel.getUserId(appContext)),teacherFragmentMainBinding.getTeacherMainFragment().getCourseName());
+        if (!findCourse()) {
+            Course targetCourse = new Course(-1, Integer.parseInt(LoginViewModel.getUserId(appContext)), teacherFragmentMainBinding.getTeacherMainFragment().getCourseName());
             setTargetCourse(targetCourse);
         }
         String courseJson = new Gson().toJson(getTargetCourse());
@@ -149,9 +145,7 @@ public class TeacherMainViewModel extends BaseObservable {
         notifyPropertyChanged(BR.courseNameError);
     }
 
-    // todo() implement those methods
     public void addQuestionClicked() {
-        //TODO() use bundle to send the things
         if (!checkEmptyCourseName()) {
 
             Bundle bundle = new Bundle();
@@ -168,7 +162,8 @@ public class TeacherMainViewModel extends BaseObservable {
         Snackbar snackbar = Snackbar.make(teacherFragmentMainBinding.getRoot(), message, Snackbar.LENGTH_SHORT);
         snackbar.show();
     }
-    public void showSnackBar(String message,Snackbar.Callback callback) {
+
+    public void showSnackBar(String message, Snackbar.Callback callback) {
         Snackbar snackbar = Snackbar.make(teacherFragmentMainBinding.getRoot(), message, Snackbar.LENGTH_SHORT);
         snackbar.addCallback(callback);
         snackbar.show();
@@ -179,17 +174,16 @@ public class TeacherMainViewModel extends BaseObservable {
             if (getTargetCourse() == null) {
                 targetCourse = new Course(Integer.parseInt(LoginViewModel.getUserId(appContext)), getCourseName());
             }
-            Course.TestCourse testCourse = new Course.TestCourse(targetCourse.getT_id(),targetCourse.getOwner_id(), targetCourse.getDescription(), getQuestions());
-            //todo() handle the post_test request
+            Course.TestCourse testCourse = new Course.TestCourse(targetCourse.getT_id(), targetCourse.getOwner_id(), targetCourse.getDescription(), getQuestions());
             coursesRepository.postData(new CourseRequest(CourseRequest.CourseAction.POST_TEST, testCourse), new ResultCallback<CourseResponse>() {
                 @Override
                 public void onSuccess(CourseResponse data) {
                     if (data.getSuccess()) {
-                        new Handler(Looper.getMainLooper()).post(()->{
+                        new Handler(Looper.getMainLooper()).post(() -> {
                             showTestCreatedDialog(data.getMessage());
                         });
                     } else {
-                       showSnackBar(data.getMessage());
+                        showSnackBar(data.getMessage());
                     }
                 }
 
@@ -217,27 +211,28 @@ public class TeacherMainViewModel extends BaseObservable {
         testGeneratedDialogBinding.exitButton.setOnClickListener((view) -> {
             dialog.cancel();
         });
+        //todo() set the view button click property for the dialog
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
 
     public void getPrevResultsClicked() {
-            Bundle bundle = new Bundle();
-            bundle.putString(ADAPTER_KEY, new Gson().toJson(ShowTrackRecyclerAdapter.AdapterType.GENERAL_TEACHER));
-            bundle.putString(COURSES_KEY, new Gson().toJson(getAvailableCourses()));
-            fragmentManager.beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.teacher_fragment_container, ShowTrackFragment.class, bundle)
-                    .addToBackStack("show_track_frag")
-                    .commit();
+        Bundle bundle = new Bundle();
+        bundle.putString(ADAPTER_KEY, new Gson().toJson(ShowTrackRecyclerAdapter.AdapterType.GENERAL_TEACHER));
+        bundle.putString(COURSES_KEY, new Gson().toJson(getAvailableCourses()));
+        fragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.teacher_fragment_container, ShowTrackFragment.class, bundle)
+                .addToBackStack("show_track_frag")
+                .commit();
 
     }
 
-    public void dropDownClicked() {
-        ImageView imageView = teacherFragmentMainBinding.dropdownIcon;
-        ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(imageView, "rotation", (imageView.getRotation() + 180f) % 360f);
-        rotateAnimator.setDuration(10);
-        rotateAnimator.start();
-    }
+//    public void dropDownClicked() {
+//        ImageView imageView = teacherFragmentMainBinding.dropdownIcon;
+//        ObjectAnimator rotateAnimator = ObjectAnimator.ofFloat(imageView, "rotation", (imageView.getRotation() + 180f) % 360f);
+//        rotateAnimator.setDuration(10);
+//        rotateAnimator.start();
+//    }
 
 }

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -62,7 +63,6 @@ public class TeacherMainFragment extends Fragment {
             }
         });
         if (getArguments() != null && !getArguments().getString(COURSES_KEY).equals("empty")) {
-            teacherFragmentMainBinding.courseNameSpinner.setEnabled(true);
             Bundle coursesBundle = getArguments();
             Type courseResponseType = new TypeToken<CourseResponse<ArrayList<Course>>>() {
             }.getType();
@@ -72,21 +72,24 @@ public class TeacherMainFragment extends Fragment {
             List<String> availableCourses = courses.stream().map(Course::getDescription).collect(Collectors.toList());
             Collections.reverse(availableCourses);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, availableCourses);
-            teacherFragmentMainBinding.courseNameSpinner.setAdapter(adapter);
-            teacherFragmentMainBinding.courseNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                    String courseName = adapterView.getItemAtPosition(position).toString();
-                    Objects.requireNonNull(teacherFragmentMainBinding.courseNameInputLayout.getEditText()).setText(courseName);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-                    Objects.requireNonNull(teacherFragmentMainBinding.courseNameInputLayout.getEditText()).setText("");
-                }
-            });
-        } else {
-            teacherFragmentMainBinding.courseNameSpinner.setEnabled(false);
+            AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) teacherFragmentMainBinding.courseNameInputLayout.getEditText();
+            assert autoCompleteTextView != null;
+            autoCompleteTextView.setAdapter(adapter);
+//            teacherFragmentMainBinding.courseNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                @Override
+//                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+//                    String courseName = adapterView.getItemAtPosition(position).toString();
+//                    Objects.requireNonNull(teacherFragmentMainBinding.courseNameInputLayout.getEditText()).setText(courseName);
+//                }
+//
+//                @Override
+//                public void onNothingSelected(AdapterView<?> adapterView) {
+//                    Objects.requireNonNull(teacherFragmentMainBinding.courseNameInputLayout.getEditText()).setText("");
+//                }
+//            });
+//        } else {
+//            teacherFragmentMainBinding.courseNameSpinner.setEnabled(false);
+//        }
         }
 
     }

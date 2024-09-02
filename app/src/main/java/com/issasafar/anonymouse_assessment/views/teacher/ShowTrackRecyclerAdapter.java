@@ -148,7 +148,6 @@ public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecy
             holder.testResultRecyclerItemBinding.getTestResultViewModel().setCourse(new Course(course.getT_id(), course.getOwner_id(), testResult.getOwner_name()));
             notifyItemChanged(position);
         } else if (adapterType == AdapterType.TEACHER_VIEW) {
-            // todo() get answers for teachers' courses
             TestResult result = holder.testResultRecyclerItemBinding.getTestResultViewModel().getTestResult();
             JsonObject jsonObject = new JsonObject();
 //            jsonObject.addProperty("t_id",result.getT_id());
@@ -196,19 +195,6 @@ public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecy
         }
     }
 
-    //    public void linkClicked() {
-//        //todo() handle the course
-//        if (getAdapterType() == ShowTrackRecyclerAdapter.AdapterType.GENERAL_STUDENT || getAdapterType() == ShowTrackRecyclerAdapter.AdapterType.GENERAL_TEACHER) {
-//            setScoreTextVisibility(View.VISIBLE);
-//            if (getAdapterType() == ShowTrackRecyclerAdapter.AdapterType.GENERAL_STUDENT) {
-//                //todo() update score text
-//            } else {
-//
-//            }
-//        } else {
-//        }
-//        //todo() handle the result
-//    }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TestResultRecyclerItemBinding testResultRecyclerItemBinding;
 
