@@ -3,6 +3,8 @@ package com.issasafar.anonymouse_assessment.views.login;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.UiThread;
+
 import com.google.gson.Gson;
 import com.issasafar.anonymouse_assessment.data.models.Result;
 import com.issasafar.anonymouse_assessment.data.models.User;
@@ -17,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executor;
+import java.util.logging.Handler;
 
 
 import okhttp3.ResponseBody;
@@ -52,9 +55,11 @@ public class LoginDataSource {
         executor.execute(() -> {
             try {
                 Result<LoginResponse> result = makeSynchronousLoginRequest(jsonBody);
+
                 repositoryCallback.onComplete(result);
             } catch (Exception e) {
                 Result<LoginResponse> errorResult = new Result.Error<>(e);
+
                 repositoryCallback.onComplete(errorResult);
             }
         });

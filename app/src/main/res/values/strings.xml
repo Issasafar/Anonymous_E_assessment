@@ -44,4 +44,5 @@
     <string name="question_type">Question type</string>
     <string name="long_answer">Long Answer</string>
     <string name="multiple_choice">Multiple Choice</string>
+    <string name="notifications">Notifications</string>
 </resources>

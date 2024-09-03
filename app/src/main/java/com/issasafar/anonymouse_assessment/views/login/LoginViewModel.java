@@ -145,14 +145,18 @@ public class LoginViewModel extends BaseObservable {
 
     public void login(String email, String password) {
         loginRepository.login(email, password, result -> {
-            if (result instanceof Result.Success) {
+            if (result instanceof Result.Success && ((Result.Success<LoginResponse>) result).getData().isSuccess()) {
                 LoggedInUser loggedInUser;
                 LoginResponse response = ((Result.Success<LoginResponse>) result).getData();
 
                 loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(), response.getPassword(), response.getSign());
                 loginResult.postValue(new LoginResult(loggedInUser));
+            } else if (!((Result.Success<LoginResponse>)result).getData().isSuccess()) {
+                String erroMessage = ((Result.Success<LoginResponse>)result).getData().getMessage();
+                loginResult.postValue(new LoginResult(erroMessage));
+
             } else {
-                loginResult.postValue(new LoginResult("login failed\n"));
+                loginResult.postValue(new LoginResult("login failed\n "));
             }
         });
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="@dimen/margin_16dp_size"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.teacher.ui.main.teacher.MessagesNotificationFragment">
+
+    <TextView
+        android:paddingBottom="@dimen/margin_8dp_size"
+        android:paddingHorizontal="@dimen/margin_8dp_size"
+        app:layout_constraintBottom_toTopOf="@id/messages_recycler"
+        android:id="@+id/head_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="@dimen/headline5"
+        android:text="@string/notifications"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        app:layout_constraintTop_toBottomOf="@id/head_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/messages_recycler"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

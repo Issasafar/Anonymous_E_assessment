@@ -152,7 +152,7 @@ public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecy
             JsonObject jsonObject = new JsonObject();
 //            jsonObject.addProperty("t_id",result.getT_id());
 //            jsonObject.addProperty("owner_id",result.getOwner_id());
-            //todo() replace with actual data
+            //todo() replace with actual data t_id and owner_id
             jsonObject.addProperty("t_id",1);
             jsonObject.addProperty("owner_id",1);
             coursesRepository.postData(new CourseRequest(CourseRequest.CourseAction.GET_ANSWERS, jsonObject), new ResultCallback<CourseResponse>() {

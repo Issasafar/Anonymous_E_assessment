@@ -16,28 +16,33 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.issasafar.anonymouse_assessment.R;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseRequest;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseResponse;
+import com.issasafar.anonymouse_assessment.data.models.common.UnderstandingMessage;
 import com.issasafar.anonymouse_assessment.databinding.ActivityTeacherMainBinding;
 import com.issasafar.anonymouse_assessment.viewmodels.teacher.TeacherMainActivityViewModel;
 import com.issasafar.anonymouse_assessment.views.common.CoursesRepository;
 import com.issasafar.anonymouse_assessment.views.common.ResultCallback;
 import com.issasafar.anonymouse_assessment.views.login.LoginViewModel;
+import com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.MessagesNotificationFragment;
 import com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.TeacherMainFragment;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 
 public class TeacherMainActivity extends AppCompatActivity {
     public static final String COURSES_KEY = "courses";
     private static final String COURSES_PREF_FILE = "courses_shared_pref_file";
+    public static final String MESSAGES_KEY = "messages";
+    private final int delay = 60000;
+    ActivityTeacherMainBinding activityTeacherMainBinding;
     private String userId;
     private Handler fetchMessageHandler = new Handler();
     private Runnable runnable;
-    private final int delay = 60000;
     private CoursesRepository coursesRepository;
-
-
-    ActivityTeacherMainBinding activityTeacherMainBinding;
 
     //todo(optional) remove course from shared preference when the app stops
     @Override
@@ -49,16 +54,19 @@ public class TeacherMainActivity extends AppCompatActivity {
         ResultCallback<CourseResponse> courseCallback = getCourseResponseResultCallback();
         userId = LoginViewModel.getUserId(getApplicationContext());
         if (savedInstanceState == null) {
-             coursesRepository = new CoursesRepository();
+            coursesRepository = new CoursesRepository();
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("owner_id",userId);
+            jsonObject.addProperty("owner_id", userId);
             coursesRepository.getData(new CourseRequest(CourseRequest.CourseAction.GET_COURSES, jsonObject), courseCallback);
         }
+
         Toolbar toolbar = (Toolbar) activityTeacherMainBinding.toolbar.getRoot();
         setSupportActionBar(toolbar);
         ImageButton menuButton = activityTeacherMainBinding.toolbar.menuIcon;
         menuButton.setOnClickListener((this::showPopupMenu));
         activityTeacherMainBinding.toolbar.setActivityTeacherMainViewModel(teacherMainActivityViewModel);
+        activityTeacherMainBinding.executePendingBindings();
+        activityTeacherMainBinding.setActivityTeacherMainViewModel(teacherMainActivityViewModel);
 
     }
 
@@ -76,14 +84,31 @@ public class TeacherMainActivity extends AppCompatActivity {
 
     private void fetchMessagesFromDataBase() {
         JsonObject jsonObject = new JsonObject();
-        //todo() replace with actual user id
-        jsonObject.addProperty("teacher_id",1);
+        jsonObject.addProperty("teacher_id", LoginViewModel.getUserId(getApplicationContext()));
         coursesRepository.postData(new CourseRequest(CourseRequest.CourseAction.GET_MESSAGES, jsonObject), new ResultCallback<CourseResponse>() {
             @Override
             public void onSuccess(CourseResponse data) {
                 if (data.getSuccess()) {
-                    activityTeacherMainBinding.toolbar.getActivityTeacherMainViewModel().setNotificationCount(2);
+                    Type courseMessagesResponseType = new TypeToken<CourseResponse<ArrayList<UnderstandingMessage>>>() {
+                    }.getType();
+                    CourseResponse<ArrayList<UnderstandingMessage>> response = new Gson().fromJson(new Gson().toJson(data), courseMessagesResponseType);
+                    ArrayList<UnderstandingMessage> messages = response.getData();
+                    activityTeacherMainBinding.getActivityTeacherMainViewModel().setMessages(messages);
                     //todo() start the notification fragment
+                    activityTeacherMainBinding.toolbar.navIcon.setOnClickListener((view) -> {
+                        activityTeacherMainBinding.getActivityTeacherMainViewModel().setMessages(new ArrayList<>());
+                        Bundle bundle = new Bundle();
+                        bundle.putString(MESSAGES_KEY,new Gson().toJson(messages));
+                        getSupportFragmentManager().beginTransaction()
+                                .setReorderingAllowed(true)
+                                .replace(R.id.teacher_fragment_container, MessagesNotificationFragment.class,bundle)
+                                .addToBackStack("messages_frag")
+                                .commit();
+                    });
+                } else {
+                    activityTeacherMainBinding.toolbar.navIcon.setOnClickListener((view) -> {
+                        Snackbar.make(activityTeacherMainBinding.getRoot(), data.getMessage(), Snackbar.LENGTH_SHORT).show();
+                    });
                 }
             }
 
@@ -93,13 +118,15 @@ public class TeacherMainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void startFetchingMessages() {
         runnable = () -> {
             fetchMessagesFromDataBase();
-            fetchMessageHandler.postDelayed(runnable,delay);
+            fetchMessageHandler.postDelayed(runnable, delay);
         };
         fetchMessageHandler.postDelayed(runnable, delay);
     }
+
     private @NonNull ResultCallback<CourseResponse> getCourseResponseResultCallback() {
         ResultCallback<CourseResponse> courseCallback = new ResultCallback<CourseResponse>() {
             @Override
