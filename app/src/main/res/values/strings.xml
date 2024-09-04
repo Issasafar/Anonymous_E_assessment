@@ -45,4 +45,9 @@
     <string name="long_answer">Long Answer</string>
     <string name="multiple_choice">Multiple Choice</string>
     <string name="notifications">Notifications</string>
+    <string name="get_questions">Get Questions</string>
+    <string name="send_lack_of_understand_sign">Send lack of understand sign</string>
+    <string name="get_results_of_the_previous_test">Get Results of the Previous Test</string>
+    <string name="what_did_you_not_understand">What did you not understand?</string>
+    <string name="send">Send</string>
 </resources>

@@ -6,5 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.student.StudentMainActivity">
-
+    <include
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/student_main_fragment_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/toolbar"
+        layout="@layout/main_tool_bar_student"/>
+    <FrameLayout
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/student_main_fragment_container"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

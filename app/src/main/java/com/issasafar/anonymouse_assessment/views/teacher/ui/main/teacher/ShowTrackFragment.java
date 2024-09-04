@@ -68,6 +68,7 @@ public class ShowTrackFragment extends Fragment {
                     showTrackRecyclerAdapter.setContext(getActivity());
                 }
 
+
                 fragmentShowTrackBinding.testResultRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
             }
         }

@@ -12,6 +12,7 @@ import android.widget.Button;
 import com.google.android.material.snackbar.Snackbar;
 import com.issasafar.anonymouse_assessment.databinding.ActivityMainBinding;
 import com.issasafar.anonymouse_assessment.views.login.LoginActivity;
+import com.issasafar.anonymouse_assessment.views.student.StudentMainActivity;
 import com.issasafar.anonymouse_assessment.views.student.StudentRegisterActivity;
 import com.issasafar.anonymouse_assessment.views.teacher.TeacherMainActivity;
 import com.issasafar.anonymouse_assessment.views.teacher.TeacherRegisterActivity;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         Button registerStudentButton = mActivityMainBinding.studentButton;
         Button signInButton = mActivityMainBinding.signInButton;
 
-        Intent i = new Intent(this, TeacherMainActivity.class);
+        Intent i = new Intent(this, StudentMainActivity.class);
         startActivity(i);
         // Using a lambda for the ActivityResultLauncher callback
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(

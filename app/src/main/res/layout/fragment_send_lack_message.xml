@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+<variable
+    name="SendLackMessageViewModel"
+    type="com.issasafar.anonymouse_assessment.viewmodels.student.SendLackMessageViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="@dimen/margin_16dp_size"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".views.student.ui.main.student.SendLackMessageFragment">
+
+        <TextView
+            android:layout_marginTop="@dimen/margin_16dp_size"
+            android:layout_marginBottom="@dimen/margin_16dp_size"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="@dimen/margin_16dp_size"
+            app:layout_constraintBottom_toTopOf="@id/message_text_layout"
+            android:textSize="@dimen/headline6"
+            android:id="@+id/understand_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/what_did_you_not_understand" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginHorizontal="@dimen/margin_32dp_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/message_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:text="@={SendLackMessageViewModel.messageText}"
+                android:maxLines="9"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:onClick="@{()->SendLackMessageViewModel.sendClicked()}"
+            android:layout_marginBottom="@dimen/margin_16dp_size"
+            android:layout_marginTop="@dimen/margin_16dp_size"
+            app:layout_constraintTop_toBottomOf="@id/message_text_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/send"
+            android:id="@+id/send_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

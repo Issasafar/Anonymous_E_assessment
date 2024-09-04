@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -119,7 +120,10 @@ public class StudentRegisterActivity extends AppCompatActivity {
             }
         });
         mStudentRegisterViewModel.getLoginResult().observe(this,loginResult -> {
-            //TODO() start activities
+            if (loginResult.getSuccess() != null) {
+                setResult(RESULT_OK,new Intent(this, StudentMainActivity.class));
+                finish();
+            }
         });
     }
 

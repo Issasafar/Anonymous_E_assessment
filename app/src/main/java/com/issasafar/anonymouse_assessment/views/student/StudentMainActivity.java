@@ -1,26 +1,49 @@
 package com.issasafar.anonymouse_assessment.views.student;
 
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.issasafar.anonymouse_assessment.R;
+import com.issasafar.anonymouse_assessment.databinding.ActivityStudentMainBinding;
+import com.issasafar.anonymouse_assessment.views.student.ui.main.student.StudentMainFragment;
 
 public class StudentMainActivity extends AppCompatActivity {
-
+        ActivityStudentMainBinding activityStudentMainBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_student_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        activityStudentMainBinding = ActivityStudentMainBinding.inflate(getLayoutInflater());
+        setContentView(activityStudentMainBinding.getRoot());
+        Toolbar toolbar = (Toolbar) activityStudentMainBinding.toolbar.getRoot();
+        setSupportActionBar(toolbar);
+        ImageButton menuButton = activityStudentMainBinding.toolbar.menuIcon;
+        menuButton.setOnClickListener((this::showPopupMenu));
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.student_main_fragment_container, StudentMainFragment.newInstance())
+                .setReorderingAllowed(true)
+                .commit();
+    }
+    private void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.menu_main_teacher, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                default:
+                    return false;
+            }
         });
+        popupMenu.show();
     }
 }

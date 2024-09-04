@@ -10,6 +10,7 @@ public class CourseRequest<T> {
     }
 
     public enum CourseAction {
+        GET_ALL_COURSES,
         MARK_SEEN,
         POST_TEST,
         GET_COURSES,

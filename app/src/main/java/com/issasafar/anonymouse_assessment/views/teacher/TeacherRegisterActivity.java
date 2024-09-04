@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.issasafar.anonymouse_assessment.R;
+import com.issasafar.anonymouse_assessment.data.models.Result;
 import com.issasafar.anonymouse_assessment.databinding.ActivityTeacherRegisterBinding;
 import com.issasafar.anonymouse_assessment.data.models.Teacher;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
@@ -106,9 +107,10 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
             }
         });
        mTeacherRegisterViewModel.getLoginResult().observe(this, loginResult -> {
-           //Todo() start corresponding acts
-           setResult(RESULT_OK, new Intent(this, TeacherMainActivity.class));
-           finish();
+           if (loginResult.getSuccess() != null) {
+               setResult(RESULT_OK, new Intent(this, TeacherMainActivity.class));
+               finish();
+           }
        });
     }
 

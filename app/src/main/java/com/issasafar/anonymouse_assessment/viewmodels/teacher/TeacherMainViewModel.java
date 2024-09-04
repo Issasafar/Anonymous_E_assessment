@@ -38,6 +38,7 @@ import com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.ShowTra
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 public class TeacherMainViewModel extends BaseObservable {
@@ -98,6 +99,12 @@ public class TeacherMainViewModel extends BaseObservable {
     public ArrayList<Question> getQuestions() {
         if (questions == null && questionsJson != null) {
             questions = new Gson().fromJson(questionsJson, questionsArrayType);
+        }
+        if (questions != null) {
+            Collections.shuffle(questions);
+            for (int i = 0; i < questions.size(); i++) {
+                questions.get(i).setQ_order(i+1);
+            }
         }
         return questions;
     }
@@ -217,14 +224,18 @@ public class TeacherMainViewModel extends BaseObservable {
     }
 
     public void getPrevResultsClicked() {
-        Bundle bundle = new Bundle();
-        bundle.putString(ADAPTER_KEY, new Gson().toJson(ShowTrackRecyclerAdapter.AdapterType.GENERAL_TEACHER));
-        bundle.putString(COURSES_KEY, new Gson().toJson(getAvailableCourses()));
-        fragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.teacher_fragment_container, ShowTrackFragment.class, bundle)
-                .addToBackStack("show_track_frag")
-                .commit();
+        if (!getAvailableCourses().isEmpty()) {
+            Bundle bundle = new Bundle();
+            bundle.putString(ADAPTER_KEY, new Gson().toJson(ShowTrackRecyclerAdapter.AdapterType.GENERAL_TEACHER));
+            bundle.putString(COURSES_KEY, new Gson().toJson(getAvailableCourses()));
+            fragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.teacher_fragment_container, ShowTrackFragment.class, bundle)
+                    .addToBackStack("show_track_frag")
+                    .commit();
+        } else {
+            showSnackBar("No tests created to get results");
+        }
 
     }
 

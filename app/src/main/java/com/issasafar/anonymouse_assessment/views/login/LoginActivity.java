@@ -21,6 +21,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.issasafar.anonymouse_assessment.R;
 import com.issasafar.anonymouse_assessment.data.models.login.UserAccount;
 import com.issasafar.anonymouse_assessment.databinding.ActivityLoginBinding;
+import com.issasafar.anonymouse_assessment.views.student.StudentMainActivity;
 import com.issasafar.anonymouse_assessment.views.teacher.TeacherMainActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -81,8 +82,8 @@ public class LoginActivity extends AppCompatActivity {
                             setResult(RESULT_OK, new Intent(this, TeacherMainActivity.class));
                             finish();
                         } else {
-                            //todo: set result for student start
-
+                            setResult(RESULT_OK, new Intent(this, StudentMainActivity.class));
+                            finish();
                         }
                     } else {
                         assert loginResult.getError() != null;
