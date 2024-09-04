@@ -123,6 +123,11 @@ private Window window;
         return this.mStudent;
     }
 
+    public Student getStudentAndEnableWindow() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        return getStudent();
+    }
+
     public void setStudent(Student student) {
         this.mStudent = student;
         notifyPropertyChanged(BR.student);
@@ -137,8 +142,7 @@ private Window window;
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             setProgressVisibility(View.VISIBLE);
             setStudent(new Student(mStudent.getName(), mStudent.getEmail(), mStudent.getPassword(), mStudent.getSign()));
-            loginRepository.register(getStudent(),result ->{
-                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            loginRepository.register(getStudentAndEnableWindow(), result ->{
                 setProgressVisibility(View.GONE);
                 if(result instanceof Result.Success){
                     LoggedInUser loggedInUser;
@@ -158,6 +162,7 @@ private Window window;
                 }
             });
         }else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             setNameError(InputValidator.validateName(mStudent.getName()));
             setEmailError(InputValidator.validateEmail(mStudent.getEmail()));
             setPasswordError(InputValidator.validatePassword(mStudent.getPassword()));

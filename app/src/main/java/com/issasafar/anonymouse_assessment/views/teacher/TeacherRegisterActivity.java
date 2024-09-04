@@ -84,6 +84,7 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
             public void afterTextChanged(Editable editable) {
             mTeacherRegisterViewModel.setPasswordError(InputValidator.validatePassword(mTeacherRegisterViewModel.getTeacherPassword()));
             activityTeacherRegisterBinding.passwordInput.getEditText().setError(mTeacherRegisterViewModel.getPasswordError());
+            activityTeacherRegisterBinding.passwordInput.setEndIconVisible(activityTeacherRegisterBinding.passwordInput.getEditText().getError() == null);
             }
         });
         activityTeacherRegisterBinding.confirmPasswordInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -101,6 +102,7 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
             public void afterTextChanged(Editable editable) {
             mTeacherRegisterViewModel.setRepeatedPasswordError(InputValidator.validateRepeatedPassword(mTeacherRegisterViewModel.getTeacherPassword(),mTeacherRegisterViewModel.getConfirmPassword()));
             activityTeacherRegisterBinding.confirmPasswordInput.getEditText().setError(mTeacherRegisterViewModel.getRepeatedPasswordError());
+            activityTeacherRegisterBinding.confirmPasswordInput.setEndIconVisible(activityTeacherRegisterBinding.confirmPasswordInput.getEditText().getError() == null);
             }
         });
        mTeacherRegisterViewModel.getLoginResult().observe(this, loginResult -> {

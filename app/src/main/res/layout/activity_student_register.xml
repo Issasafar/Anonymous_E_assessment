@@ -160,7 +160,7 @@
             app:layout_constraintTop_toBottomOf="@+id/Your_sign_input"
             android:onClick="@{() -> StudentRegister.onRegisterClicked()}"
             app:toastMessage="@{StudentRegister.toastMessage}"
-            app:student="@{StudentRegister.student}"/>
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
         <ProgressBar

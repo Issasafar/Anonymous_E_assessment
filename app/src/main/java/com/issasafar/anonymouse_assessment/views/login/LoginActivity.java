@@ -34,11 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindingAdapter({"inputError"})
     public static void setInputError(TextInputLayout textInputLayout, String error) {
-        if (error != null && !"".equals(error)) {
-            textInputLayout.setEndIconVisible(false);
-        } else {
-            textInputLayout.setEndIconVisible(true);
-        }
+        textInputLayout.setEndIconVisible(error == null || error.isEmpty());
         textInputLayout.getEditText().setError(error);
     }
 
@@ -64,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         forgotPasswordButton.setOnClickListener(view -> {
             Intent forgotPasswordIntent = new Intent(this, ResetPasswordActivity.class);
             startActivity(forgotPasswordIntent);
-            //todo() finish this activity if the action is not success
         });
         loginButton.setOnClickListener(view -> {
             mLoginViewModel.onLoginClicked();
@@ -81,11 +76,13 @@ public class LoginActivity extends AppCompatActivity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     if (loginResult.getSuccess() != null) {
                         loginViewModel.saveUserCredentials(loginResult);
-                        //TODO() do something after saving the credentials :)
-                        if(loginResult.getSuccess().getSign() == null || "".equals(loginResult.getSuccess().getSign())){
+                        if (loginResult.getSuccess().getSign() == null || "".equals(loginResult.getSuccess().getSign())) {
                             // no sign so it's a teacher
                             setResult(RESULT_OK, new Intent(this, TeacherMainActivity.class));
                             finish();
+                        } else {
+                            //todo: set result for student start
+
                         }
                     } else {
                         assert loginResult.getError() != null;

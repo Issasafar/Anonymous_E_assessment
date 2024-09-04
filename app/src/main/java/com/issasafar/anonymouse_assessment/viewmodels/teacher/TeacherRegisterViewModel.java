@@ -1,14 +1,11 @@
 package com.issasafar.anonymouse_assessment.viewmodels.teacher;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -22,7 +19,6 @@ import com.issasafar.anonymouse_assessment.data.models.login.LoggedInUser;
 import com.issasafar.anonymouse_assessment.data.models.login.LoginResponse;
 import com.issasafar.anonymouse_assessment.databinding.ActivityTeacherRegisterBinding;
 import com.issasafar.anonymouse_assessment.viewmodels.InputValidator;
-import com.issasafar.anonymouse_assessment.views.login.LoggedInUserView;
 import com.issasafar.anonymouse_assessment.views.login.LoginDataSource;
 import com.issasafar.anonymouse_assessment.views.login.LoginRepository;
 import com.issasafar.anonymouse_assessment.views.login.LoginResult;
@@ -81,6 +77,10 @@ public class TeacherRegisterViewModel extends BaseObservable {
         return this.mTeacher;
     }
 
+    public Teacher getTeacherAndEnableWindow() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        return getTeacher();
+    }
     public void setTeacher(Teacher teacher) {
         this.mTeacher = teacher;
         notifyPropertyChanged(BR.teacher);
@@ -143,11 +143,7 @@ public class TeacherRegisterViewModel extends BaseObservable {
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             setToastMessage(successMessage + ": " + getTeacherName());
             setTeacher(new Teacher(mTeacher.getName(), mTeacher.getEmail(), mTeacher.getPassword()));
-         /*   if (!Objects.equals(mTeacher.getEmail().trim(), "")) {
-                Toast.makeText(getAppContext(), "invoked register " + mTeacher.getEmail(), Toast.LENGTH_LONG).show();
-            }*/
-            loginRepository.register(getTeacher(), result -> {
-                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            loginRepository.register(getTeacherAndEnableWindow(), result -> {
                 setProgressVisibility(View.GONE);
                 if (result instanceof Result.Success) {
                     LoggedInUser loggedInUser;
@@ -166,6 +162,7 @@ public class TeacherRegisterViewModel extends BaseObservable {
                 }
             });
         } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             setNameError(InputValidator.validateName(mTeacher.getName()));
             setPasswordError(InputValidator.validatePassword(mTeacher.getPassword()));
             setEmailError(InputValidator.validateEmail(mTeacher.getEmail()));

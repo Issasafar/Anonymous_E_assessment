@@ -1,6 +1,9 @@
 package com.issasafar.anonymouse_assessment.views.login;
 
+import static com.issasafar.anonymouse_assessment.views.login.LoginViewModel.SHARED_PREF_CREDENTIAL_FILE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.UiThread;
@@ -55,11 +58,9 @@ public class LoginDataSource {
         executor.execute(() -> {
             try {
                 Result<LoginResponse> result = makeSynchronousLoginRequest(jsonBody);
-
                 repositoryCallback.onComplete(result);
             } catch (Exception e) {
                 Result<LoginResponse> errorResult = new Result.Error<>(e);
-
                 repositoryCallback.onComplete(errorResult);
             }
         });
@@ -97,8 +98,9 @@ public class LoginDataSource {
         });
     }
 
-    public void logout() {
-        // TODO: revoke authentication
+    public void logout(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(SHARED_PREF_CREDENTIAL_FILE, Context.MODE_PRIVATE);
+        sp.edit().clear().apply();
     }
 
 

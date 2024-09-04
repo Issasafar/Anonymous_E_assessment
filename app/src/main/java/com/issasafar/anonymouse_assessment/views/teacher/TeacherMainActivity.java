@@ -35,30 +35,19 @@ import java.util.ArrayList;
 
 public class TeacherMainActivity extends AppCompatActivity {
     public static final String COURSES_KEY = "courses";
-    private static final String COURSES_PREF_FILE = "courses_shared_pref_file";
+    public static final String COURSES_PREF_FILE = "courses_shared_pref_file";
     public static final String MESSAGES_KEY = "messages";
     private final int delay = 60000;
     ActivityTeacherMainBinding activityTeacherMainBinding;
-    private String userId;
     private Handler fetchMessageHandler = new Handler();
     private Runnable runnable;
     private CoursesRepository coursesRepository;
-
-    //todo(optional) remove course from shared preference when the app stops
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityTeacherMainBinding = ActivityTeacherMainBinding.inflate(getLayoutInflater());
         setContentView(activityTeacherMainBinding.getRoot());
         TeacherMainActivityViewModel teacherMainActivityViewModel = new TeacherMainActivityViewModel(activityTeacherMainBinding);
-        ResultCallback<CourseResponse> courseCallback = getCourseResponseResultCallback();
-        userId = LoginViewModel.getUserId(getApplicationContext());
-        if (savedInstanceState == null) {
-            coursesRepository = new CoursesRepository();
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("owner_id", userId);
-            coursesRepository.getData(new CourseRequest(CourseRequest.CourseAction.GET_COURSES, jsonObject), courseCallback);
-        }
 
         Toolbar toolbar = (Toolbar) activityTeacherMainBinding.toolbar.getRoot();
         setSupportActionBar(toolbar);
@@ -67,6 +56,11 @@ public class TeacherMainActivity extends AppCompatActivity {
         activityTeacherMainBinding.toolbar.setActivityTeacherMainViewModel(teacherMainActivityViewModel);
         activityTeacherMainBinding.executePendingBindings();
         activityTeacherMainBinding.setActivityTeacherMainViewModel(teacherMainActivityViewModel);
+        coursesRepository = new CoursesRepository();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.teacher_fragment_container,TeacherMainFragment.newInstance())
+                .setReorderingAllowed(true)
+                .commit();
 
     }
 
@@ -94,7 +88,6 @@ public class TeacherMainActivity extends AppCompatActivity {
                     CourseResponse<ArrayList<UnderstandingMessage>> response = new Gson().fromJson(new Gson().toJson(data), courseMessagesResponseType);
                     ArrayList<UnderstandingMessage> messages = response.getData();
                     activityTeacherMainBinding.getActivityTeacherMainViewModel().setMessages(messages);
-                    //todo() start the notification fragment
                     activityTeacherMainBinding.toolbar.navIcon.setOnClickListener((view) -> {
                         activityTeacherMainBinding.getActivityTeacherMainViewModel().setMessages(new ArrayList<>());
                         Bundle bundle = new Bundle();
@@ -127,54 +120,7 @@ public class TeacherMainActivity extends AppCompatActivity {
         fetchMessageHandler.postDelayed(runnable, delay);
     }
 
-    private @NonNull ResultCallback<CourseResponse> getCourseResponseResultCallback() {
-        ResultCallback<CourseResponse> courseCallback = new ResultCallback<CourseResponse>() {
-            @Override
-            public void onSuccess(CourseResponse data) {
-                if (data.getSuccess()) {
-                    saveCourseResponse(data);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(COURSES_KEY, new Gson().toJson(data));
-                    getSupportFragmentManager().beginTransaction()
-                            .setReorderingAllowed(true)
-                            .add(R.id.teacher_fragment_container, TeacherMainFragment.class, bundle)
-                            .commit();
-                }
-            }
 
-            @Override
-            public void onError(Exception e) {
-                if (e.getCause().toString().contains("java.net.ConnectException")) {
-                    Snackbar.make(activityTeacherMainBinding.getRoot(), "Unable to fetch courses (Connection error)", Snackbar.LENGTH_SHORT).show();
-                } else if (e.getCause().toString().contains("java.net.SocketTimeoutException")) {
-                    Snackbar.make(activityTeacherMainBinding.getRoot(), "Unable to connect to the server", Snackbar.LENGTH_SHORT).show();
-                } else {
-                    Snackbar.make(activityTeacherMainBinding.getRoot(), "Unknown error", Snackbar.LENGTH_SHORT).show();
-                }
-
-                Bundle bundle = new Bundle();
-                bundle.putString(COURSES_KEY, getCourseResponseString());
-                getSupportFragmentManager().beginTransaction()
-                        .setReorderingAllowed(true)
-                        .add(R.id.teacher_fragment_container, TeacherMainFragment.class, bundle)
-                        .commit();
-            }
-        };
-        return courseCallback;
-    }
-
-    private void saveCourseResponse(CourseResponse data) {
-        SharedPreferences sp = getApplicationContext().getSharedPreferences(COURSES_PREF_FILE, MODE_PRIVATE);
-        SharedPreferences.Editor spEditor = sp.edit();
-        spEditor.putString(COURSES_KEY, new Gson().toJson(data));
-        spEditor.apply();
-    }
-
-    private String getCourseResponseString() {
-        SharedPreferences sp = getApplicationContext().getSharedPreferences(COURSES_PREF_FILE, MODE_PRIVATE);
-        return sp.getString(COURSES_KEY, "empty");
-
-    }
 
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);

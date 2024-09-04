@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.View;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -56,7 +55,8 @@ public class TeacherMainViewModel extends BaseObservable {
     private Course targetCourse;
     private Bundle courseBundle = new Bundle();
     @Bindable
-    private String courseNameError;
+    private String courseNameError = null;
+
     public TeacherMainViewModel(TeacherFragmentMainBinding teacherFragmentMainBinding, FragmentManager fragmentManager, Context appContext) {
         this.teacherFragmentMainBinding = teacherFragmentMainBinding;
         this.fragmentManager = fragmentManager;
@@ -211,7 +211,7 @@ public class TeacherMainViewModel extends BaseObservable {
         testGeneratedDialogBinding.exitButton.setOnClickListener((view) -> {
             dialog.cancel();
         });
-        //todo() set the view button click property for the dialog
+        //todo: set the view button click property for the dialog
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }

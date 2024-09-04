@@ -40,7 +40,6 @@ public class LoginRepository {
 
         }
         public void register(User user, RepositoryCallBack<LoginResponse> repositoryCallBack){
-
             dataSource.register(user,repositoryCallBack);
         }
 

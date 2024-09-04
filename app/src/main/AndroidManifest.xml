@@ -17,6 +17,9 @@
         android:theme="@style/Theme.AnonymousEassessment"
         tools:targetApi="31">
         <activity
+            android:name=".views.student.StudentMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.teacher.TeacherMainActivity"
             android:exported="false" />
         <activity

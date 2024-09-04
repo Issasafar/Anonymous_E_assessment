@@ -45,6 +45,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 mStudentRegisterViewModel.setNameError(InputValidator.validateName(mStudentRegisterViewModel.getStudentName()));
                 activityStudentRegisterBinding.nameInput.getEditText().setError(mStudentRegisterViewModel.getNameError());
+
             }
         });
         activityStudentRegisterBinding.emailInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -79,6 +80,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
              mStudentRegisterViewModel.setPasswordError(InputValidator.validatePassword(mStudentRegisterViewModel.getStudentPassword()));
              activityStudentRegisterBinding.passwordInput.getEditText().setError(mStudentRegisterViewModel.getPasswordError());
+             activityStudentRegisterBinding.passwordInput.setEndIconVisible(activityStudentRegisterBinding.passwordInput.getError() == null);
             }
         });
         activityStudentRegisterBinding.confirmPasswordInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -96,6 +98,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 mStudentRegisterViewModel.setRepeatedPasswordError(InputValidator.validateRepeatedPassword(mStudentRegisterViewModel.getStudentPassword(), mStudentRegisterViewModel.getConfirmPassword()));
                 activityStudentRegisterBinding.confirmPasswordInput.getEditText().setError(mStudentRegisterViewModel.getRepeatedPasswordError());
+                activityStudentRegisterBinding.confirmPasswordInput.setEndIconVisible(activityStudentRegisterBinding.confirmPasswordInput.getError() == null);
             }
         });
         activityStudentRegisterBinding.YourSignInput.getEditText().addTextChangedListener(new TextWatcher() {
@@ -120,18 +123,7 @@ public class StudentRegisterActivity extends AppCompatActivity {
         });
     }
 
-    @BindingAdapter({"student"})
-    public static void runMe(View view, Student student) {
-//        if (!Objects.equals(student.getEmail().trim(), "")) {
-//            Toast.makeText(view.getContext(), "invoked register " + student.getEmail(), Toast.LENGTH_LONG).show();
-//        }
 
-    }
-
-    @BindingAdapter({"inputError"})
-    public static void setInputError(TextInputLayout textInputLayout, String error) {
-        textInputLayout.getEditText().setError(error);
-    }
     //TODO() do something with this toast message
     @BindingAdapter({"toastMessage"})
     public static void runMe(View view, String message) {
