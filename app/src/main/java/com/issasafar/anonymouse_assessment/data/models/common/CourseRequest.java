@@ -21,6 +21,7 @@ public class CourseRequest<T> {
         GET_ANSWERS,
         GET_MESSAGES,
         POST_MESSAGE,
-        GET_PREV_TESTS
+        GET_PREV_TESTS,
+        GET_ALL_RESULTS
     }
 }

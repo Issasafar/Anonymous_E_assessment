@@ -1,6 +1,6 @@
 package com.issasafar.anonymouse_assessment.views.teacher;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuInflater;
@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.issasafar.anonymouse_assessment.MainActivity;
 import com.issasafar.anonymouse_assessment.R;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseRequest;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseResponse;
@@ -126,14 +126,15 @@ public class TeacherMainActivity extends AppCompatActivity {
         PopupMenu popupMenu = new PopupMenu(this, view);
         MenuInflater inflater = popupMenu.getMenuInflater();
         inflater.inflate(R.menu.menu_main_teacher, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    default:
-                        return false;
-                }
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            if (menuItem.getTitle().equals("logout")) {
+                LoginViewModel.logout(getApplicationContext());
+                Intent i = new Intent(this, MainActivity.class);
+                startActivity(i);
+                finish();
+                return true;
             }
+            return false;
         });
         popupMenu.show();
     }

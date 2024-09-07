@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.issasafar.anonymouse_assessment.R" />
+
+        <variable
+            name="StudentQuestionsViewModel"
+            type="com.issasafar.anonymouse_assessment.viewmodels.student.StudentQuestionsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/margin_16dp_size"
+        tools:context=".views.student.ui.main.student.StudentQuestionsFragment">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/result_card"
+            android:layout_width="300dp"
+            android:layout_height="400dp"
+            android:elevation="10dp"
+            android:visibility="@{StudentQuestionsViewModel.testResult != null ? View.VISIBLE : View.GONE}"
+            app:cardCornerRadius="@dimen/margin_8dp_size"
+            app:cardMaxElevation="12dp"
+            app:cardPreventCornerOverlap="true"
+            app:layout_constraintBottom_toTopOf="@id/send_answers_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/margin_16dp_size">
+
+                <TextView
+                    android:id="@+id/test_result_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/test_result"
+                    android:textSize="@dimen/subtitle1"
+                    app:layout_constraintBottom_toTopOf="@id/your_result_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.1" />
+
+                <TextView
+                    android:id="@+id/your_result_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/your_result_is"
+                    android:textSize="@dimen/subtitle1"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/result_score_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/result_score_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{StudentQuestionsViewModel.testResult.score+`/100`}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <Button
+                    android:clickable="false"
+                    android:id="@+id/result_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@{(StudentQuestionsViewModel.testResult.score > 75) ? @color/excellent_color : @color/good_color}"
+                    android:text="@{StudentQuestionsViewModel.testResult.score > 75 ? `Excellent` : `Good`}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/result_score_text" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/top_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/test_questions"
+            android:textAlignment="center"
+            android:textSize="@dimen/subtitle1"
+            android:textStyle="bold"
+            android:visibility="@{StudentQuestionsViewModel.testResult == null ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@id/questions_recycler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/questions_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:adapter="@{StudentQuestionsViewModel.questionRecyclerViewAdapter}"
+            android:visibility="@{StudentQuestionsViewModel.testResult == null ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@id/send_answers_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_text" />
+
+        <Button
+            android:id="@+id/send_answers_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8dp_size"
+            android:enabled="@{StudentQuestionsViewModel.testResult == null ? true : false}"
+            android:onClick="@{()->StudentQuestionsViewModel.sendAnswersClicked()}"
+            android:text="@string/send_answers"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -65,12 +64,7 @@ public class TeacherMainFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         teacherMainViewModel = new TeacherMainViewModel(teacherFragmentMainBinding, fragmentManager, getActivity());
         teacherFragmentMainBinding.setTeacherMainFragment(teacherMainViewModel);
-        fragmentManager.setFragmentResultListener(QUESTIONS_KEY, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                teacherFragmentMainBinding.getTeacherMainFragment().setQuestions(QuestionDeserializer.parseQuestionsJson(result.getString(QUESTIONS_KEY)));
-            }
-        });
+        fragmentManager.setFragmentResultListener(QUESTIONS_KEY, this, (requestKey, result) -> teacherFragmentMainBinding.getTeacherMainFragment().setQuestions(QuestionDeserializer.getQuestionsFromJson(result.getString(QUESTIONS_KEY))));
         ResultCallback<CourseResponse> courseCallback = getCourseResponseResultCallback();
         teacherFragmentMainBinding.courseNameInputLayout.getEditText().setOnClickListener((view) -> {
             userId = LoginViewModel.getUserId(getActivity().getApplicationContext());
@@ -95,6 +89,7 @@ public class TeacherMainFragment extends Fragment {
                 teacherFragmentMainBinding.courseNameInputLayout.setEndIconVisible(!"".equals(str));
             }
         });
+        teacherFragmentMainBinding.courseNameInputLayout.getEditText().performClick();
     }
 
     @Nullable
@@ -120,9 +115,11 @@ public class TeacherMainFragment extends Fragment {
                     Collections.reverse(availableCourses);
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, availableCourses);
                     AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) teacherFragmentMainBinding.courseNameInputLayout.getEditText();
+                    teacherMainViewModel.setAvailableCourses(courses);
                     assert autoCompleteTextView != null;
                     getActivity().runOnUiThread(() -> {
                         autoCompleteTextView.setAdapter(adapter);
+
                     });
                 } else {
                     if (!"empty".equals(getCourseResponseString())) {

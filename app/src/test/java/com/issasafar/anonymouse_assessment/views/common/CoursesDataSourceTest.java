@@ -64,8 +64,8 @@ class CoursesDataSourceTest {
     public static CourseRequest<Course> getSampleTest() {
         Question question1 = new LongAnswerQuestion(1, 1, "what is 2!", 1, "2");
         Question question2 = new MultipleChoiceQuestion(1, 1, "which is best", 2, "A", new String[]{"java", "kotlin", "python"});
-        Answer answer1 = new Answer.LongAnswerAnswer(1, "9", 1, 1);
-        Answer answer2 = new Answer.MultipleChoiceAnswer(2, "python", 1, 2);
+        Answer answer1 = new Answer.LongAnswerAnswer(1, 1,"9", 1, 1);
+        Answer answer2 = new Answer.MultipleChoiceAnswer(2,1, "python", 1, 2);
         ArrayList<Question> questions = new ArrayList<>();
         questions.add(question1);
         questions.add(question2);

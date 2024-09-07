@@ -23,7 +23,7 @@ public class QuestionDeserializer implements JsonDeserializer {
         }
     }
 
-    public static  ArrayList<Question> parseQuestionsJson(String jsonString) {
+    public static  ArrayList<Question> getQuestionsFromJson(String jsonString) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Question.class, new QuestionDeserializer())
                 .create();

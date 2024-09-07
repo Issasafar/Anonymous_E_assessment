@@ -1,17 +1,17 @@
 package com.issasafar.anonymouse_assessment;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.issasafar.anonymouse_assessment.databinding.ActivityMainBinding;
 import com.issasafar.anonymouse_assessment.views.login.LoginActivity;
+import com.issasafar.anonymouse_assessment.views.login.LoginViewModel;
 import com.issasafar.anonymouse_assessment.views.student.StudentMainActivity;
 import com.issasafar.anonymouse_assessment.views.student.StudentRegisterActivity;
 import com.issasafar.anonymouse_assessment.views.teacher.TeacherMainActivity;
@@ -32,9 +32,16 @@ public class MainActivity extends AppCompatActivity {
         Button registerTeacherButton = mActivityMainBinding.teacherButton;
         Button registerStudentButton = mActivityMainBinding.studentButton;
         Button signInButton = mActivityMainBinding.signInButton;
-
-        Intent i = new Intent(this, StudentMainActivity.class);
-        startActivity(i);
+        if (Integer.parseInt(LoginViewModel.getUserId(getApplicationContext())) != -1) {
+            Intent i;
+            if (LoginViewModel.getStudentSign(getApplicationContext()) != null) {
+                i = new Intent(this, StudentMainActivity.class);
+            } else {
+               i = new Intent(this, TeacherMainActivity.class);
+            }
+            startActivity(i);
+            finish();
+        }
         // Using a lambda for the ActivityResultLauncher callback
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),

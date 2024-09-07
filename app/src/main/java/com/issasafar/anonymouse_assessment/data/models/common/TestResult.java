@@ -34,4 +34,10 @@ public class TestResult {
         this.score = score;
         this.owner_name = owner_name;
     }
+    public TestResult( int owner_id, String owner_name, int t_id, int score) {
+        this.owner_id = owner_id;
+        this.t_id = t_id;
+        this.score = score;
+        this.owner_name = owner_name;
+    }
 }

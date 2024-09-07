@@ -32,6 +32,7 @@ import com.issasafar.anonymouse_assessment.databinding.TestGeneratedDialogBindin
 import com.issasafar.anonymouse_assessment.views.common.CoursesRepository;
 import com.issasafar.anonymouse_assessment.views.common.ResultCallback;
 import com.issasafar.anonymouse_assessment.views.login.LoginViewModel;
+import com.issasafar.anonymouse_assessment.views.student.ui.main.student.StudentQuestionsFragment;
 import com.issasafar.anonymouse_assessment.views.teacher.ShowTrackRecyclerAdapter;
 import com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.AddQuestionsFragment;
 import com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.ShowTrackFragment;
@@ -39,12 +40,15 @@ import com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.ShowTra
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TeacherMainViewModel extends BaseObservable {
     public static final Type questionsArrayType = new TypeToken<ArrayList<Question>>() {
     }.getType();
     public static final String ADAPTER_KEY = "ADAPTER_KEY";
+    public static final String TEACHER_LAUNCH_KEY = "teacher_key";
     public final MutableLiveData<String> courseName = new MutableLiveData<>("");
     private Context appContext;
     private FragmentManager fragmentManager;
@@ -218,7 +222,17 @@ public class TeacherMainViewModel extends BaseObservable {
         testGeneratedDialogBinding.exitButton.setOnClickListener((view) -> {
             dialog.cancel();
         });
-        //todo: set the view button click property for the dialog
+        Bundle bundle = new Bundle();
+        bundle.putString(QUESTIONS_KEY,new Gson().toJson(questions));
+        bundle.putBoolean(TEACHER_LAUNCH_KEY,true);
+        testGeneratedDialogBinding.viewButton.setOnClickListener((view)->{
+            dialog.cancel();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.teacher_fragment_container, StudentQuestionsFragment.class, bundle)
+                    .addToBackStack("view_test")
+                    .setReorderingAllowed(true)
+                    .commit();
+        });
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
     }
@@ -234,7 +248,7 @@ public class TeacherMainViewModel extends BaseObservable {
                     .addToBackStack("show_track_frag")
                     .commit();
         } else {
-            showSnackBar("No tests created to get results");
+            showSnackBar("No tests created or selected to get results");
         }
 
     }

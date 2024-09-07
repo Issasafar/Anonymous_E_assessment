@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="com.issasafar.anonymouse_assessment.data.models.common.Question.QuestionType"/>
+        <import type="android.view.View"/>
+        <variable
+            name="StudentQuestionViewModel"
+            type="com.issasafar.anonymouse_assessment.viewmodels.student.StudentQuestionViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/question_root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/q_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_32dp_size"
+            android:layout_marginEnd="@dimen/margin_16dp_size"
+            android:text="@{`Q`+StudentQuestionViewModel.question.q_order+`:`}"
+            android:textSize="@dimen/subtitle1"
+            app:layout_constraintBottom_toBottomOf="@id/question_text_layout"
+            app:layout_constraintEnd_toStartOf="@id/question_text_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/question_text_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/question_text_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_32dp_size"
+            android:maxWidth="350dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/q_text"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:cursorVisible="false"
+                android:focusableInTouchMode="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{StudentQuestionViewModel.question.description}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:visibility="@{StudentQuestionViewModel.question.type == QuestionType.LONG ? View.VISIBLE : View.GONE}"
+            android:id="@+id/a_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{`A`+StudentQuestionViewModel.question.q_order+`:`}"
+            android:textSize="@dimen/subtitle1"
+            app:layout_constraintBottom_toBottomOf="@id/answer_text_layout"
+            app:layout_constraintEnd_toEndOf="@id/q_text"
+            app:layout_constraintStart_toStartOf="@id/q_text"
+            app:layout_constraintTop_toTopOf="@id/answer_text_layout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:visibility="@{StudentQuestionViewModel.question.type == QuestionType.LONG ? View.VISIBLE : View.GONE}"
+            android:id="@+id/answer_text_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxWidth="350dp"
+            app:layout_constraintStart_toStartOf="@id/question_text_layout"
+            app:layout_constraintEnd_toEndOf="@id/question_text_layout"
+            app:layout_constraintTop_toBottomOf="@id/question_text_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:maxLines="4"
+                android:text="@={StudentQuestionViewModel.answer.description}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Answer"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <RadioGroup
+            android:layout_marginTop="@dimen/margin_8dp_size"
+            android:layout_marginBottom="@dimen/margin_8dp_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/answer_text_layout"
+            android:orientation="horizontal"
+            android:onCheckedChanged="@{(radio,id)->StudentQuestionViewModel.onChoiceSelected(radio,id)}"
+            android:visibility="@{StudentQuestionViewModel.question.type == QuestionType.MULTI ? View.VISIBLE : View.GONE}"
+            android:id="@+id/choices_radio_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+           <RadioButton
+               android:id="@+id/choice1_button"
+               android:layout_marginEnd="@dimen/margin_8dp_size"
+               android:text="@{StudentQuestionViewModel.choices[0]}"
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"/>
+            <RadioButton
+                android:layout_marginEnd="@dimen/margin_8dp_size"
+                android:id="@+id/choice2_button"
+                android:text="@{StudentQuestionViewModel.choices[1]}"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+            <RadioButton
+                android:layout_marginEnd="@dimen/margin_8dp_size"
+                android:id="@+id/choice3_button"
+                android:text="@{StudentQuestionViewModel.choices[2]}"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+
+        </RadioGroup>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

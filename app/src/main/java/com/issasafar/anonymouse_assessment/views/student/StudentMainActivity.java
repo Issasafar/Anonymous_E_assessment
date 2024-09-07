@@ -1,5 +1,6 @@
 package com.issasafar.anonymouse_assessment.views.student;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,8 +15,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.issasafar.anonymouse_assessment.MainActivity;
 import com.issasafar.anonymouse_assessment.R;
 import com.issasafar.anonymouse_assessment.databinding.ActivityStudentMainBinding;
+import com.issasafar.anonymouse_assessment.views.login.LoginViewModel;
 import com.issasafar.anonymouse_assessment.views.student.ui.main.student.StudentMainFragment;
 
 public class StudentMainActivity extends AppCompatActivity {
@@ -39,10 +42,14 @@ public class StudentMainActivity extends AppCompatActivity {
         MenuInflater inflater = popupMenu.getMenuInflater();
         inflater.inflate(R.menu.menu_main_teacher, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                default:
-                    return false;
+            if (menuItem.getTitle().equals("logout")) {
+                LoginViewModel.logout(getApplicationContext());
+                Intent i = new Intent(this, MainActivity.class);
+                startActivity(i);
+                finish();
+                return true;
             }
+            return false;
         });
         popupMenu.show();
     }

@@ -128,7 +128,6 @@ public class StudentRegisterActivity extends AppCompatActivity {
     }
 
 
-    //TODO() do something with this toast message
     @BindingAdapter({"toastMessage"})
     public static void runMe(View view, String message) {
 //        if (message != null)

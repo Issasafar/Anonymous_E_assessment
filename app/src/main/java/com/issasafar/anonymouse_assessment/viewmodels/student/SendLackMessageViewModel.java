@@ -69,16 +69,20 @@ public class SendLackMessageViewModel extends BaseObservable {
 
                 @Override
                 public void onError(Exception e) {
-                    if (e.getCause().toString().contains("java.net.ConnectException")) {
-                        Snackbar.make(fragmentSendLackMessageBinding.getRoot(), "Unable to post message (Connection error)", Snackbar.LENGTH_SHORT).show();
-                    } else if (e.getCause().toString().contains("java.net.SocketTimeoutException")) {
-                        Snackbar.make(fragmentSendLackMessageBinding.getRoot(), "Unable to connect to the server", Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        Snackbar.make(fragmentSendLackMessageBinding.getRoot(), "Unknown error", Snackbar.LENGTH_SHORT).show();
-                    }
+                    showSnackBarError(e);
                 }
             });
 
+        }
+    }
+
+    private void showSnackBarError(Exception e) {
+        if (e.getCause().toString().contains("java.net.ConnectException")) {
+            Snackbar.make(fragmentSendLackMessageBinding.getRoot(), "Unable to post message (Connection error)", Snackbar.LENGTH_SHORT).show();
+        } else if (e.getCause().toString().contains("java.net.SocketTimeoutException")) {
+            Snackbar.make(fragmentSendLackMessageBinding.getRoot(), "Unable to connect to the server", Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(fragmentSendLackMessageBinding.getRoot(), "Unknown error", Snackbar.LENGTH_SHORT).show();
         }
     }
 

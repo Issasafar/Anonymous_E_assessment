@@ -1,22 +1,37 @@
 package com.issasafar.anonymouse_assessment.data.models.common;
 
-public  class Question {
+public class Question {
     protected int q_id;
+    protected QuestionType type;
     protected int t_id;
     protected String description;
     protected int q_order;
-
     public Question(int q_id, int t_id, String description, int q_order) {
         this.q_id = q_id;
         this.t_id = t_id;
         this.description = description;
         this.q_order = q_order;
     }
-    public Question(String description, int q_order){
+    public Question(int q_id, int t_id, String description, int q_order, QuestionType type) {
+        this.q_id = q_id;
+        this.t_id = t_id;
+        this.description = description;
+        this.q_order = q_order;
+        this.type = type;
+    }
+
+    public Question(String description, int q_order) {
         this.description = description;
         this.q_order = q_order;
     }
 
+    public QuestionType getType() {
+        return type;
+    }
+
+    public void setType(QuestionType type) {
+        this.type = type;
+    }
 
     public int getQ_id() {
         return q_id;
@@ -48,5 +63,10 @@ public  class Question {
 
     public void setQ_order(int q_order) {
         this.q_order = q_order;
+    }
+
+    public enum QuestionType {
+        LONG,
+        MULTI
     }
 }

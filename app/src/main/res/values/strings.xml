@@ -24,7 +24,7 @@
     <string name="signin">Login</string>
     <string name="nav_icon_desc">navigate</string>
     <string name="app_icon_desc">icon</string>
-    <string name="action_settings">settings</string>
+    <string name="action_logout">logout</string>
     <string name="menu_icon_desc">menu\n</string>
     <string name="welcome_text">Welcome to Anonymous E-assessment Application</string>
     <string name="choose_course">Choose Course</string>
@@ -50,4 +50,8 @@
     <string name="get_results_of_the_previous_test">Get Results of the Previous Test</string>
     <string name="what_did_you_not_understand">What did you not understand?</string>
     <string name="send">Send</string>
+    <string name="send_answers">Send Answers</string>
+    <string name="test_questions">Test Questions</string>
+    <string name="test_result">Test Result</string>
+    <string name="your_result_is">Your Result Is</string>
 </resources>

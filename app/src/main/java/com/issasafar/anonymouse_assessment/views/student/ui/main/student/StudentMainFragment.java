@@ -33,8 +33,8 @@ import java.util.stream.Collectors;
 public class StudentMainFragment extends Fragment {
 
    private FragmentStudentMainBinding fragmentStudentMainBinding;
-    public String COURSES_ARRAY_KEY = "courses array list key";
-    private String COURSES_KEY = "courses key";
+    public String COURSES_ARRAY_KEY = "courses_array_list_key";
+    private String COURSES_KEY = "courses_key";
     public static StudentMainFragment newInstance() {
         return new StudentMainFragment();
     }
@@ -46,10 +46,10 @@ private CoursesRepository coursesRepository;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fragmentStudentMainBinding = FragmentStudentMainBinding.inflate(getLayoutInflater());
-        StudentMainFragViewModel studentMainFragViewModel = new StudentMainFragViewModel(fragmentStudentMainBinding, getParentFragmentManager());
-        fragmentStudentMainBinding.setStudentMainFragViewModel(studentMainFragViewModel);
         coursesRepository = new CoursesRepository();
+        fragmentStudentMainBinding = FragmentStudentMainBinding.inflate(getLayoutInflater());
+        StudentMainFragViewModel studentMainFragViewModel = new StudentMainFragViewModel(fragmentStudentMainBinding, getParentFragmentManager(),coursesRepository,getActivity());
+        fragmentStudentMainBinding.setStudentMainFragViewModel(studentMainFragViewModel);
         fragmentStudentMainBinding.courseNameInputLayout.getEditText().setOnClickListener((view) -> {
             coursesRepository.postData(new CourseRequest(CourseRequest.CourseAction.GET_ALL_COURSES, null), getCourseResponseCallback());
                 }

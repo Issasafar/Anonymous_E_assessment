@@ -1,6 +1,8 @@
 package com.issasafar.anonymouse_assessment.views.teacher;
 
+import static com.issasafar.anonymouse_assessment.viewmodels.teacher.AddQuestionsViewModel.QUESTIONS_KEY;
 import static com.issasafar.anonymouse_assessment.viewmodels.teacher.TeacherMainViewModel.ADAPTER_KEY;
+import static com.issasafar.anonymouse_assessment.views.teacher.TeacherMainActivity.COURSES_KEY;
 import static com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.ShowTrackFragment.TESTS_RESULTS_KEY;
 
 import android.content.Context;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
@@ -16,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.issasafar.anonymouse_assessment.R;
+import com.issasafar.anonymouse_assessment.data.models.common.Answer;
 import com.issasafar.anonymouse_assessment.data.models.common.Course;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseRequest;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseResponse;
@@ -28,10 +33,15 @@ import com.issasafar.anonymouse_assessment.views.common.ResultCallback;
 import com.issasafar.anonymouse_assessment.views.teacher.ui.main.teacher.ShowTrackFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecyclerAdapter.ViewHolder> {
+    public static final String ANSWERS_KEY = "answer_key";
     private static View parent = null;
     private FragmentManager fragmentManager;
     private Context context;
@@ -101,9 +111,13 @@ public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecy
 
     @Override
     public void onBindViewHolder(@NonNull ShowTrackRecyclerAdapter.ViewHolder holder, int position) {
-        if (getAdapterType() == AdapterType.GENERAL_STUDENT || getAdapterType() == AdapterType.GENERAL_TEACHER) {
+        if (holder.getAdapterType() == AdapterType.GENERAL_TEACHER) {
             holder.testResultRecyclerItemBinding.getTestResultViewModel().setCourse(courses.get(position));
-        } else {
+        } else if (holder.getAdapterType() == AdapterType.GENERAL_STUDENT) {
+            holder.testResultRecyclerItemBinding.getTestResultViewModel().setCourse(courses.get(position));
+//            holder.testResultRecyclerItemBinding.getTestResultViewModel().setTestResultForStudentView(results.get(position));
+        } else if (holder.getAdapterType() == AdapterType.TEACHER_VIEW) {
+            holder.testResultRecyclerItemBinding.getTestResultViewModel().setCourse(courses.get(position));
             holder.testResultRecyclerItemBinding.getTestResultViewModel().setTestResult(results.get(position));
         }
         holder.testResultRecyclerItemBinding.linkText.setOnClickListener((view) -> {
@@ -116,21 +130,25 @@ public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecy
     }
 
     public void linkTextClicked(int position, ViewHolder holder) {
-        if (adapterType == AdapterType.GENERAL_TEACHER) {
+        if (holder.getAdapterType() == AdapterType.GENERAL_TEACHER) {
             Map<String, Integer> data = new HashMap<>();
-            data.put("t_id", courses.get(position).getT_id());
+            data.put("test_id", courses.get(position).getT_id());
             coursesRepository.postData(new CourseRequest(CourseRequest.CourseAction.GET_RESULTS, data), new ResultCallback<CourseResponse>() {
                 @Override
                 public void onSuccess(CourseResponse data) {
                     if (data.getSuccess()) {
+                        ArrayList<TestResult> temp = new Gson().fromJson(new Gson().toJson(data.getData()), new TypeToken<ArrayList<TestResult>>() {
+                        }.getType());
+                        ArrayList<Course> dumpCourses = new ArrayList<>();
+                        Course tempCourse = courses.get(position);
+                        for (TestResult result : temp) {
+                            dumpCourses.add(tempCourse);
+                        }
                         Bundle bundle = new Bundle();
+                        bundle.putString(COURSES_KEY,new Gson().toJson(dumpCourses));
                         bundle.putString(TESTS_RESULTS_KEY, new Gson().toJson(data.getData()));
                         bundle.putString(ADAPTER_KEY, new Gson().toJson(AdapterType.TEACHER_VIEW));
-                        fragmentManager.beginTransaction()
-                                .setReorderingAllowed(true)
-                                .replace(R.id.teacher_fragment_container, ShowTrackFragment.class, bundle)
-                                .addToBackStack("teacher_view")
-                                .commit();
+                        fragmentManager.beginTransaction().setReorderingAllowed(true).replace(R.id.teacher_fragment_container, ShowTrackFragment.class, bundle).addToBackStack("teacher_view").commit();
                     } else {
                         showSnackBar(data.getMessage());
                     }
@@ -141,25 +159,32 @@ public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecy
                     showSnackBar("Connection error");
                 }
             });
-        } else if (adapterType == AdapterType.GENERAL_STUDENT) {
+        } else if (holder.getAdapterType() == AdapterType.GENERAL_STUDENT) {
+            holder.setAdapterType(AdapterType.STUDENT_VIEW);
             holder.testResultRecyclerItemBinding.getTestResultViewModel().setAdapterType(AdapterType.STUDENT_VIEW);
-            Course course = holder.testResultRecyclerItemBinding.getTestResultViewModel().getCourse();
-            TestResult testResult = holder.testResultRecyclerItemBinding.getTestResultViewModel().getTestResult();
-            holder.testResultRecyclerItemBinding.getTestResultViewModel().setCourse(new Course(course.getT_id(), course.getOwner_id(), testResult.getOwner_name()));
-            notifyItemChanged(position);
-        } else if (adapterType == AdapterType.TEACHER_VIEW) {
+            holder.testResultRecyclerItemBinding.getTestResultViewModel().setTestResultForStudentView(results.get(position));
+//            Course course = holder.testResultRecyclerItemBinding.getTestResultViewModel().getCourse();
+//            TestResult testResult = holder.testResultRecyclerItemBinding.getTestResultViewModel().getTestResult();
+//            holder.testResultRecyclerItemBinding.getTestResultViewModel().setCourse(new Course(course.getT_id(), course.getOwner_id(), testResult.getOwner_name()));
+        } else if (holder.getAdapterType() == AdapterType.TEACHER_VIEW || holder.getAdapterType() == AdapterType.STUDENT_VIEW) {
+            Bundle bundle = new Bundle();
             TestResult result = holder.testResultRecyclerItemBinding.getTestResultViewModel().getTestResult();
-            JsonObject jsonObject = new JsonObject();
-//            jsonObject.addProperty("t_id",result.getT_id());
-//            jsonObject.addProperty("owner_id",result.getOwner_id());
-            //todo() replace with actual data t_id and owner_id
-            jsonObject.addProperty("t_id",1);
-            jsonObject.addProperty("owner_id",1);
-            coursesRepository.postData(new CourseRequest(CourseRequest.CourseAction.GET_ANSWERS, jsonObject), new ResultCallback<CourseResponse>() {
+            List<TestResult> tempResults = results.stream().filter((item)->item.getT_id() == holder.testResultRecyclerItemBinding.getTestResultViewModel().getTestResult().getT_id()).collect(Collectors.toList());
+            tempResults.sort(Comparator.comparing(TestResult::getR_id));
+            int wantedResultId = tempResults.indexOf(result);
+
+            Course course = holder.testResultRecyclerItemBinding.getTestResultViewModel().getCourse();
+            JsonObject answersRequestJson = new JsonObject();
+            answersRequestJson.addProperty("test_id",result.getT_id());
+            answersRequestJson.addProperty("owner_id",result.getOwner_id());
+            JsonObject questionsRequestJson = new JsonObject();
+            questionsRequestJson.addProperty("test_id", result.getT_id());
+            questionsRequestJson.addProperty("owner_id", course.getOwner_id());
+            coursesRepository.postData(new CourseRequest(CourseRequest.CourseAction.GET_QUESTIONS, questionsRequestJson), new ResultCallback<CourseResponse>() {
                 @Override
                 public void onSuccess(CourseResponse data) {
                     if (data.getSuccess()) {
-                       // todo() pass the answers to the next fragment with adapter for the questions
+                        bundle.putString(QUESTIONS_KEY, new Gson().toJson(data.getData()));
                     }
                 }
 
@@ -168,9 +193,47 @@ public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecy
                     showSnackBar(e.getMessage());
                 }
             });
+            coursesRepository.postData(new CourseRequest(CourseRequest.CourseAction.GET_ANSWERS, answersRequestJson), new ResultCallback<CourseResponse>() {
+                @Override
+                public void onSuccess(CourseResponse data) {
+                    if (data.getSuccess()) {
 
-        } else if (adapterType == AdapterType.STUDENT_VIEW) {
-            // todo() implement this
+                        ArrayList<Answer> allAnswers = new Gson().fromJson(new Gson().toJson(data.getData()), new TypeToken<ArrayList<Answer>>() {
+                        }.getType());
+//                        bundle.putString(ANSWERS_KEY, new Gson().toJson(data.getData()));
+                        allAnswers.sort(Comparator.comparing(Answer::getQ_id));
+                        long attemptsCount = allAnswers.stream().filter((item) -> item.getQ_id() == allAnswers.get(0).getQ_id()).count();
+                        List<Answer> wantedAnswers = new ArrayList<>();
+                        for (long i = wantedResultId; i < allAnswers.size(); i += attemptsCount) {
+                            wantedAnswers.add(allAnswers.get((int) i));
+                        }
+                        wantedAnswers.sort(Comparator.comparing(Answer::getA_order));
+                        bundle.putString(ANSWERS_KEY, new Gson().toJson(wantedAnswers));
+                        bundle.putString(ADAPTER_KEY, new Gson().toJson(AdapterType.STUDENT_VIEW));
+                        if (holder.getAdapterType() == AdapterType.STUDENT_VIEW) {
+                            fragmentManager.beginTransaction()
+                                    .addToBackStack("answers_fragment")
+                                    .setReorderingAllowed(true)
+                                    .replace(R.id.student_main_fragment_container, ShowTrackFragment.class, bundle)
+                                    .commit();
+                        } else {
+                            fragmentManager.beginTransaction()
+                                    .addToBackStack("answers_fragment")
+                                    .setReorderingAllowed(true)
+                                    .replace(R.id.teacher_fragment_container, ShowTrackFragment.class, bundle)
+                                    .commit();
+                        }
+
+                    } else {
+                        Snackbar.make(parent, "Unable to fetch answers from server", Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    showSnackBar(e.getMessage());
+                }
+            });
         }
     }
 
@@ -196,6 +259,7 @@ public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecy
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private AdapterType adapterType;
         private TestResultRecyclerItemBinding testResultRecyclerItemBinding;
 
         public ViewHolder(@NonNull View itemView, TestResultRecyclerItemBinding testResultRecyclerItemBinding, AdapterType adapterType) {
@@ -203,7 +267,16 @@ public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecy
             this.testResultRecyclerItemBinding = testResultRecyclerItemBinding;
             testResultRecyclerItemBinding.executePendingBindings();
             TestResultViewModel resultViewModel = new TestResultViewModel(testResultRecyclerItemBinding, adapterType);
+            this.adapterType = adapterType;
             testResultRecyclerItemBinding.setTestResultViewModel(resultViewModel);
+        }
+
+        public AdapterType getAdapterType() {
+            return adapterType;
+        }
+
+        public void setAdapterType(AdapterType adapterType) {
+            this.adapterType = adapterType;
         }
     }
 }

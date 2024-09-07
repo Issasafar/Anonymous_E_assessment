@@ -10,8 +10,9 @@
         >
         <menu>-->
             <item
+                android:id="@+id/logout_button"
                 android:icon="@drawable/baseline_settings_24"
-                android:title="@string/action_settings"/>
+                android:title="@string/action_logout"/>
       <!--  </menu>
     </item>-->
 </menu>

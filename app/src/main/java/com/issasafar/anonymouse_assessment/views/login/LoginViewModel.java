@@ -142,6 +142,15 @@ public class LoginViewModel extends BaseObservable {
         SharedPreferences sharedPreferences = appContext.getSharedPreferences(SHARED_PREF_CREDENTIAL_FILE, MODE_PRIVATE);
         return sharedPreferences.getString("userId", "-1");
     }
+    public static String getStudentSign(Context appContext) {
+        SharedPreferences sharedPreferences = appContext.getSharedPreferences(SHARED_PREF_CREDENTIAL_FILE, MODE_PRIVATE);
+        return sharedPreferences.getString("sign", null);
+    }
+
+    public static void logout(Context appContext) {
+        SharedPreferences sharedPreferences = appContext.getSharedPreferences(SHARED_PREF_CREDENTIAL_FILE, MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+    }
 
     public void login(String email, String password) {
         loginRepository.login(email, password, result -> {
@@ -151,12 +160,11 @@ public class LoginViewModel extends BaseObservable {
 
                 loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(), response.getPassword(), response.getSign());
                 loginResult.postValue(new LoginResult(loggedInUser));
-            } else if (!((Result.Success<LoginResponse>)result).getData().isSuccess()) {
+            }else if(result instanceof Result.Success && !((Result.Success<LoginResponse>) result).getData().isSuccess()){
                 String erroMessage = ((Result.Success<LoginResponse>)result).getData().getMessage();
                 loginResult.postValue(new LoginResult(erroMessage));
-
             } else {
-                loginResult.postValue(new LoginResult("login failed\n "));
+                loginResult.postValue(new LoginResult("Login failed (connection error)"));
             }
         });
 
