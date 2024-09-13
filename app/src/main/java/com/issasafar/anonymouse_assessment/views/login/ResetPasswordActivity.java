@@ -3,8 +3,12 @@ package com.issasafar.anonymouse_assessment.views.login;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -32,6 +36,13 @@ public class ResetPasswordActivity extends AppCompatActivity {
         activityForgotPasswordBinding.executePendingBindings();
         submitButton = activityForgotPasswordBinding.submitButton;
         newPasswordTextInput = activityForgotPasswordBinding.newPasswordField;
+        activityForgotPasswordBinding.getResetPasswordViewModel().getProgressVisibilityLiveData().observe(this, integer -> {
+            if (integer == View.VISIBLE) {
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            } else {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
         newPasswordTextInput.setOnEditorActionListener((textView, i, keyEvent) ->{
         if (i == EditorInfo.IME_ACTION_DONE) {
             submitButton.performClick();

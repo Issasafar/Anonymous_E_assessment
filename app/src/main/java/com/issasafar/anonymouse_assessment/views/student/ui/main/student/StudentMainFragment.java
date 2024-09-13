@@ -28,6 +28,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class StudentMainFragment extends Fragment {
@@ -58,12 +59,14 @@ private CoursesRepository coursesRepository;
     }
 
     private void storeCourses(ArrayList<Course> courses) {
-        SharedPreferences sp = getActivity().getSharedPreferences(COURSES_ARRAY_KEY, Context.MODE_PRIVATE);
-        sp.edit().putString(COURSES_KEY, new Gson().toJson(courses)).apply();
+        SharedPreferences sp = requireActivity().getSharedPreferences(COURSES_ARRAY_KEY, Context.MODE_PRIVATE);
+        if (sp != null) {
+            sp.edit().putString(COURSES_KEY, new Gson().toJson(courses)).apply();
+        }
     }
 
     private ArrayList<Course> getStoredCourses() {
-        SharedPreferences sp = getActivity().getSharedPreferences(COURSES_ARRAY_KEY, Context.MODE_PRIVATE);
+        SharedPreferences sp = requireActivity().getSharedPreferences(COURSES_ARRAY_KEY, Context.MODE_PRIVATE);
         String json = sp.getString(COURSES_KEY, "empty");
         if (!"empty".equals(json)) {
             return new Gson().fromJson(json, coursesArrayType);
@@ -86,10 +89,10 @@ private CoursesRepository coursesRepository;
                 }
                 fragmentStudentMainBinding.getStudentMainFragViewModel().setCourses(courses);
                 List<String> availableCoursesNamesList = courses.stream().map(Course::getDescription).collect(Collectors.toList());
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1,availableCoursesNamesList);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity().getApplicationContext(), android.R.layout.simple_list_item_1,availableCoursesNamesList);
                 AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) fragmentStudentMainBinding.courseNameInputLayout.getEditText();
                 assert autoCompleteTextView != null;
-                getActivity().runOnUiThread(()-> {
+                requireActivity().runOnUiThread(()-> {
                     autoCompleteTextView.setAdapter(adapter);
 
                 });

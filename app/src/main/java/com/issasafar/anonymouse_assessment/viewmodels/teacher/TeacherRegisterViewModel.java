@@ -33,7 +33,7 @@ public class TeacherRegisterViewModel extends BaseObservable {
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private final String successMessage = "Registration was successful";
     private final String errorMessage = "Registration Failed";
-    private int progressVisibility = View.GONE;
+    private MutableLiveData<Integer> progressVisibility = new MutableLiveData<>(View.GONE);
     private LoginRepository loginRepository;
     @Bindable
     private String toastMessage = null;
@@ -225,11 +225,14 @@ public class TeacherRegisterViewModel extends BaseObservable {
 
     @Bindable
     public int getProgressVisibility() {
-        return progressVisibility;
+        return progressVisibility.getValue();
     }
 
+    public MutableLiveData<Integer> getLiveProgressVisibility() {
+        return progressVisibility;
+    }
     public void setProgressVisibility(int progressVisibility) {
-        this.progressVisibility = progressVisibility;
+        this.progressVisibility.postValue(progressVisibility);
         notifyPropertyChanged(BR.progressVisibility);
     }
 }

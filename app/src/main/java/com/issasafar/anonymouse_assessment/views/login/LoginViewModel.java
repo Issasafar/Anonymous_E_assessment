@@ -161,9 +161,10 @@ public class LoginViewModel extends BaseObservable {
                 loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(), response.getPassword(), response.getSign());
                 loginResult.postValue(new LoginResult(loggedInUser));
             }else if(result instanceof Result.Success && !((Result.Success<LoginResponse>) result).getData().isSuccess()){
-                String erroMessage = ((Result.Success<LoginResponse>)result).getData().getMessage();
-                loginResult.postValue(new LoginResult(erroMessage));
+                String errorMessage = ((Result.Success<LoginResponse>)result).getData().getMessage();
+                loginResult.postValue(new LoginResult(errorMessage));
             } else {
+                // show an error
                 loginResult.postValue(new LoginResult("Login failed (connection error)"));
             }
         });

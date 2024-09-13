@@ -32,7 +32,7 @@ public class StudentRegisterViewModel extends BaseObservable {
     private String successMessage = "Registration was successful";
     private String errorMessage = "Registration failed";
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private int progressVisibility = View.GONE;
+    private MutableLiveData<Integer> progressVisibility = new MutableLiveData<>(View.GONE);
     private LoginRepository loginRepository;
     @Bindable
     private String toastMessage = null;
@@ -42,50 +42,46 @@ public class StudentRegisterViewModel extends BaseObservable {
     @Bindable
     private String nameError = null;
 
-@Bindable
-private String emailError = null;
-@Bindable
-private String passwordError = null;
-@Bindable
-private String repeatedPasswordError = null;
-@Bindable
-private String signError = null;
-private Window window;
+    @Bindable
+    private String emailError = null;
+    @Bindable
+    private String passwordError = null;
+    @Bindable
+    private String repeatedPasswordError = null;
+    @Bindable
+    private String signError = null;
+    private Window window;
     private Context appContext;
     private ActivityStudentRegisterBinding studentRegisterBinding;
+
     public StudentRegisterViewModel(Context appContext, ActivityStudentRegisterBinding studentRegisterBinding, Window window) {
-        this.mStudent = new Student("","","","");
+        this.mStudent = new Student("", "", "", "");
         this.confirmPassword = "";
         this.appContext = appContext;
         this.studentRegisterBinding = studentRegisterBinding;
         Executor executor = Executors.newCachedThreadPool();
-        this.loginRepository = LoginRepository.getInstance(new LoginDataSource( executor));
+        this.loginRepository = LoginRepository.getInstance(new LoginDataSource(executor));
         this.window = window;
     }
+
     public StudentRegisterViewModel(Student student, String confirmPassword) {
         mStudent = student;
         this.confirmPassword = confirmPassword;
     }
 
-    public void setStudentName(String name) {
-        mStudent.setName(name);
-        notifyPropertyChanged(BR.studentName);
+    @Bindable
+    public String getToastMessage() {
+        return this.toastMessage;
     }
 
-    public void setStudentEmail(String email) {
-        mStudent.setEmail(email);
-        notifyPropertyChanged(BR.studentEmail);
+    private void setToastMessage(String message) {
+        this.toastMessage = message;
+        notifyPropertyChanged(BR.toastMessage);
     }
 
-    public void setStudentPassword(String password) {
-        mStudent.setPassword(password);
-        notifyPropertyChanged(BR.studentPassword);
-
-    }
-
-    public void setStudentSign(String sign) {
-        mStudent.setSign(sign);
-        notifyPropertyChanged(BR.studentSign);
+    @Bindable
+    public String getConfirmPassword() {
+        return this.confirmPassword;
     }
 
     public void setConfirmPassword(String password) {
@@ -94,28 +90,44 @@ private Window window;
     }
 
     @Bindable
-    public String getToastMessage() {
-        return this.toastMessage;
-    }
-    @Bindable
-    public String getConfirmPassword() {
-        return this.confirmPassword;
-    }
-    @Bindable
     public String getStudentName() {
         return mStudent.getName();
     }
+
+    public void setStudentName(String name) {
+        mStudent.setName(name);
+        notifyPropertyChanged(BR.studentName);
+    }
+
     @Bindable
     public String getStudentEmail() {
         return mStudent.getEmail();
     }
+
+    public void setStudentEmail(String email) {
+        mStudent.setEmail(email);
+        notifyPropertyChanged(BR.studentEmail);
+    }
+
     @Bindable
     public String getStudentPassword() {
         return mStudent.getPassword();
     }
+
+    public void setStudentPassword(String password) {
+        mStudent.setPassword(password);
+        notifyPropertyChanged(BR.studentPassword);
+
+    }
+
     @Bindable
     public String getStudentSign() {
         return mStudent.getSign();
+    }
+
+    public void setStudentSign(String sign) {
+        mStudent.setSign(sign);
+        notifyPropertyChanged(BR.studentSign);
     }
 
     @Bindable
@@ -123,34 +135,33 @@ private Window window;
         return this.mStudent;
     }
 
-    public Student getStudentAndEnableWindow() {
-        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        return getStudent();
-    }
-
     public void setStudent(Student student) {
         this.mStudent = student;
         notifyPropertyChanged(BR.student);
     }
 
+    public Student getStudentAndEnableWindow() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        return getStudent();
+    }
+
     public MutableLiveData<LoginResult> getLoginResult() {
         return this.loginResult;
     }
+
     public void onRegisterClicked() {
         if (isInputValid()) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             setProgressVisibility(View.VISIBLE);
             setStudent(new Student(mStudent.getName(), mStudent.getEmail(), mStudent.getPassword(), mStudent.getSign()));
-            loginRepository.register(getStudentAndEnableWindow(), result ->{
+            loginRepository.register(getStudentAndEnableWindow(), result -> {
                 setProgressVisibility(View.GONE);
-                if(result instanceof Result.Success){
+                if (result instanceof Result.Success) {
                     LoggedInUser loggedInUser;
-                    LoginResponse response =  ((Result.Success<LoginResponse>) result).getData();
-                    loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(),response.getPassword(), response.getSign());
+                    LoginResponse response = ((Result.Success<LoginResponse>) result).getData();
+                    loggedInUser = new LoggedInUser(response.getUserId(), response.getUserName(), response.getEmail(), response.getPassword(), response.getSign());
                     LoginViewModel loginViewModel = new LoginViewModel(getAppContext());
                     loginViewModel.saveUserCredentials(new LoginResult(loggedInUser));
-                    setToastMessage(successMessage + ": "+getStudentName());
+                    setToastMessage(successMessage + ": " + getStudentName());
                     loginResult.postValue(new LoginResult(loggedInUser));
                 } else if (result instanceof Result.Error) {
                     // failed
@@ -161,16 +172,15 @@ private Window window;
                     loginResult.postValue(new LoginResult(errorMessage));
                 }
             });
-        }else {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        } else {
             setNameError(InputValidator.validateName(mStudent.getName()));
             setEmailError(InputValidator.validateEmail(mStudent.getEmail()));
             setPasswordError(InputValidator.validatePassword(mStudent.getPassword()));
             setRepeatedPasswordError(InputValidator.validateRepeatedPassword(mStudent.getPassword(), getConfirmPassword()));
             setSignError(InputValidator.validateSign(mStudent.getSign()));
-        setToastMessage(errorMessage);
+            setToastMessage(errorMessage);
         }
-        }
+    }
 
     private boolean isInputValid() {
         return (!TextUtils.isEmpty(getStudentName().trim()) &&
@@ -180,11 +190,7 @@ private Window window;
                 Objects.equals(getStudentPassword().trim(), getConfirmPassword().trim()));
     }
 
-    private void setToastMessage(String message) {
-        this.toastMessage = message;
-        notifyPropertyChanged(BR.toastMessage);
-    }
-@Bindable
+    @Bindable
     public String getNameError() {
         return nameError;
     }
@@ -193,7 +199,8 @@ private Window window;
         this.nameError = nameError;
         notifyPropertyChanged(BR.nameError);
     }
-@Bindable
+
+    @Bindable
     public String getEmailError() {
         return emailError;
     }
@@ -202,7 +209,8 @@ private Window window;
         this.emailError = emailError;
         notifyPropertyChanged(BR.emailError);
     }
-@Bindable
+
+    @Bindable
     public String getPasswordError() {
         return passwordError;
     }
@@ -211,7 +219,8 @@ private Window window;
         this.passwordError = passwordError;
         notifyPropertyChanged(BR.passwordError);
     }
-@Bindable
+
+    @Bindable
     public String getRepeatedPasswordError() {
         return repeatedPasswordError;
     }
@@ -220,7 +229,8 @@ private Window window;
         this.repeatedPasswordError = repeatedPasswordError;
         notifyPropertyChanged(BR.repeatedPasswordError);
     }
-@Bindable
+
+    @Bindable
     public String getSignError() {
         return signError;
     }
@@ -229,13 +239,18 @@ private Window window;
         this.signError = signError;
         notifyPropertyChanged(BR.signError);
     }
-@Bindable
+
+    @Bindable
     public int getProgressVisibility() {
+        return progressVisibility.getValue();
+    }
+
+    public MutableLiveData<Integer> getLiveProgressVisibility() {
         return progressVisibility;
     }
 
     public void setProgressVisibility(int progressVisibility) {
-        this.progressVisibility = progressVisibility;
+        this.progressVisibility.postValue(progressVisibility);;
         notifyPropertyChanged(BR.progressVisibility);
     }
 

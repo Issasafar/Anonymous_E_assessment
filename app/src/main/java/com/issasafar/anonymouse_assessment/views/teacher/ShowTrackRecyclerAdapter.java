@@ -25,6 +25,7 @@ import com.issasafar.anonymouse_assessment.data.models.common.Answer;
 import com.issasafar.anonymouse_assessment.data.models.common.Course;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseRequest;
 import com.issasafar.anonymouse_assessment.data.models.common.CourseResponse;
+import com.issasafar.anonymouse_assessment.data.models.common.Question;
 import com.issasafar.anonymouse_assessment.data.models.common.TestResult;
 import com.issasafar.anonymouse_assessment.databinding.TestResultRecyclerItemBinding;
 import com.issasafar.anonymouse_assessment.viewmodels.teacher.TestResultViewModel;
@@ -200,12 +201,17 @@ public class ShowTrackRecyclerAdapter extends RecyclerView.Adapter<ShowTrackRecy
 
                         ArrayList<Answer> allAnswers = new Gson().fromJson(new Gson().toJson(data.getData()), new TypeToken<ArrayList<Answer>>() {
                         }.getType());
-//                        bundle.putString(ANSWERS_KEY, new Gson().toJson(data.getData()));
                         allAnswers.sort(Comparator.comparing(Answer::getQ_id));
-                        long attemptsCount = allAnswers.stream().filter((item) -> item.getQ_id() == allAnswers.get(0).getQ_id()).count();
+                        List<Answer> longAnswers = allAnswers.stream().filter((item)->item.getA_type() == Question.QuestionType.LONG).collect(Collectors.toList());
+                        List<Answer> multiAnswers = allAnswers.stream().filter((item)->item.getA_type() == Question.QuestionType.MULTI).collect(Collectors.toList());
+                        long longAttemptsCount = longAnswers.stream().filter((item) -> item.getQ_id() == longAnswers.get(0).getQ_id()).count();
+                        long multiAttemptsCount = multiAnswers.stream().filter((item) -> item.getQ_id() == multiAnswers.get(0).getQ_id()).count();
                         List<Answer> wantedAnswers = new ArrayList<>();
-                        for (long i = wantedResultId; i < allAnswers.size(); i += attemptsCount) {
-                            wantedAnswers.add(allAnswers.get((int) i));
+                        for (long i = wantedResultId; i < longAnswers.size(); i += longAttemptsCount) {
+                            wantedAnswers.add(longAnswers.get((int) i));
+                        }
+                        for (long i = wantedResultId; i < multiAnswers.size(); i += multiAttemptsCount) {
+                            wantedAnswers.add(multiAnswers.get((int) i));
                         }
                         wantedAnswers.sort(Comparator.comparing(Answer::getA_order));
                         bundle.putString(ANSWERS_KEY, new Gson().toJson(wantedAnswers));

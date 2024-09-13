@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -36,7 +37,7 @@ public class ResetPasswordViewModel extends BaseObservable {
     private String newPassword = null;
     private Context context;
     private ActivityForgotPasswordBinding activityForgotPasswordBinding;
-    private int progressVisibility = View.GONE;
+    private MutableLiveData<Integer> progressVisibility = new MutableLiveData<>(View.GONE);
     private int newPasswordTextInputLayoutVisibility = View.GONE;
     private ResetPasswordCredentials.ResetPasswordDataHolder.AccountType accountType;
     private String newPasswordError = null;
@@ -55,16 +56,14 @@ public class ResetPasswordViewModel extends BaseObservable {
 
     @Bindable
     public int getProgressVisibility() {
+        return progressVisibility.getValue();
+    }
+    public MutableLiveData<Integer> getProgressVisibilityLiveData() {
         return progressVisibility;
     }
 
     public void setProgressVisibility(int progressVisibility) {
-        this.progressVisibility = progressVisibility;
-        if (progressVisibility == View.VISIBLE) {
-            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        } else {
-           window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        }
+        this.progressVisibility.postValue(progressVisibility);
         notifyPropertyChanged(BR.progressVisibility);
     }
 

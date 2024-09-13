@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         Button signInButton = mActivityMainBinding.signInButton;
         if (Integer.parseInt(LoginViewModel.getUserId(getApplicationContext())) != -1) {
             Intent i;
-            if (LoginViewModel.getStudentSign(getApplicationContext()) != null) {
+            if (!"".equals(LoginViewModel.getStudentSign(getApplicationContext()))) {
                 i = new Intent(this, StudentMainActivity.class);
             } else {
                i = new Intent(this, TeacherMainActivity.class);
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private String getErrorMessage(int resultCode) {
         switch (resultCode) {
             case RESULT_CANCELED:
-                return "Action canceled";
+//                return "Action canceled";
             case RESULT_FIRST_USER: // Example: Custom result code
                 return "Registration failed. Please try again.";
             default:

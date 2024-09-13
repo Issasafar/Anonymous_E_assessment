@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -112,6 +113,14 @@ private TeacherRegisterViewModel mTeacherRegisterViewModel;
                finish();
            }
        });
+      activityTeacherRegisterBinding.getTeacherRegister().getLiveProgressVisibility().observe(this,(integer -> {
+          if (integer == View.VISIBLE) {
+              getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+          } else {
+              getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+          }
+      }));
     }
+
 
 }

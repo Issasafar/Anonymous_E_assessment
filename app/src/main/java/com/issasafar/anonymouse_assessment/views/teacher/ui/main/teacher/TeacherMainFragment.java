@@ -106,7 +106,10 @@ public class TeacherMainFragment extends Fragment {
                 Type courseResponseType = new TypeToken<CourseResponse<ArrayList<Course>>>() {
                 }.getType();
                 CourseResponse<ArrayList<Course>> courseResponse;
-                CourseResponse<ArrayList<Course>> prev = new Gson().fromJson(getCourseResponseString(), courseResponseType);
+                CourseResponse<ArrayList<Course>> prev = null;
+                if (!"empty".equals(getCourseResponseString())) {
+                     prev = new Gson().fromJson(getCourseResponseString(), courseResponseType);
+                }
                 CourseResponse<ArrayList<Course>> fetched = new Gson().fromJson(new Gson().toJson(data), courseResponseType);
                 if (data.getSuccess() && prev != fetched) {
                     saveCourseResponse(data);
@@ -119,7 +122,6 @@ public class TeacherMainFragment extends Fragment {
                     assert autoCompleteTextView != null;
                     getActivity().runOnUiThread(() -> {
                         autoCompleteTextView.setAdapter(adapter);
-
                     });
                 } else {
                     if (!"empty".equals(getCourseResponseString())) {

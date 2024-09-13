@@ -192,6 +192,7 @@ public class TeacherMainViewModel extends BaseObservable {
                     if (data.getSuccess()) {
                         new Handler(Looper.getMainLooper()).post(() -> {
                             showTestCreatedDialog(data.getMessage());
+                            teacherFragmentMainBinding.courseNameInputLayout.getEditText().performClick();
                         });
                     } else {
                         showSnackBar(data.getMessage());

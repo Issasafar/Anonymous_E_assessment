@@ -86,9 +86,10 @@ public class LoginActivity extends AppCompatActivity {
                             finish();
                         }
                     } else {
-                        assert loginResult.getError() != null;
-                        Snackbar snackbar = Snackbar.make(activityLoginBinding.getRoot(), loginResult.getError(), Snackbar.LENGTH_LONG);
-                        snackbar.show();
+                        if (loginResult.getError() != null) {
+                            Snackbar snackbar = Snackbar.make(activityLoginBinding.getRoot(), loginResult.getError(), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
                     }
                 });
             }
